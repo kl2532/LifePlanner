@@ -6,8 +6,7 @@ tokens = (
     'INTEGER','DECIMAL','CHARACTER', 'STRING', 
     'PLUS','MINUS','DIVIDE',
     'TIMES', 'NEWLINE', 'LEFTPAREN',
-    'RIGHTPAREN', 'BUILD', 'PRINT', 'TAB'
-)
+    'RIGHTPAREN', 'BUILD', 'PRINT', 'TAB')
 
 # ----REGULAR EXPRESSION PATTERNS---
 
@@ -26,20 +25,21 @@ t_TIMES      = r'\*'
 t_DIVIDE    = r'/'
 t_TAB = r'\t'
 t_ignore = r' '
+t_NEWLINE = r'\n'
 
 # Regular expression patterns for multi-use
 # tokens.
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
-t_BUILD = r'(build schedule\n)'
+t_BUILD = r'(build schedule)'
 t_PRINT = r'(print)'
 
-def t_NEWLINE(t):       # When a \n is found,
-    r'\n'               # increment the line
-    t.lexer.lineno +=1  # number of the lexer.
-    return t            # This way, line count
-                        # and errors can be
-                        # reported precisely.
+# def t_NEWLINE(t):       # When a \n is found,
+#     r'\n'               # increment the line
+#     t.lexer.lineno +=1  # number of the lexer.
+#     return t            # This way, line count
+#                         # and errors can be
+#                         # reported precisely.
 
 # ----ERROR HANDLING----
 

@@ -24,8 +24,8 @@ def p_program(p):
     p[0] = p[1]
 
 def p_expression(p):
-    '''expression : build b_stmt'''
-    p[0] = (p[1], p[2])
+    '''expression : build newline b_stmt'''
+    p[0] = (p[1], p[2], p[3])
    
 def p_build(p):
     '''build : BUILD'''
@@ -41,6 +41,10 @@ def p_tab(p):
 
 def p_print(p):
     '''print : PRINT'''
+    p[0] = p[1]
+
+def p_newline(p):
+    '''newline : NEWLINE'''
     p[0] = p[1]
 
 # def p_term(p):
