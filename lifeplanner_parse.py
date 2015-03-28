@@ -2,7 +2,7 @@
 import lifeplanner_lex
 
 # Utilizing the PLY LALR parser generator.
-import ply.yacc as yacc
+import yacc
 
 # ----TOKEN DECLARATION AND PRECEDENCE----
 

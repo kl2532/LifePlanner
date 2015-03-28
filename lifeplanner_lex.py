@@ -1,4 +1,4 @@
-import ply.lex as lex
+import lex
 
 # ----DELINEATION OF KEYWORDS AND TOKENS----
 
@@ -6,7 +6,7 @@ tokens = (
     'INTEGER','DECIMAL','CHARACTER', 'STRING', 
     'PLUS','MINUS','DIVIDE',
     'TIMES', 'NEWLINE', 'LEFTPAREN',
-    'RIGHTPAREN', 'BUILD', 'PRINT'
+    'RIGHTPAREN', 'BUILD', 'PRINT' 'TAB'
 )
 
 # ----REGULAR EXPRESSION PATTERNS---
@@ -24,14 +24,14 @@ t_PLUS       = r'\+'
 t_MINUS	     = r'\-'
 t_TIMES      = r'\*'
 t_DIVIDE    = r'/'
-
-t_ignore = ' \t'
+t_TAB = '\t'
+t_ignore = ' '
 
 # Regular expression patterns for multi-use
 # tokens.
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
-t_BUILD = r'(build schedule)'
+t_BUILD = r'(build schedule \n)'
 t_PRINT = r'(print)'
 
 def t_NEWLINE(t):       # When a \n is found,
