@@ -6,7 +6,7 @@ tokens = (
     'INTEGER','DECIMAL','CHARACTER', 'STRING', 
     'PLUS','MINUS','DIVIDE',
     'TIMES', 'NEWLINE', 'LEFTPAREN',
-    'RIGHTPAREN', 'BUILD', 'PRINT', 'TAB')
+    'RIGHTPAREN', 'BUILD', 'PRINT', 'TAB', 'SCHEDULE')
 
 # ----REGULAR EXPRESSION PATTERNS---
 
@@ -31,6 +31,7 @@ t_NEWLINE = r'\n'
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
 t_BUILD = r'(build)'
+t_SCHEDULE = r'(schedule)'
 t_PRINT = r'(print)'
 t_ignore = r' '
 

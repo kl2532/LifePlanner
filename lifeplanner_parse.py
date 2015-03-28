@@ -24,11 +24,15 @@ def p_program(p):
     p[0] = p[1]
 
 def p_expression(p):
-    '''expression : build newline b_stmt'''
-    p[0] = (p[1], p[2], p[3])
+    '''expression : build schedule newline b_stmt'''
+    p[0] = (p[1], p[2], p[3], p[4])
    
 def p_build(p):
     '''build : BUILD'''
+    p[0] = p[1]
+
+def p_schedule(p):
+    '''schedule : SCHEDULE'''
     p[0] = p[1]
 
 def p_bstmt(p):
@@ -89,5 +93,5 @@ def p_string(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = "build\n\tprint \"Hello World\""
+data = "build schedule\n\tprint \"Hello World\""
 print yacc.parse(data)
