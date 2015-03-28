@@ -71,7 +71,7 @@ def p_string(p):
     p[0] = p[1]
 
 def p_indent(p):
-    '''indent: INDENT'''
+    '''indent : INDENT'''
     p[0] = p[1]
 
 def p_rparen(p):
