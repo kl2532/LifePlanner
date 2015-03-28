@@ -37,7 +37,7 @@ def p_schedule(p):
 
 def p_bstmt(p):
     '''b_stmt : tab print string'''
-    p[0] = (p[1], p[2], p[3])
+    p[0] = ('print', p[1], p[2], p[3])
 
 def p_tab(p):
     '''tab : TAB'''
