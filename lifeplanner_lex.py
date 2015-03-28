@@ -4,7 +4,7 @@ import ply.lex as lex
 
 tokens = (
     'INTEGER','DECIMAL','CHARACTER', 'STRING', 
-    'PLUS','MINUS','DIVIDED',
+    'PLUS','MINUS','DIVIDE',
     'TIMES', 'NEWLINE', 'LEFTPAREN',
     'RIGHTPAREN', 'BUILD', 'PRINT'
 )
@@ -23,7 +23,7 @@ t_STRING     = r'(\"[^\"]*\")'
 t_PLUS       = r'\+'
 t_MINUS	     = r'\-'
 t_TIMES      = r'\*'
-t_DIVIDED    = r'/'
+t_DIVIDE    = r'/'
 
 t_ignore = ' \t'
 
@@ -31,7 +31,7 @@ t_ignore = ' \t'
 # tokens.
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
-t_BUILD = r'(build)'
+t_BUILD = r'(build schedule)'
 t_PRINT = r'(print)'
 
 def t_NEWLINE(t):       # When a \n is found,
