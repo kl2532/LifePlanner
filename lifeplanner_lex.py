@@ -30,7 +30,7 @@ t_NEWLINE = r'\n'
 # tokens.
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
-t_BUILD = r'(build schedule)'
+t_BUILD = r'(build)'
 t_PRINT = r'(print)'
 t_ignore = r' '
 

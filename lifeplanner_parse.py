@@ -89,5 +89,5 @@ def p_string(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = "build schedule\n\tprint \"Hello World\""
+data = "build\n\tprint \"Hello World\""
 print yacc.parse(data)
