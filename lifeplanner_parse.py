@@ -43,28 +43,28 @@ def p_print(p):
     '''print : PRINT'''
     p[0] = p[1]
 
-def p_term(p):
-    '''term : constant'''
-    p[0] = ( rt.TERM, p[1] )
+# def p_term(p):
+#     '''term : constant'''
+#     p[0] = ( rt.TERM, p[1] )
 
-def p_constant(p):
-    '''constant : integer
-                | decimal
-                | character
-                | string'''
-    p[0] = ( rt.CONSTANT, p[1] )
+# def p_constant(p):
+#     '''constant : integer
+#                 | decimal
+#                 | character
+#                 | string'''
+#     p[0] = ( rt.CONSTANT, p[1] )
 
-def p_integer(p):
-    '''integer : INTEGER'''
-    p[0] = ( rt.INTEGER, int(p[1]) )
+# def p_integer(p):
+#     '''integer : INTEGER'''
+#     p[0] = ( rt.INTEGER, int(p[1]) )
  
-def p_decimal(p):
-    '''decimal : DECIMAL'''
-    p[0] = ( rt.DECIMAL, float(p[1]) )
+# def p_decimal(p):
+#     '''decimal : DECIMAL'''
+#     p[0] = ( rt.DECIMAL, float(p[1]) )
 
-def p_char(p):
-    '''character : CHARACTER'''
-    p[0] = ( rt.CHARACTER, p[1][1])
+# def p_char(p):
+#     '''character : CHARACTER'''
+#     p[0] = ( rt.CHARACTER, p[1][1])
 
 def p_string(p):
     '''string : STRING'''
@@ -74,13 +74,13 @@ def p_indent(p):
     '''indent : INDENT'''
     p[0] = p[1]
 
-def p_rparen(p):
-    '''rparen : RIGHTPAREN'''
-    p[0] = ( rt.RPAREN )
+# def p_rparen(p):
+#     '''rparen : RIGHTPAREN'''
+#     p[0] = ( rt.RPAREN )
 
-def p_lparen(p):
-    '''lparen : LEFTPAREN'''
-    p[0] = ( rt.LPAREN )
+# def p_lparen(p):
+#     '''lparen : LEFTPAREN'''
+#     p[0] = ( rt.LPAREN )
 
 # ----INITIALIZE PARSER----
 
