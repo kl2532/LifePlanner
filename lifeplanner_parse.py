@@ -72,7 +72,7 @@ def p_string(p):
 
 def p_indent(p):
     '''indent: INDENT'''
-    p[0] = 
+    p[0] = p[1]
 
 def p_rparen(p):
     '''rparen : RIGHTPAREN'''
