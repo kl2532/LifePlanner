@@ -24,8 +24,8 @@ t_PLUS       = r'\+'
 t_MINUS	     = r'\-'
 t_TIMES      = r'\*'
 t_DIVIDE    = r'/'
-t_TAB = '\t'
-t_ignore = ' '
+t_TAB = r'\t'
+t_ignore = r' '
 
 # Regular expression patterns for multi-use
 # tokens.
