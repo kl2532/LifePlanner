@@ -24,7 +24,6 @@ t_MINUS	     = r'\-'
 t_TIMES      = r'\*'
 t_DIVIDE    = r'/'
 t_TAB = r'\t'
-t_ignore = r' '
 t_NEWLINE = r'\n'
 
 # Regular expression patterns for multi-use
@@ -33,6 +32,7 @@ t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
 t_BUILD = r'(build schedule)'
 t_PRINT = r'(print)'
+t_ignore = r' '
 
 # def t_NEWLINE(t):       # When a \n is found,
 #     r'\n'               # increment the line
