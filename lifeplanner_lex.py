@@ -31,7 +31,7 @@ t_ignore = r' '
 # tokens.
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
-t_BUILD = r'(build schedule \n)'
+t_BUILD = r'(build schedule\n)'
 t_PRINT = r'(print)'
 
 def t_NEWLINE(t):       # When a \n is found,
