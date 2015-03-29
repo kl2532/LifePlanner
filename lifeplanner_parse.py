@@ -102,5 +102,5 @@ for line in tree:
     if line[0]=='print':
         for i in range(len(line) - 1, -1, -1):
             if line[i] == 'print':
-                print line[i:]
+                print ''.join(line[i+1:])
                 sys.exit(0)
