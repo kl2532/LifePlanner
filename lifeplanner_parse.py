@@ -94,4 +94,9 @@ def p_string(p):
 
 yacc.yacc()
 data = "build schedule\n\tprint \"Hello World\""
-print yacc.parse(data)
+tree = yacc.parse(data)
+
+for line in tree:
+    if line[0]=='print':
+        i = line.rfind('print')
+        print line[i:]
