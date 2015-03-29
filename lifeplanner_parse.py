@@ -96,7 +96,11 @@ yacc.yacc()
 data = "build schedule\n\tprint \"Hello World\""
 tree = yacc.parse(data)
 
+import sys
+
 for line in tree:
     if line[0]=='print':
-        i = line.rfind('print')
-        print line[i:]
+        for i in range(len(line) - 1, -1, -1):
+            if line[i] == 'print':
+                print line[i:]
+                sys.exit(0)
