@@ -1,4 +1,4 @@
-# Use the lexer defined by lifeplanner-lex.py
+# Use the lexer defined by lifeplanner_lex.py
 import lifeplanner_lex
 
 # Utilizing the PLY LALR parser generator.
