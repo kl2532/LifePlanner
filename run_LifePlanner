@@ -1,0 +1,9 @@
+#!/bin/bash
+
+python translator.py $1 
+if [ "$?" = "1" ]; then
+    python calendar.py
+    rm calendar.py
+else 
+    echo "Errors thrown from translator."
+fi
