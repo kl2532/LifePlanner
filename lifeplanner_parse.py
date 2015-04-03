@@ -98,9 +98,14 @@ tree = yacc.parse(data)
 
 import sys
 
+python_translation = ""
+
 for line in tree:
     if line[0]=='print':
         for i in range(len(line) - 1, -1, -1):
             if line[i] == 'print':
-                print ''.join(line[i+1:]).strip('\"')
-                sys.exit(0)
+                python_translation +=  ''.join(line[i+1:]).strip('\"')
+                break
+
+with open("calendar.py", "w") as f:
+    f.write(python_translation)
