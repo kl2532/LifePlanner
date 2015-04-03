@@ -1,4 +1,6 @@
 #!/bin/bash
+#Used to run .plan files
+#To run "run_LifePlanner [file_name.plan]
 
 python translator.py $1 
 if [ "$?" = "1" ]; then
