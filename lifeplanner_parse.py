@@ -31,6 +31,7 @@ def p_imports(p):
     elif (len(p) == 2):
         p[0] = p[1]
 
+# TODO: day
 def p_schedulestmt(p):
     '''schedule_stmts : day colon newline event_list schedule_stmts
                       | empty'''
@@ -38,6 +39,35 @@ def p_schedulestmt(p):
         p[0] = (p[1], p[2], p[3], p[4], p[5])
     elif (len(p) == 2):
         p[0] = p[1]
+
+def p_events(p):
+    '''event_list : event event_list
+                  | empty'''
+    if (len(p) == 3):
+        p[0] = (p[1], p[2])
+    elif (len(p) == 2):
+        p[0] = p[1]
+
+def p_event(p):
+    '''event : event_title when where who newline tag_line'''
+    p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
+
+def p_eventname(p):
+    '''event_title: strings'''
+    p[0] = p[1]
+
+#TODO: time
+def p_when(p):
+    '''when : from time to time'''
+    p[0] = (p[1], p[2], p[3], p[4])
+
+def p_from(p):
+    '''from : FROM'''
+    p[0] = p[1]
+
+def p_to(p):
+    '''to : TO'''
+    p[0] = p[1]
 
 def p_colon(p):
     '''colon : COLON'''
