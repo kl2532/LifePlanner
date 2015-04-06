@@ -20,13 +20,29 @@ precedence = (
 
 # ----GRAMMAR PRODUCTIONS----
 def p_program(p):
-    '''program : expression'''
+    '''program : import_stmt schedule_stmts build_schedule export_stmt'''
+    p[0] = (p[1], p[2], p[3], p[4])
+
+def p_imports(p):
+    '''import_stmt : import string newline
+                   | empty'''
+    if (len(p) == 4):
+        p[0] = (p[1], p[2], p[3])
+    elif (len(p) == 2):
+        p[0] = p[1]
+
+def p_schedulestmt(p):
+    '''schedule_stmts : day colon newline event_list schedule_stmts
+                      | empty'''
+    if (len(p) == 6):
+        p[0] = (p[1], p[2], p[3], p[4], p[5])
+    elif (len(p) == 2):
+        p[0] = p[1]
+
+def p_colon(p):
+    '''colon : COLON'''
     p[0] = p[1]
 
-def p_expression(p):
-    '''expression : build schedule newline b_stmt'''
-    p[0] = (p[1], p[2], p[3], p[4])
-   
 def p_build(p):
     '''build : BUILD'''
     p[0] = p[1]
@@ -39,8 +55,24 @@ def p_bstmt(p):
     '''b_stmt : tab print string'''
     p[0] = ('print', p[1], p[2], p[3])
 
+def p_strings(p):
+    '''strings : string strings
+               | empty'''
+    if (len(p) == 3 ):
+        p[0] = (p[1], p[2])
+    elif (len(p) == 3):
+        p[0] = p[1]
+
+def p_empty(p):
+    '''empty :'''
+    pass
+
 def p_tab(p):
     '''tab : TAB'''
+    p[0] = p[1]
+
+def p_import(p):
+    '''import : IMPORT'''
     p[0] = p[1]
 
 def p_print(p):
