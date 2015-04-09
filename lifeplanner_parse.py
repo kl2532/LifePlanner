@@ -77,7 +77,7 @@ def p_event(p):
     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
 
 def p_eventname(p):
-    '''event_title : string'''
+    '''event_title : strings'''
     p[0] = p[1]
 
 def p_when(p):
@@ -97,7 +97,7 @@ def p_where(p):
         p[0] = p[1]
 
 def p_loc(p):
-    '''location : string'''
+    '''location : strings'''
     p[0] = p[1]
 
 def p_who(p):
@@ -163,7 +163,7 @@ def p_tag(p):
     p[0] = p[1]
 
 def p_name(p):
-    '''name : string'''
+    '''name : strings'''
     p[0] = p[1]
 
 def p_and(p):
@@ -280,7 +280,7 @@ def p_string(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho\nbuild schedule\nexport"
+data = "Monday:\n\"PLT\" from 4:13PM to 4:14PM at \"Mudd\" with \"Aho\"\nbuild schedule\nexport"
 tree = yacc.parse(data)
 print tree
 #import sys
