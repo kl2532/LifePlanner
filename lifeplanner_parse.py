@@ -280,7 +280,7 @@ def p_string(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = "Monday:\n\"PLT\" from 4:13PM to 4:14PM at \"Mudd\" with \"Aho\"\nbuild schedule\nexport"
+data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho\nbuild schedule\nexport"
 tree = yacc.parse(data)
 print tree
 #import sys
