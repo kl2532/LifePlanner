@@ -17,7 +17,8 @@ tokens = (
 t_INTEGER    = r'[\-]?[0-9]+'
 t_DECIMAL    = r'[\-]?[0-9]+\.[0-9]*'
 t_CHARACTER  = r'(\'[^\']\')'
-t_STRING     = r'(\"[^\"]+\")'
+#t_STRING     = r'(\"[^\"]+\")'
+t_STRING = r'^[a-zA-Z][a-zA-Z]*$'
 # Regular expression patterns for arithmetic
 # operators.
 t_PLUS       = r'\+'
@@ -27,7 +28,7 @@ t_DIVIDE    = r'/'
 
 # Regular expression patterns
 # for whitespace
-t_NEWLINE = r'\n'
+#t_NEWLINE = r'\n'
 
 # Regular expression patterns for multi-use
 # tokens.
@@ -64,10 +65,10 @@ t_COLON = r'\:'
 
 #t_STRING = r'(^[A-Za-z]+$)'
 
-# def t_NEWLINE(t):       # When a \n is found,
-#     r'\n'               # increment the line
-#     t.lexer.lineno +=1  # number of the lexer.
-#     return t            # This way, line count
+def t_NEWLINE(t):       # When a \n is found,
+     r'\n'               # increment the line
+     t.lexer.lineno +=1  # number of the lexer.
+     return t            # This way, line count
 #                         # and errors can be
 #                         # reported precisely.
 
