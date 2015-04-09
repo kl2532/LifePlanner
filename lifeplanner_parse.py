@@ -60,9 +60,9 @@ def p_day6(p):
 def p_day7(p):
     '''day : SUNDAY'''
     p[0] = p[1]
-def p_day8(p):
-    '''day : time'''
-    p[0] = p[1]
+#def p_day8(p):
+#    '''day : time'''
+#    p[0] = p[1]
 
 def p_events(p):
     '''event_list : event event_list
@@ -77,7 +77,7 @@ def p_event(p):
     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
 
 def p_eventname(p):
-    '''event_title: strings'''
+    '''event_title : string'''
     p[0] = p[1]
 
 def p_when(p):
@@ -85,12 +85,8 @@ def p_when(p):
     p[0] = (p[1], p[2], p[3], p[4])
 
 def p_time(p):
-    '''time : num num colon num num meridian
-            | num colon num num meridian'''
-    if (len(p) == 7):
-        p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
-    elif (len(p) == 6):
-        p[0] = (p[1], p[2], p[3], p[4], p[5])
+    '''time : num colon num meridian'''
+    p[0] = (p[1], p[2], p[3], p[4])
 
 def p_where(p):
     '''where : at location
@@ -101,7 +97,85 @@ def p_where(p):
         p[0] = p[1]
 
 def p_loc(p):
-    '''location : strings'''
+    '''location : string'''
+    p[0] = p[1]
+
+def p_who(p):
+    '''who : with people_list
+           | empty'''
+    if (len(p) == 3):
+        p[0] = (p[1], p[2])
+    elif (len(p) == 2):
+        p[0] = p[1]
+
+def p_plist(p):
+    '''people_list : name people_list1'''
+    p[0] = (p[1], p[2])
+
+def p_plist1(p):
+    '''people_list1 : comma name people_list1
+                    | and people_list1
+                    | empty'''
+    if (len(p) == 4):
+        p[0] = (p[1], p[2], p[3])
+    elif (len(p) == 3):
+        p[0] = (p[1], p[2])
+    elif (len(p) == 2):
+        p[0] = p[1]
+
+def p_tagline(p):
+    '''tag_line : tag tag_name newline
+                | empty'''
+    if (len(p) == 4):
+        p[0] = (p[1], p[2], p[3])
+    elif (len(p) == 2):
+        p[0] = p[1]
+
+def p_buildstmts(p):
+    '''build_schedule : build schedule newline tag_priorities clean'''
+    p[0] = (p[1], p[2], p[3], p[4], p[5])
+
+#change later
+def p_tagp(p):
+    '''tag_priorities : empty'''
+    p[0] = p[1]
+
+#change later
+def p_clean(p):
+    '''clean : empty'''
+    p[0] = p[1]
+
+#change
+def p_exportstmt(p):
+    '''export_stmt : export'''
+    p[0] = p[1]
+
+def p_export(p):
+    '''export : EXPORT'''
+    p[0] = p[1]
+
+def p_tagname(p):
+    '''tag_name : strings'''
+    p[0] = p[1]
+
+def p_tag(p):
+    '''tag : TAG'''
+    p[0] = p[1]
+
+def p_name(p):
+    '''name : string'''
+    p[0] = p[1]
+
+def p_and(p):
+    '''and : AND'''
+    p[0] = p[1]
+
+def p_comma(p):
+    '''comma : COMMA'''
+    p[0] = p[1]
+
+def p_with(p):
+    '''with : WITH'''
     p[0] = p[1]
 
 def p_at(p):
@@ -109,7 +183,7 @@ def p_at(p):
     p[0] = p[1]
 
 def p_num(p):
-    '''num : NUM'''
+    '''num : INTEGER'''
     p[0] = p[1]
 
 def p_meridian1(p):
@@ -140,12 +214,8 @@ def p_schedule(p):
     '''schedule : SCHEDULE'''
     p[0] = p[1]
 
-def p_bstmt(p):
-    '''b_stmt : tab print string'''
-    p[0] = ('print', p[1], p[2], p[3])
-
 def p_strings(p):
-    '''strings : string strings
+    '''strings : STRING strings
                | empty'''
     if (len(p) == 3 ):
         p[0] = (p[1], p[2])
@@ -155,10 +225,6 @@ def p_strings(p):
 def p_empty(p):
     '''empty :'''
     pass
-
-def p_tab(p):
-    '''tab : TAB'''
-    p[0] = p[1]
 
 def p_import(p):
     '''import : IMPORT'''
@@ -214,19 +280,19 @@ def p_string(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = "build schedule\n\tprint \"Hello World\""
+data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho\nbuild schedule\nexport"
 tree = yacc.parse(data)
+print tree
+#import sys
 
-import sys
+#python_translation = ""
 
-python_translation = ""
+#for line in tree:
+#    if line[0]=='print':
+#        for i in range(len(line) - 1, -1, -1):
+#            if line[i] == 'print':
+#                python_translation +=  ''.join(line[i+1:]).strip('\"')
+#                break
 
-for line in tree:
-    if line[0]=='print':
-        for i in range(len(line) - 1, -1, -1):
-            if line[i] == 'print':
-                python_translation +=  ''.join(line[i+1:]).strip('\"')
-                break
-
-with open("calendar.py", "w") as f:
-    f.write(python_translation)
+#with open("calendar.py", "w") as f:
+#    f.write(python_translation)
