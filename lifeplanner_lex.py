@@ -6,9 +6,9 @@ tokens = (
     'INTEGER','DECIMAL','CHARACTER', 'STRING', 
     'PLUS','MINUS','DIVIDE',
     'TIMES', 'NEWLINE', 'LEFTPAREN', 'COLON',
-    'RIGHTPAREN', 'BUILD', 'PRINT', 'TAB', 'SCHEDULE', 'EXPORT', 'IMPORT'
+    'RIGHTPAREN', 'BUILD', 'PRINT', 'TAB', 'SCHEDULE', 'EXPORT', 'IMPORT',
     'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY', 'AM', 'PM',
-    'TO', 'WITH', 'FROM', 'AT', 'TAG')
+    'TO', 'WITH', 'FROM', 'AT', 'TAG', 'AND', 'COMMA')
 
 # ----REGULAR EXPRESSION PATTERNS---
 
@@ -17,8 +17,7 @@ tokens = (
 t_INTEGER    = r'[\-]?[0-9]+'
 t_DECIMAL    = r'[\-]?[0-9]+\.[0-9]*'
 t_CHARACTER  = r'(\'[^\']\')'
-t_STRING     = r'(\"[^\"]*\")'
-
+#t_STRING     = r'(\"[^\"]*\")'
 # Regular expression patterns for arithmetic
 # operators.
 t_PLUS       = r'\+'
@@ -51,17 +50,19 @@ t_AT = r'(at)'
 t_FROM = r'(from)'
 t_TO = r'(to)'
 t_WITH = r'(with)'
-
+t_AND = r'(and)'
+t_COMMA = r'\,'
 # Time Meridian
 t_AM = r'(AM)'
 t_PM = r'(PM)'
-t_ignore = r' \t'
+t_ignore = ' \t'
 
 # Punctuation
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
 t_COLON = r'\:'
 
+t_STRING = r'(^[A-Za-z]+$)'
 
 # def t_NEWLINE(t):       # When a \n is found,
 #     r'\n'               # increment the line
