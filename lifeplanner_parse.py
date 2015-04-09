@@ -31,7 +31,6 @@ def p_imports(p):
     elif (len(p) == 2):
         p[0] = p[1]
 
-# TODO: day
 def p_schedulestmt(p):
     '''schedule_stmts : day colon newline event_list schedule_stmts
                       | empty'''
@@ -39,6 +38,31 @@ def p_schedulestmt(p):
         p[0] = (p[1], p[2], p[3], p[4], p[5])
     elif (len(p) == 2):
         p[0] = p[1]
+
+def p_day1(p):
+    '''day : MONDAY'''
+    p[0] = p[1]
+def p_day2(p):
+    '''day : TUESDAY'''
+    p[0] = p[1]
+def p_day3(p):
+    '''day : WEDNESDAY'''
+    p[0] = p[1]
+def p_day4(p):
+    '''day : THURSDAY'''
+    p[0] = p[1]
+def p_day5(p):
+    '''day : FRIDAY'''
+    p[0] = p[1]
+def p_day6(p):
+    '''day : SATURDAY'''
+    p[0] = p[1]
+def p_day7(p):
+    '''day : SUNDAY'''
+    p[0] = p[1]
+def p_day8(p):
+    '''day : time'''
+    p[0] = p[1]
 
 def p_events(p):
     '''event_list : event event_list
@@ -56,10 +80,45 @@ def p_eventname(p):
     '''event_title: strings'''
     p[0] = p[1]
 
-#TODO: time
 def p_when(p):
     '''when : from time to time'''
     p[0] = (p[1], p[2], p[3], p[4])
+
+def p_time(p):
+    '''time : num num colon num num meridian
+            | num colon num num meridian'''
+    if (len(p) == 7):
+        p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
+    elif (len(p) == 6):
+        p[0] = (p[1], p[2], p[3], p[4], p[5])
+
+def p_where(p):
+    '''where : at location
+             | empty'''
+    if (len(p) == 3):
+        p[0] = (p[1], p[2])
+    elif (len(p) == 2):
+        p[0] = p[1]
+
+def p_loc(p):
+    '''location : strings'''
+    p[0] = p[1]
+
+def p_at(p):
+    '''at : AT'''
+    p[0] = p[1]
+
+def p_num(p):
+    '''num : NUM'''
+    p[0] = p[1]
+
+def p_meridian1(p):
+    '''meridian : AM'''
+    p[0] = p[1]
+
+def p_meridian2(p):
+    '''meridian : PM'''
+    p[0] = p[1]
 
 def p_from(p):
     '''from : FROM'''
