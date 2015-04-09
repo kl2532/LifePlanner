@@ -17,7 +17,7 @@ tokens = (
 t_INTEGER    = r'[\-]?[0-9]+'
 t_DECIMAL    = r'[\-]?[0-9]+\.[0-9]*'
 t_CHARACTER  = r'(\'[^\']\')'
-#t_STRING     = r'(\"[^\"]*\")'
+t_STRING     = r'(\"[^\"]+\")'
 # Regular expression patterns for arithmetic
 # operators.
 t_PLUS       = r'\+'
@@ -62,7 +62,7 @@ t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
 t_COLON = r'\:'
 
-t_STRING = r'(^[A-Za-z]+$)'
+#t_STRING = r'(^[A-Za-z]+$)'
 
 # def t_NEWLINE(t):       # When a \n is found,
 #     r'\n'               # increment the line
