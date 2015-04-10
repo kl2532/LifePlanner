@@ -77,7 +77,7 @@ def p_event(p):
     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
 
 def p_eventname(p):
-    '''event_title : strings'''
+    '''event_title : string'''
     p[0] = p[1]
 
 def p_when(p):
@@ -97,7 +97,7 @@ def p_where(p):
         p[0] = p[1]
 
 def p_loc(p):
-    '''location : strings'''
+    '''location : string'''
     p[0] = p[1]
 
 def p_who(p):
@@ -155,7 +155,7 @@ def p_export(p):
     p[0] = p[1]
 
 def p_tagname(p):
-    '''tag_name : strings'''
+    '''tag_name : string'''
     p[0] = p[1]
 
 def p_tag(p):
@@ -163,7 +163,7 @@ def p_tag(p):
     p[0] = p[1]
 
 def p_name(p):
-    '''name : strings'''
+    '''name : string'''
     p[0] = p[1]
 
 def p_and(p):
@@ -214,16 +214,18 @@ def p_schedule(p):
     '''schedule : SCHEDULE'''
     p[0] = p[1]
 
-def p_strings(p):
-    '''strings : STRING strings
-               | empty'''
-    if (len(p) == 3 ):
-        p[0] = (p[1], p[2])
-    elif (len(p) == 3):
-        p[0] = p[1]
+# def p_strings(p):
+#     'strings : STRING strings'
+#     '          | empty'
+#     print 'p_strings p[1]', p[1]
+#     if (len(p) == 3 ):
+#         print 'p_strings p[2]', p[2]
+#         p[0] = (p[1], p[2])
+#     elif (len(p) == 2):
+#         p[0] = p[1]
 
 def p_empty(p):
-    '''empty :'''
+    'empty :'
     pass
 
 def p_import(p):
@@ -263,6 +265,7 @@ def p_newline(p):
 
 def p_string(p):
     '''string : STRING'''
+    print 'hello', p[1]
     p[0] = p[1]
 
 # def p_indent(p):
