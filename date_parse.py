@@ -2,11 +2,12 @@ import date_lex
 import yacc
 
 tokens = date_lex.tokens
+
 start = 'program'
 
 def p_program(p):
-    '''program : when'''
-    p[0] = p[1]#, p[2])
+    '''program : string when'''
+    p[0] = (p[1], p[2])
     
 def p_when(p):
     '''when : from time to time'''
@@ -41,6 +42,9 @@ def p_string(p):
     '''string : STRING'''
     p[0] = p[1]
 
+def p_error(p):
+    print p.type, " ", p.value
+
 #def p_user_strings(p):
 #    '''user_strings : USERSTRING user_string_rep'''
 #    print 'p_strings p[1]', p[1]
@@ -58,6 +62,6 @@ def p_string(p):
 #    	print 'empty'
      
 yacc.yacc(start='program')
-data = "from 4:25PM to 5:30PM"
+data = "PLT from 4:25PM to 5:30PM"
 tree = yacc.parse(data)
 print tree
