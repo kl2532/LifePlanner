@@ -3,7 +3,7 @@ import lex
 # ----DELINEATION OF KEYWORDS AND TOKENS----
 
 tokens = (
-    'INTEGER','DECIMAL','CHARACTER', 'STRING', 
+    'INTEGER','DECIMAL','STRING', #'CHARACTER', 
     'PLUS','MINUS','DIVIDE',
     'TIMES', 'NEWLINE', 'LEFTPAREN', 'COLON',
     'RIGHTPAREN', 'BUILD', 'PRINT', 'TAB', 'SCHEDULE', 'EXPORT', 'IMPORT',
@@ -54,7 +54,7 @@ t_COLON = r'\:'
 # constants (integer, decimal, character)
 t_INTEGER    = r'[\-]?[0-9]+'
 t_DECIMAL    = r'[\-]?[0-9]+\.[0-9]*'
-t_CHARACTER  = r'(\'[^\']\')'
+# t_CHARACTER  = r'(\'[^\']\')'
 #t_STRING     = r'(\"[^\"]+\")'
 t_STRING = r'[a-zA-Z]+'
 # Regular expression patterns for arithmetic

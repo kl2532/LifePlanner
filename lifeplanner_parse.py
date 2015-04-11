@@ -38,7 +38,7 @@ def p_imports(p):
         p[0] = p[1]
 
 def p_schedulestmt(p):
-    '''schedule_stmts : day colon newline event_list schedule_stmts
+    '''schedule_stmts : day colon newline event_list schedule_stmts_rep
                       | empty'''
     # print "p_schedulestmt"
     if (len(p) == 6):
@@ -49,6 +49,16 @@ def p_schedulestmt(p):
     elif (len(p) == 2):
         print "p_schedulestmt elif"
         p[0] = p[1]
+
+def p_schedule_stmt_rep(p):
+    '''schedule_stmts_rep : 
+                            | schedule_stmts schedule_stmts_rep'''
+    if(len(p) == 3):
+        print 'print p[1] ', p[1]
+        print 'print p[2] ', p[2]
+        p[0] = (p[1], p[2])
+    else:
+        print 'empty'
 
 def p_day1(p):
     '''day : MONDAY'''
@@ -77,7 +87,7 @@ def p_day7(p):
 #    p[0] = p[1]
 
 def p_events(p):
-    '''event_list : event event_list
+    '''event_list : event event_list_rep
                   | empty'''
     print "p_events p[1]", p[1]
     if (len(p) == 3):
@@ -85,6 +95,16 @@ def p_events(p):
         p[0] = (p[1], p[2])
     elif (len(p) == 2):
         p[0] = p[1]
+
+def p_events_rep(p):
+    '''event_list_rep : 
+                        | event_list event_list_rep'''
+    if(len(p) == 3):
+        print 'print p[1] ', p[1]
+        print 'print p[2] ', p[2]
+        p[0] = (p[1], p[2])
+    else:
+        print 'empty'
 
 def p_event(p):
     '''event : event_title when where who newline tag_line'''
@@ -126,19 +146,29 @@ def p_who(p):
         p[0] = p[1]
 
 def p_plist(p):
-    '''people_list : name people_list1'''
-    p[0] = (p[1], p[2])
+    '''people_list : name'''
+    p[0] = p[1]
 
-def p_plist1(p):
-    '''people_list1 : comma name people_list1
-                    | and people_list1
-                    | empty'''
-    if (len(p) == 4):
-        p[0] = (p[1], p[2], p[3])
-    elif (len(p) == 3):
-        p[0] = (p[1], p[2])
-    elif (len(p) == 2):
-        p[0] = p[1]
+# def p_plist_rep(p):
+#     '''people_list_rep :
+#                         | people_list people_list_rep'''
+#     if(len(p) == 3):
+#         print 'print p[1] ', p[1]
+#         print 'print p[2] ', p[2]
+#         p[0] = (p[1], p[2])
+#     else:
+#         print 'empty'
+
+# def p_plist1(p):
+#     '''people_list1 : comma name people_list1
+#                     | and people_list1
+#                     | empty'''
+#     if (len(p) == 4):
+#         p[0] = (p[1], p[2], p[3])
+#     elif (len(p) == 3):
+#         p[0] = (p[1], p[2])
+#     elif (len(p) == 2):
+#         p[0] = p[1]
 
 def p_tagline(p):
     '''tag_line : tag tag_name newline
@@ -238,6 +268,7 @@ def p_strings(p):
     print 'p_strings p[1]', p[1]
     print 'p_strings p[2]', p[2]
     p[0] = (p[1], p[2])
+
 def p_string_rep(p):
     '''string_rep : 
                     | strings string_rep'''
