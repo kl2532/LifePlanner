@@ -20,7 +20,7 @@ precedence = (
 
 # ----GRAMMAR PRODUCTIONS----
 def p_program(p):
-    '''program : schedule_stmts'''
+    '''program : event'''
     p[0] = p[1]
 
 # def p_program(p):
@@ -38,7 +38,7 @@ def p_imports(p):
         p[0] = p[1]
 
 def p_schedulestmt(p):
-    '''schedule_stmts : day colon newline event_list schedule_stmts_rep
+    '''schedule_stmts : day colon newline event
                       | empty'''
     # print "p_schedulestmt"
     if (len(p) == 6):
@@ -128,6 +128,7 @@ def p_time(p):
 def p_where(p):
     '''where : at location
              | empty'''
+    print p[2]
     if (len(p) == 3):
         p[0] = (p[1], p[2])
     elif (len(p) == 2):
@@ -140,6 +141,7 @@ def p_loc(p):
 def p_who(p):
     '''who : with people_list
            | empty'''
+    print p[2]
     if (len(p) == 3):
         p[0] = (p[1], p[2])
     elif (len(p) == 2):
@@ -147,6 +149,7 @@ def p_who(p):
 
 def p_plist(p):
     '''people_list : name'''
+    print p[1]
     p[0] = p[1]
 
 # def p_plist_rep(p):
@@ -339,7 +342,8 @@ def p_newline(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho"
+data = "PLT from 4:13PM to 4:14PM at Mudd with Aho"
+
 # data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho\nbuild schedule\nexport"
 print data
 print "END"
