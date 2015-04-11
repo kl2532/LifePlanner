@@ -20,12 +20,18 @@ precedence = (
 
 # ----GRAMMAR PRODUCTIONS----
 def p_program(p):
-    '''program : import_stmt schedule_stmts build_schedule export_stmt'''
-    p[0] = (p[1], p[2], p[3], p[4])
+    '''program : schedule_stmts'''
+    p[0] = p[1]
+
+# def p_program(p):
+#     '''program : import_stmt schedule_stmts build_schedule export_stmt'''
+#     print "p_program p[2]", p[2]
+#     p[0] = (p[1], p[2], p[3], p[4])
 
 def p_imports(p):
-    '''import_stmt : import string newline
+    '''import_stmt : import strings newline
                    | empty'''
+    print "p_imports"
     if (len(p) == 4):
         p[0] = (p[1], p[2], p[3])
     elif (len(p) == 2):
@@ -34,13 +40,19 @@ def p_imports(p):
 def p_schedulestmt(p):
     '''schedule_stmts : day colon newline event_list schedule_stmts
                       | empty'''
+    # print "p_schedulestmt"
     if (len(p) == 6):
+        print "p_schedulestmt p[1]", p[1]
+        print "p_schedulestmt p[2]", p[2]
+        print "p_schedulestmt p[4]", p[4]
         p[0] = (p[1], p[2], p[3], p[4], p[5])
     elif (len(p) == 2):
+        print "p_schedulestmt elif"
         p[0] = p[1]
 
 def p_day1(p):
     '''day : MONDAY'''
+    print "p_day1"
     p[0] = p[1]
 def p_day2(p):
     '''day : TUESDAY'''
@@ -67,21 +79,26 @@ def p_day7(p):
 def p_events(p):
     '''event_list : event event_list
                   | empty'''
+    print "p_events p[1]", p[1]
     if (len(p) == 3):
+        print "p_events p[2]", p[2]
         p[0] = (p[1], p[2])
     elif (len(p) == 2):
         p[0] = p[1]
 
 def p_event(p):
     '''event : event_title when where who newline tag_line'''
+    print "p_event"
     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
 
 def p_eventname(p):
-    '''event_title : string'''
+    '''event_title : strings'''
+    print "p_eventname", p[1]
     p[0] = p[1]
 
 def p_when(p):
     '''when : from time to time'''
+    print "p_when", p[1]
     p[0] = (p[1], p[2], p[3], p[4])
 
 def p_time(p):
@@ -97,7 +114,7 @@ def p_where(p):
         p[0] = p[1]
 
 def p_loc(p):
-    '''location : string'''
+    '''location : strings'''
     p[0] = p[1]
 
 def p_who(p):
@@ -155,7 +172,7 @@ def p_export(p):
     p[0] = p[1]
 
 def p_tagname(p):
-    '''tag_name : string'''
+    '''tag_name : strings'''
     p[0] = p[1]
 
 def p_tag(p):
@@ -163,7 +180,7 @@ def p_tag(p):
     p[0] = p[1]
 
 def p_name(p):
-    '''name : string'''
+    '''name : strings'''
     p[0] = p[1]
 
 def p_and(p):
@@ -196,6 +213,7 @@ def p_meridian2(p):
 
 def p_from(p):
     '''from : FROM'''
+    print 'p_from', p[1]
     p[0] = p[1]
 
 def p_to(p):
@@ -204,6 +222,7 @@ def p_to(p):
 
 def p_colon(p):
     '''colon : COLON'''
+    print "p_colon"
     p[0] = p[1]
 
 def p_build(p):
@@ -214,15 +233,20 @@ def p_schedule(p):
     '''schedule : SCHEDULE'''
     p[0] = p[1]
 
-# def p_strings(p):
-#     'strings : STRING strings'
-#     '          | empty'
-#     print 'p_strings p[1]', p[1]
-#     if (len(p) == 3 ):
-#         print 'p_strings p[2]', p[2]
-#         p[0] = (p[1], p[2])
-#     elif (len(p) == 2):
-#         p[0] = p[1]
+def p_strings(p):
+    'strings : STRING string_rep'
+    print 'p_strings p[1]', p[1]
+    print 'p_strings p[2]', p[2]
+    p[0] = (p[1], p[2])
+def p_string_rep(p):
+    '''string_rep : 
+                    | strings string_rep'''
+    if(len(p) == 3):
+        print 'print p[1] ', p[1]
+        print 'print p[2] ', p[2]
+        p[0] = (p[1], p[2])
+    else:
+        print 'empty' 
 
 def p_empty(p):
     'empty :'
@@ -238,6 +262,7 @@ def p_print(p):
 
 def p_newline(p):
     '''newline : NEWLINE'''
+    print "p_newline"
     p[0] = p[1]
 
 # def p_term(p):
@@ -263,10 +288,10 @@ def p_newline(p):
 #     '''character : CHARACTER'''
 #     p[0] = ( rt.CHARACTER, p[1][1])
 
-def p_string(p):
-    '''string : STRING'''
-    print 'hello', p[1]
-    p[0] = p[1]
+# def p_string(p):
+#     '''string : STRING'''
+#     print 'hello', p[1]
+#     p[0] = p[1]
 
 # def p_indent(p):
 #     '''indent : INDENT'''
@@ -283,7 +308,10 @@ def p_string(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho\nbuild schedule\nexport"
+data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho"
+# data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho\nbuild schedule\nexport"
+print data
+print "END"
 tree = yacc.parse(data)
 print tree
 #import sys
