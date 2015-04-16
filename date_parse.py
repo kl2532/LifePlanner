@@ -45,13 +45,13 @@ def p_string(p):
 def p_error(p):
     print p.type, " ", p.value
 
-#def p_user_strings(p):
+# def p_user_strings(p):
 #    '''user_strings : USERSTRING user_string_rep'''
 #    print 'p_strings p[1]', p[1]
 #    print 'p_strings p[2]', p[2]
 #    p[0] = (p[1], p[2])
-#    
-#def p_user_string_rep(p):
+   
+# def p_user_string_rep(p):
 #    '''user_string_rep : 
 #    			    | user_strings user_string_rep'''
 #    if(len(p) == 3):
@@ -61,7 +61,7 @@ def p_error(p):
 #    else:
 #    	print 'empty'
      
-yacc.yacc(start='program')
+yacc.yacc()
 data = "PLT from 4:25PM to 5:30PM"
 tree = yacc.parse(data)
 print tree

@@ -15,8 +15,11 @@ tokens = (
 reserved = {
     'from' : 'FROM',
     'to' : 'TO',
+    'at' : 'AT',
+    'with' : 'WITH',
     'AM' : 'AM',
-    'PM' : 'PM' }
+    'PM' : 'PM', 
+    }
 
 
 # ----REGULAR EXPRESSION PATTERNS---
@@ -69,6 +72,7 @@ t_DECIMAL	= r'[\-]?[0-9]+\.[0-9]*'
 # t_STRING = r'^([a-zA-Z]+)$'
 # t_USERSTRING = r'[a-zA-Z]+'
 
+# t_STRING = r'[a-zA-Z]+'
 def t_STRING(t):
     r'[a-zA-Z]+'
     if t.value in reserved:

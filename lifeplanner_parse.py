@@ -111,7 +111,7 @@ def p_event(p):
     print "p_event"
     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
 
-def p_eventname(p):
+def p_event_title(p):
     '''event_title : strings'''
     print "p_eventname", p[1]
     p[0] = p[1]
@@ -124,11 +124,12 @@ def p_when(p):
 def p_time(p):
     '''time : num colon num meridian'''
     p[0] = (p[1], p[2], p[3], p[4])
+    print "p_time", p[0]
 
 def p_where(p):
     '''where : at location
              | empty'''
-    print p[2]
+    print 'p_where'
     if (len(p) == 3):
         p[0] = (p[1], p[2])
     elif (len(p) == 2):
@@ -136,12 +137,13 @@ def p_where(p):
 
 def p_loc(p):
     '''location : strings'''
+    print 'p_location', p[1]
     p[0] = p[1]
 
 def p_who(p):
     '''who : with people_list
            | empty'''
-    print p[2]
+    print 'p_who', p[2]
     if (len(p) == 3):
         p[0] = (p[1], p[2])
     elif (len(p) == 2):
@@ -226,22 +228,23 @@ def p_comma(p):
 
 def p_with(p):
     '''with : WITH'''
+    print 'p_with', p[1]
     p[0] = p[1]
 
 def p_at(p):
     '''at : AT'''
+    print 'p_at', p[1]
     p[0] = p[1]
 
 def p_num(p):
     '''num : INTEGER'''
+    print 'p_num', p[1]
     p[0] = p[1]
 
-def p_meridian1(p):
-    '''meridian : AM'''
-    p[0] = p[1]
-
-def p_meridian2(p):
-    '''meridian : PM'''
+def p_meridian(p):
+    '''meridian : AM
+                | PM'''
+    print 'p_meridian', p[1]
     p[0] = p[1]
 
 def p_from(p):
@@ -251,11 +254,12 @@ def p_from(p):
 
 def p_to(p):
     '''to : TO'''
+    print 'p_to', p[1]
     p[0] = p[1]
 
 def p_colon(p):
     '''colon : COLON'''
-    print "p_colon"
+    print "p_colon", p[1]
     p[0] = p[1]
 
 def p_build(p):
@@ -264,6 +268,10 @@ def p_build(p):
 
 def p_schedule(p):
     '''schedule : SCHEDULE'''
+    p[0] = p[1]
+
+def p_string(p):
+    '''string : STRING'''
     p[0] = p[1]
 
 def p_strings(p):
@@ -298,6 +306,9 @@ def p_newline(p):
     '''newline : NEWLINE'''
     print "p_newline"
     p[0] = p[1]
+
+# def p_error(p):
+#     print p.type, " ", p.value
 
 # def p_term(p):
 #     '''term : constant'''
@@ -339,16 +350,31 @@ def p_newline(p):
 #     '''lparen : LEFTPAREN'''
 #     p[0] = ( rt.LPAREN )
 
+# def p_user_strings(p):
+#    '''user_strings : USERSTRING user_string_rep'''
+#    print 'p_strings p[1]', p[1]
+#    print 'p_strings p[2]', p[2]
+#    p[0] = (p[1], p[2])
+   
+# def p_user_string_rep(p):
+#    '''user_string_rep : 
+#                   | user_strings user_string_rep'''
+#    if(len(p) == 3):
+#       print 'print p[1] ', p[1]
+#       print 'print p[2] ', p[2]
+#       p[0] = (p[1], p[2])
+#    else:
+#       print 'empty'
+
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = "PLT from 4:13PM to 4:14PM at Mudd with Aho"
-
+data = "PLT from 4:13PM to 4:20PM at Mudd with Aho\n"
 # data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho\nbuild schedule\nexport"
 print data
-print "END"
 tree = yacc.parse(data)
 print tree
+
 #import sys
 
 #python_translation = ""
