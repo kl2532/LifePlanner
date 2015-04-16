@@ -3,21 +3,28 @@ import lex
 # ----DELINEATION OF KEYWORDS AND TOKENS----
 
 tokens = (
-    'INTEGER','DECIMAL','STRING', #'CHARACTER', 
-    'PLUS','MINUS','DIVIDE',
-    'TIMES', 'NEWLINE', 'LEFTPAREN', 'COLON',
-    'RIGHTPAREN', 'BUILD', 'PRINT', 'TAB', 'SCHEDULE', 'EXPORT', 'IMPORT',
-    'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY', 'AM', 'PM',
-    'TO', 'WITH', 'FROM', 'AT', 'TAG', 'AND', 'COMMA')
+    'INTEGER','DECIMAL','STRING', 'NUM', #'CHARACTER', 
+    'PLUS','MINUS','DIVIDE', 'TIMES', 
+    'NEWLINE', 'LEFTPAREN', 'COLON', 'COMMA', 'RIGHTPAREN', 
+    'BUILD', 'PRINT', 'TAB', 'SCHEDULE', 'EXPORT', 'IMPORT',
+    'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 
+    'SUNDAY', 
+    'AM', 'PM', 'TO', 'WITH', 'FROM', 'AT', 'TAG', 'AND',
+    )
+
+reserved = {
+    'from' : 'FROM',
+    'to' : 'TO',
+    'AM' : 'AM',
+    'PM' : 'PM' }
+
 
 # ----REGULAR EXPRESSION PATTERNS---
 
-# Regular expression patterns
-# for whitespace
+# Regular expression patterns for whitespace
 t_NEWLINE = r'\n'
 
-# Regular expression patterns for multi-use
-# tokens.
+# Regular expression patterns for multi-use tokens.
 
 # Keywords
 t_MONDAY = r'(Monday)'
@@ -42,29 +49,37 @@ t_COMMA = r'\,'
 # Time Meridian
 t_AM = r'(AM)'
 t_PM = r'(PM)'
-# t_PLT = r'(PLT)'
 t_ignore = ' \t'
+# t_PLT = r'(PLT)'
 
 # Punctuation
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
 t_COLON = r'\:'
 
-# Regular expression patterns for basic 
-# constants (integer, decimal, character)
-t_INTEGER    = r'[\-]?[0-9]+'
-t_DECIMAL    = r'[\-]?[0-9]+\.[0-9]*'
+# Regular expression patterns for basic constants 
+# (integer, decimal, character, ...)
+t_NUM 		= r'[\-]?[0-9]+'
+t_INTEGER	= r'[\-]?[0-9]+'
+t_DECIMAL	= r'[\-]?[0-9]+\.[0-9]*'
 # t_CHARACTER  = r'(\'[^\']\')'
-#t_STRING     = r'(\"[^\"]+\")'
-t_STRING = r'[a-zA-Z]+'
-# Regular expression patterns for arithmetic
-# operators.
-t_PLUS       = r'\+'
-t_MINUS      = r'\-'
-t_TIMES      = r'\*'
-t_DIVIDE    = r'/'
+# t_STRING     = r'(\"[^\"]+\")'
+# t_STRING = r'[a-zA-Z]+'
+# t_STRING = r'(^[A-Za-z]+$)'
+# t_STRING = r'^([a-zA-Z]+)$'
+# t_USERSTRING = r'[a-zA-Z]+'
 
-#t_STRING = r'(^[A-Za-z]+$)'
+def t_STRING(t):
+    r'[a-zA-Z]+'
+    if t.value in reserved:
+        t.type = reserved[t.value]
+    return t
+
+# Regular expression patterns for arithmetic operators.
+t_PLUS		= r'\+'
+t_MINUS		= r'\-'
+t_TIMES		= r'\*'
+t_DIVIDE	= r'/'
 
 # def t_NEWLINE(t):       # When a \n is found,
 #      r'\n'               # increment the line
@@ -73,13 +88,16 @@ t_DIVIDE    = r'/'
 #                         # and errors can be
 #                         # reported precisely.
 
+
 # ----ERROR HANDLING----
 
-# If an error is found, attempt to recover by
-# skipping the invalid character.
+# If an error is found, attempt to recover by skipping the invalid character.
 
 def t_error(t):
     t.lexer.skip(1)
+
+# def t_error(t):
+#     print t.type, " ",t.value
 
 # Lex the input.
 lexer = lex.lex()
