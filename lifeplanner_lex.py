@@ -19,6 +19,10 @@ reserved = {
     'with' : 'WITH',
     'AM' : 'AM',
     'PM' : 'PM', 
+    'Monday' : 'MONDAY',
+    'build' : 'BUILD',
+    'schedule' : 'SCHEDULE',
+    'export' : 'EXPORT',
     }
 
 

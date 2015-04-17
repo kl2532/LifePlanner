@@ -19,14 +19,13 @@ precedence = (
 )
 
 # ----GRAMMAR PRODUCTIONS----
-def p_program(p):
-    '''program : event'''
-    p[0] = p[1]
-
 # def p_program(p):
-#     '''program : import_stmt schedule_stmts build_schedule export_stmt'''
-#     print "p_program p[2]", p[2]
-#     p[0] = (p[1], p[2], p[3], p[4])
+#     '''program : day colon newline event build_schedule export_stmt'''
+#     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
+
+def p_program(p):
+    '''program : import_stmt schedule_stmts build_schedule export_stmt'''
+    p[0] = (p[1], p[2], p[3], p[4])
 
 def p_imports(p):
     '''import_stmt : import strings newline
@@ -40,12 +39,8 @@ def p_imports(p):
 def p_schedulestmt(p):
     '''schedule_stmts : day colon newline event
                       | empty'''
-    # print "p_schedulestmt"
-    if (len(p) == 6):
-        print "p_schedulestmt p[1]", p[1]
-        print "p_schedulestmt p[2]", p[2]
-        print "p_schedulestmt p[4]", p[4]
-        p[0] = (p[1], p[2], p[3], p[4], p[5])
+    if (len(p) == 5):
+        p[0] = (p[1], p[2], p[3], p[4])
     elif (len(p) == 2):
         print "p_schedulestmt elif"
         p[0] = p[1]
@@ -184,8 +179,8 @@ def p_tagline(p):
         p[0] = p[1]
 
 def p_buildstmts(p):
-    '''build_schedule : build schedule newline tag_priorities clean'''
-    p[0] = (p[1], p[2], p[3], p[4], p[5])
+    '''build_schedule : build schedule newline'''# tag_priorities clean'''
+    p[0] = (p[1], p[2], p[3])#, p[4], p[5])
 
 #change later
 def p_tagp(p):
@@ -369,8 +364,7 @@ def p_newline(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = "PLT from 4:13PM to 4:20PM at Mudd with Aho\n"
-# data = "Monday:\nPLT from 4:13PM to 4:14PM at Mudd with Aho\nbuild schedule\nexport"
+data = "Monday:\nPLT from 4:13PM to 4:20PM at Mudd with Aho\nbuild schedule\nexport"
 print data
 tree = yacc.parse(data)
 print tree
