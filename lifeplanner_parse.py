@@ -222,8 +222,25 @@ def p_expr(p):
             | for_stmt
             | event_stmt
             | comment_stmt
-            | assignment_stmt'''
+            | assignment_stmt
+	    | math_stmt'''
     p[0] = (p[1])
+
+def p_mathstmt1(p):
+    '''math_stmt : math_stmt PLUS math_stmt
+		 | math_stmt MINUS math_stmt
+		 | math_stmt TIMES math_stmt
+		 | math_stmt DIVIDE math_stmt'''
+    p[0] = (p[1], p[2], p[3])
+
+def p_mathstmt2(p):
+    '''math_stmt : LEFTPAREN math_stmt RIGHTPAREN'''
+    p[0] = (p[1], p[2], p[3])
+
+def p_mathstmt3(p):
+    '''math_stmt : INTEGER
+		 | string'''
+    p[0] = p[1]
 
 def p_comment_stmt(p): 
     '''comment_stmt : COMMENT strings
