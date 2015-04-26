@@ -1,4 +1,5 @@
 import lex
+import re
 
 # ----DELINEATION OF KEYWORDS AND TOKENS----
 
@@ -6,7 +7,7 @@ tokens = [
     'INTEGER','DECIMAL','STRING', #'CHARACTER', 
     'PLUS','MINUS','DIVIDE', 'TIMES', 
     'NEWLINE', 'LEFTPAREN', 'COLON', 'COMMA', 'RIGHTPAREN', 'COMMENT', 
-    'PPLAND', 'SLASH', 'VARIABLE', 'USERSTRING',
+    'PPLAND', 'SLASH', 'USERSTRING',
     'EE', 'GE', 'LE', 'EQUAL', 'GT', 'LT', 'QUOTATION',
     'NUMTYPE', 'DECTYPE', 'STRTYPE',
     ]
@@ -189,16 +190,23 @@ t_INTEGER   = r'[\-]?[0-9]+'
 t_DECIMAL   = r'[\-]?[0-9]+\.[0-9]*'
 # t_USERSTRING(t) = r'\"[a-zA-Z0-9_]*\"'
 
-def t_VARIABLE(t):
-    r'[a-zA-Z_][a-zA-Z0-9_]*'
-    if t.value in reserved:
-        t.type = reserved[t.value]
-    return t
+# def t_VARIABLE(t):
+#     r'[a-zA-Z_][a-zA-Z0-9_]*'
+#     if t.value in reserved:
+#         t.type = reserved[t.value]
+#     return t
 
 def t_STRING(t):
     r'[a-zA-Z0-9_]+'
-    if t.value in reserved:
+    int_re = re.compile('[\-]?[0-9]+')
+    dec_re = re.compile('[\-]?[0-9]+\.[0-9]*')
+    if int_re.match(t.value):
+        t.type = 'INTEGER'
+    elif dec_re.match(t.value):
+        t.type = 'DECIMAL'
+    elif t.value in reserved:
         t.type = reserved[t.value]
+
     return t
 
 # Regular expression patterns for arithmetic operators.

@@ -27,6 +27,8 @@ precedence =    (
 #     '''program : day colon newline event build_schedule export_stmt'''
 #     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
 
+start = 'program'
+
 def p_program(p):
     '''program : function_blocks import_stmt schedule_stmts build_schedule export_stmt'''
     print 'program start'
@@ -36,7 +38,7 @@ def p_functionblocks(p):
     '''function_blocks : function_block
                 | function_blocks function_block
                 | empty'''
-    print 'f_blox'
+    print 'function_blox'
     if len(p) == 2:
         p[0] = p[1]
     else:
@@ -97,7 +99,7 @@ def p_year(p):
 def p_events(p):
     '''event_list : event event_list_rep
                   | empty'''
-    print "p_events p[1]", p[1]
+    print "p_events", p[1]
     if len(p) == 3:
         print "p_events p[2]", p[2]
         p[0] = (p[1], p[2])
@@ -114,8 +116,7 @@ def p_event(p):
     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
 
 def p_event_title(p):
-    '''event_title : STRING 
-                    | USERSTRING'''
+    '''event_title : STRING'''
     print "p_eventname", p[1]
     p[0] = p[1]
 
@@ -296,7 +297,7 @@ def p_assignmentstmt(p):
 
 # gotta add array
 def p_value(p):
-    '''value : VARIABLE
+    '''value : variable
             | num
             | time
             | day
@@ -305,7 +306,9 @@ def p_value(p):
             | tag'''
     p[0] = p[1]
 
-
+def p_variable(p):
+    '''variable : STRING'''
+    p[0] = p[1]
                             
 def p_bool_op(p):
     '''bool_operator : AND
@@ -511,11 +514,11 @@ def p_newline(p):
     p[0] = p[1]
     
 def p_var_assignmet(p):
-    '''var_assign : VARIABLE EQUAL STRING'''
+    '''var_assign : variable EQUAL STRING'''
     p[0] = (p[1], p[2], p[3])
 
 def p_function_declaration(p):
-    '''function_declaration : type FUNCTION VARIABLE LEFTPAREN parameter_list RIGHTPAREN'''
+    '''function_declaration : type FUNCTION variable LEFTPAREN parameter_list RIGHTPAREN'''
     p[0] = (p[1], p[2], p[3], p[5])
 
 def p_parameter_list(p):
@@ -599,8 +602,8 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 
-yacc.yacc(start='program')
-data = "Monday:\nPLT from 4:13PM to 4:20PM at Mudd with Aho\nbuild schedule\nexport asdlfmasdlkf"
+yacc.yacc()
+data = "Monday:\nPLT from 4:13 PM to 4:20 PM at Mudd with Aho\nbuild schedule\nexport asdlfmasdlkf"
 print data
 tree = yacc.parse(data)
 print tree
