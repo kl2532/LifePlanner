@@ -95,7 +95,7 @@ def p_event(p):
     p[0] = ('event', p[1], p[2], p[3], p[4], p[6])
 
 def p_event_title(p):
-    '''event_title : STRING'''
+    '''event_title : strings'''
     p[0] = p[1]
 
 def p_when(p):
@@ -219,20 +219,20 @@ def p_eventstmt(p):
     p[0] = p[1]
     
 def p_addstmt(p):
-    '''add_stmt : ADD string'''
-    p[0] = p[1]
+    '''add_stmt : ADD strings'''
+    p[0] = ('add_stmt', p[1], p[2])
     
 def p_cancel_stmt(p):
-    '''cancel_stmt : CANCEL string'''
-    p[0] = p[1]
+    '''cancel_stmt : CANCEL strings'''
+    p[0] = ('cancel_stmt', p[1], p[2])
     
 def p_whilestmt(p):
-    '''while_stmt : WHILE bool_expr expr_block END'''
-    p[0] = ('while_stmt', p[1], p[2], p[3])
+    '''while_stmt : WHILE bool_expr newline expr_block END'''
+    p[0] = ('while_stmt', p[1], p[2], p[4])
     
 def p_forstmt(p):
-    '''for_stmt : FOR assignment_stmt COMMA bool_expr COMMA math_stmt expr_block END'''
-    p[0] = ('for_stmt', p[1], p[1], p[3], p[5], p[6])
+    '''for_stmt : FOR assignment_stmt COMMA bool_expr COMMA assignment_stmt newline expr_block END'''
+    p[0] = ('for_stmt', p[1], p[2], p[4], p[6], p[8])
 
 def p_boolean(p):
     '''bool_expr : bool_expr bool_operator bool_expr 
@@ -441,13 +441,16 @@ def p_string(p):
     p[0] = p[1]
 
 def p_strings(p):
-    '''strings : STRING string_rep
+    '''strings : STRING strings
                 | empty'''
     if len(p) == 3:
         if p[2] == None:
             p[0] = ('strings', p[1])
         else:
-            p[0] = ('strings', p[1], p[2])
+            str_list = ""
+            for string in p[2][1:]:
+                str_list = str_list + " " + string
+            p[0] = ('strings', p[1] + str_list)
 
 def p_string_rep(p):
     '''string_rep : strings'''
@@ -477,19 +480,20 @@ def p_newline(p):
 #     p[0] = ('var_assign', p[1], p[2], p[3])
 
 def p_function_declaration(p):
-    '''function_declaration : type FUNCTION variable LEFTPAREN parameter_list RIGHTPAREN'''
+    '''function_declaration : FUNCTION variable LEFTPAREN parameter_list RIGHTPAREN newline'''
     p[0] = ('function_declaration', p[1], p[2], p[3], p[5])
 
 def p_parameter_list(p):
-    '''parameter_list : STRING COMMA parameter_list 
+    '''parameter_list : STRING parameter_list 
+                    | COMMA STRING parameter_list
                     | empty'''
     if len(p) == 4:
         p[0] = ('param_list', p[1], p[2], p[3])
 
 def p_return(p):
-    '''return_statement : RETURN value 
+    '''return_statement : RETURN value newline
                         | empty'''
-    if len(p) == 3:
+    if len(p) == 4:
         p[0] = ('return_stmt', p[1], p[2])
 
 def p_types(p):
@@ -562,7 +566,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'Monday:\nPLT from 4:13 PM to 4:20 PM at Mudd with Alfie\nbuild schedule\nx = 5\nif x == 5\nx = x + 1\nend\nexport asdlfmasdlkf'
+data = 'function addition(a, b)\ny = a + b\nreturn y\nbuild schedule\nexport mysched'
 print data
 tree = yacc.parse(data)
 print tree
