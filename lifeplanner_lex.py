@@ -3,11 +3,12 @@ import lex
 # ----DELINEATION OF KEYWORDS AND TOKENS----
 
 tokens = [
-    'INTEGER','DECIMAL','STRING', 'NUM', #'CHARACTER', 
+    'INTEGER','DECIMAL','STRING', #'CHARACTER', 
     'PLUS','MINUS','DIVIDE', 'TIMES', 
     'NEWLINE', 'LEFTPAREN', 'COLON', 'COMMA', 'RIGHTPAREN', 'COMMENT', 
     'PPLAND', 'SLASH', 'VARIABLE', 'USERSTRING',
     'EE', 'GE', 'LE', 'EQUAL', 'GT', 'LT', 'QUOTATION',
+    'NUMTYPE', 'DECTYPE', 'STRTYPE',
     ]
 
 reserved = {
@@ -77,8 +78,8 @@ reserved = {
     'cancel' : 'CANCEL',
     'and' : 'AND',
     'not' : 'NOT',
-    'or' : 'OR'
-
+    'or' : 'OR',
+    'function' : 'FUNCTION'
     }
 
 tokens = tokens + reserved.values()
@@ -176,10 +177,14 @@ t_PPLAND = r'\(&\)'
 t_QUOTATION = '\"'
 t_SLASH = r'/'
 
+# Keywords
+t_FUNCTION = r'function'
+t_NUMTYPE = r'number'
+t_DECTYPE = r'decimal'
+t_STRTYPE = r'string'
 
 # Regular expression patterns for basic constants 
 # (integer, decimal, character, ...)
-t_NUM       = r'[\-]?[0-9]+'
 t_INTEGER   = r'[\-]?[0-9]+'
 t_DECIMAL   = r'[\-]?[0-9]+\.[0-9]*'
 # t_USERSTRING(t) = r'\"[a-zA-Z0-9_]*\"'

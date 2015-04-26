@@ -263,9 +263,13 @@ def p_cancel_stmt(p):
     p[0] = p[1]
     
 def p_whilestmt(p):
-    '''while_stmt : WHILE bool_expr expr_block'''
+    '''while_stmt : WHILE bool_expr expr_block END'''
     p[0] = (p[1], p[2], p[3])
     
+def p_forstmt(p):
+    '''for_stmt : FOR assignment_stmt COMMA bool_expr COMMA math_stmt expr_block END'''
+    p[0] = (p[1], p[1], p[3], p[5], p[6])
+
 def p_boolean(p):
     '''bool_expr : bool_expr bool_operator bool_expr 
             | bool_operation 
@@ -282,19 +286,21 @@ def p_boolean_opearation(p):
     p[0] = (p[1], p[2], p[3])
 
 def p_assignmentstmt(p):
-   '''assignment_stmt : string EQUALS value'''
+   '''assignment_stmt : string EQUAL value'''
    p[0] = (p[1], p[2], p[3])
-   
+
+# gotta add array
 def p_value(p):
     '''value : VARIABLE
             | num
             | time
             | day
-            | array
             | name
             | event
             | tag'''
     p[0] = p[1]
+
+
                             
 def p_bool_op(p):
     '''bool_operator : AND
@@ -504,7 +510,7 @@ def p_var_assignmet(p):
     p[0] = (p[1], p[2], p[3])
 
 def p_function_declaration(p):
-    '''function-declaration : TYPE FUNCTION VARIABLE LEFTPAREN parameter_list RIGHTPAREN'''
+    '''function_declaration : type FUNCTION VARIABLE LEFTPAREN parameter_list RIGHTPAREN'''
     p[0] = (p[1], p[2], p[3], p[5])
 
 def p_parameter_list(p):
@@ -519,9 +525,16 @@ def p_return(p):
     if len(p) == 3:
         p[0] = (p[1], p[2])
 
+def p_types(p):
+    '''type : NUMTYPE
+            | DECTYPE
+            | STRTYPE'''
+    p[0] = p[1]
 
-# def p_error(p):
-#     print p.type, " ", p.value
+def p_error(p):
+    print p
+
+
 
 # def p_term(p):
 #     '''term : constant'''
