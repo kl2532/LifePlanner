@@ -29,12 +29,14 @@ precedence =    (
 
 def p_program(p):
     '''program : function_blocks import_stmt schedule_stmts build_schedule export_stmt'''
+    print 'program start'
     p[0] = (p[1], p[2], p[3], p[4])
 
 def p_functionblocks(p):
     '''function_blocks : function_block
                 | function_blocks function_block
                 | empty'''
+    print 'f_blox'
     if len(p) == 2:
         p[0] = p[1]
     else:
@@ -43,19 +45,22 @@ def p_functionblocks(p):
 def p_functionblock(p):
     '''function_block : function_declaration expr_block return_statement'''
     p[0] = (p[1], p[2], p[3])
+
 def p_imports(p):
     '''import_stmt : import filename newline
                    | empty'''
-    print "p_imports"
     if len(p) == 4:
+        print "p_imports"
         p[0] = (p[1], p[2], p[3])
     elif len(p) == 2:
+        print "p_import empty"
         p[0] = p[1]
 
 def p_schedulestmt(p):
     '''schedule_stmts : day colon newline event_list schedule_stmts_rep
                       | empty'''
     if len(p) == 6:
+        print 'p_schedulestmt'
         p[0] = (p[1], p[2], p[3], p[4], p[5])
     elif len(p) == 2:
         print "p_schedulestmt elif"
@@ -74,7 +79,7 @@ def p_day1(p):
            | SATURDAY
            | SUNDAY
            | date'''
-    print "p_day"
+    print "p_day", p[1]
     p[0] = p[1]
 
 def p_date(p):
@@ -473,23 +478,23 @@ def p_string(p):
     p[0] = p[1]
 
 def p_strings(p):
-    'strings : STRING string_rep'
+    '''strings : STRING string_rep'''
     print 'p_strings p[1]', p[1]
     print 'p_strings p[2]', p[2]
     p[0] = (p[1], p[2])
 
 def p_string_rep(p):
-    '''string_rep : 
-                    | strings string_rep'''
-    if(len(p) == 3):
+    '''string_rep : strings
+                | empty'''
+    if(len(p) == 2):
         print 'print p[1] ', p[1]
-        print 'print p[2] ', p[2]
-        p[0] = (p[1], p[2])
+        p[0] = p[1]
     else:
         print 'empty' 
 
 def p_empty(p):
-    'empty :'
+    '''empty :'''
+    print 'empty!!'
     pass
 
 def p_import(p):
@@ -594,8 +599,8 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 
-yacc.yacc()
-data = "Monday:\nPLT from 4:13PM to 4:20PM at Mudd with Aho\nbuild schedule\nexport"
+yacc.yacc(start='program')
+data = "Monday:\nPLT from 4:13PM to 4:20PM at Mudd with Aho\nbuild schedule\nexport asdlfmasdlkf"
 print data
 tree = yacc.parse(data)
 print tree
