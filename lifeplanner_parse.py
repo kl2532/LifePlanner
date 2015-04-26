@@ -109,7 +109,8 @@ def p_event(p):
     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
 
 def p_event_title(p):
-    '''event_title : STRING | USERSTRING'''
+    '''event_title : STRING 
+                    | USERSTRING'''
     print "p_eventname", p[1]
     p[0] = p[1]
 
@@ -206,7 +207,7 @@ def p_clean(p):
     elif len(p) == 2:
         p[0] = (p[1])
 
-def expr_block(p):
+def p_expr_block(p):
     '''expr_block : expr
                     | expr_block expr
                     | empty'''
@@ -281,7 +282,7 @@ def p_boolean_opearation(p):
     p[0] = (p[1], p[2], p[3])
 
 def p_assignmentstmt(p):
-   '''assignment_stmt: string EQUALS value'''
+   '''assignment_stmt : string EQUALS value'''
    p[0] = (p[1], p[2], p[3])
    
 def p_value(p):
@@ -289,7 +290,6 @@ def p_value(p):
             | num
             | time
             | day
-            | tag
             | array
             | name
             | event
@@ -303,11 +303,16 @@ def p_bool_op(p):
     p[0] = p[1]
 
 def p_comp_op(p):
-    '''comparison_operator : LT | GT | EE | LE | GE'''
+    '''comparison_operator : LT 
+                        | GT 
+                        | EE 
+                        | LE 
+                        | GE'''
     p[0] = p[1]
     
 def p_bool_value(p):
-    '''bool_value : TRUE | FALSE'''
+    '''bool_value : TRUE 
+                | FALSE'''
     p[0] = p[1]
 
 def p_ifstmt(p):
@@ -499,16 +504,18 @@ def p_var_assignmet(p):
     p[0] = (p[1], p[2], p[3])
 
 def p_function_declaration(p):
-    '''function-declaration : TYPE FUNCTION VARIABLE LEFTPAREN parameter-list RIGHTPAREN'''
+    '''function-declaration : TYPE FUNCTION VARIABLE LEFTPAREN parameter_list RIGHTPAREN'''
     p[0] = (p[1], p[2], p[3], p[5])
 
 def p_parameter_list(p):
-    '''parameter-list : STRING COMMA parameter-list | empty'''
+    '''parameter_list : STRING COMMA parameter_list 
+                    | empty'''
     if len(p) == 4:
         p[0] = (p[1], p[2], p[3])
 
 def p_return(p):
-    '''return-statement : RETURN value | empty'''
+    '''return_statement : RETURN value 
+                        | empty'''
     if len(p) == 3:
         p[0] = (p[1], p[2])
 

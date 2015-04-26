@@ -2,12 +2,13 @@ import lex
 
 # ----DELINEATION OF KEYWORDS AND TOKENS----
 
-tokens = (
+tokens = [
     'INTEGER','DECIMAL','STRING', 'NUM', #'CHARACTER', 
     'PLUS','MINUS','DIVIDE', 'TIMES', 
     'NEWLINE', 'LEFTPAREN', 'COLON', 'COMMA', 'RIGHTPAREN', 'COMMENT', 
-    'PPLAND', 'SLASH', 'COMMENT', 'VARIABLE', 'USERSTRING',
-    )
+    'PPLAND', 'SLASH', 'VARIABLE', 'USERSTRING',
+    'EE', 'GE', 'LE', 'EQUAL', 'GT', 'LT', 'QUOTATION',
+    ]
 
 reserved = {
     'from' : 'FROM',
@@ -68,12 +69,16 @@ reserved = {
     'length': 'LENGTH',
     'if' : 'IF',
     'elseif' : 'ELSEIF',
-    'else': ' ELSE', 
+    'else': 'ELSE', 
     'for' : 'FOR',
     'while' : 'WHILE',
     'return' : 'RETURN', 
     'add' : 'ADD', 
     'cancel' : 'CANCEL',
+    'and' : 'AND',
+    'not' : 'NOT',
+    'or' : 'OR'
+
     }
 
 tokens = tokens + reserved.values()
@@ -105,7 +110,7 @@ t_SEP = 'September'
 t_OCT = 'October'
 t_NOV = 'November'
 t_DEC = 'December'
-t_MIN = r'(minute) | (minutes)'
+t_MINUTE = r'(minute) | (minutes)'
 t_HOUR = r'(hour) | (hours)'
 t_DAY = r'(day) | (days)'
 t_WEEK = r'(week) | (weeks)'
@@ -177,7 +182,7 @@ t_SLASH = r'/'
 t_NUM       = r'[\-]?[0-9]+'
 t_INTEGER   = r'[\-]?[0-9]+'
 t_DECIMAL   = r'[\-]?[0-9]+\.[0-9]*'
-t_USERSTRING(t) = r'\"[a-zA-Z0-9_]+\"'
+# t_USERSTRING(t) = r'\"[a-zA-Z0-9_]*\"'
 
 def t_VARIABLE(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
