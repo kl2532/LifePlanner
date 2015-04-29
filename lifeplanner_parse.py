@@ -1,5 +1,6 @@
 # Use the lexer defined by lifeplanner_lex.py
 import lifeplanner_lex
+import lifeplanner_translate as trans
 
 # Utilizing the PLY LALR parser generator.
 import yacc
@@ -31,29 +32,31 @@ start = 'program'
 
 def p_program(p):
     '''program : function_blocks import_stmt schedule_stmts build_schedule export_stmt'''
-    p[0] = ('program', p[1], p[2], p[3], p[4])
+    p[0] = ('program', p[1], p[2], p[3], p[4], p[5])
 
 def p_functionblocks(p):
     '''function_blocks : function_block function_blocks
                     | empty'''
     if len(p) == 3:
         p[0] = ('function_blocks', p[1], p[2])
+    else:
+        p[0] = ('function_blocks', None)
 
 def p_functionblock(p):
-    '''function_block : function_declaration expr_block return_statement'''
+    '''function_block : function_declaration expr_block return_stmt'''
     p[0] = ('function_block', p[1], p[2], p[3])
 
 def p_imports(p):
     '''import_stmt : import filename newline
                    | empty'''
     if len(p) == 4:
-        p[0] = ('import', p[1], p[2])
+        p[0] = ('import_stmt', p[1], p[2])
 
 def p_schedulestmt(p):
     '''schedule_stmts : day colon newline event_list schedule_stmts_rep
                       | empty'''
     if len(p) == 6:
-        p[0] = ('schedule_stmt', p[1], p[2], p[4], p[5])
+        p[0] = ('schedule_stmts', p[1], p[2], p[4], p[5])
 
 def p_schedule_stmt_rep(p):
     '''schedule_stmts_rep : schedule_stmts'''
@@ -68,7 +71,7 @@ def p_day1(p):
            | SATURDAY
            | SUNDAY
            | date'''
-    p[0] = p[1]
+    p[0] = ('day', p[1])
 
 def p_date(p):
     '''date : num SLASH num year'''
@@ -319,7 +322,7 @@ def p_elseblock(p):
 def p_daymath(p):
     '''day_math : date op date_duration
                 | date_duration op date'''
-    p[0] = ('dat_math', p[1], p[2], p[3])
+    p[0] = ('day_math', p[1], p[2], p[3])
 
 def p_timemath(p):
     '''time_math : time op time_duration
@@ -488,10 +491,10 @@ def p_parameter_list(p):
                     | COMMA STRING parameter_list
                     | empty'''
     if len(p) == 4:
-        p[0] = ('param_list', p[1], p[2], p[3])
+        p[0] = ('parameter_list', p[1], p[2], p[3])
 
 def p_return(p):
-    '''return_statement : RETURN value newline
+    '''return_stmt : RETURN value newline
                         | empty'''
     if len(p) == 4:
         p[0] = ('return_stmt', p[1], p[2])
@@ -566,10 +569,10 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'function addition(a, b)\ny = a + b\nreturn y\nbuild schedule\nexport mysched'
-print data
+data = 'import aho\nMonday:\nPLT from 2:30 PM to 4:00 PM with Alfie\nbuild schedule\nexport calendar'
 tree = yacc.parse(data)
 print tree
+print trans.translate(tree)
 
 #import sys
 
