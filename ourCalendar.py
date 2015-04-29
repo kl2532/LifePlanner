@@ -23,14 +23,11 @@ class ourCalendar:
 					stuff.append({})
 				if(line.startswith('DTSTART')):
 					info = line.split(":")
-					stuff[i]["DSTART"] = info[1].rstrip()
+					stuff[i]["from"] = info[1].rstrip()
 				if(line.startswith('DTEND')):
 					info = line.split(":")
-					stuff[i]["DTEND"] = info[1].rstrip()
-				if(line.startswith('UID')):
-					info = line.split(":")
-					stuff[i]["UID"] = info[1].rstrip()
-				if(line.startswith('DESCRIPTION')):
+					stuff[i]["to"] = info[1].rstrip()
+				if(line.startswith('with')):
 					info = line.split(":")
 					if(info[1].rstrip().startswith('with')):
 						stuff[i]["DESCRIPTION"] = info[1].rstrip()
@@ -38,10 +35,10 @@ class ourCalendar:
 						stuff[i]["DESCRIPTION"] = ""
 				if(line.startswith('LOCATION')):
 					info = line.split(":")
-					stuff[i]["LOCATION"] = info[1].rstrip()
+					stuff[i]["at"] = info[1].rstrip()
 				if(line.startswith('SUMMARY')):
 					info = line.split(":")
-					stuff[i]["SUMMARY"] = info[1].rstrip()
+					stuff[i]["name"] = info[1].rstrip()
 				if(line.startswith('END:VEVENT')):
 					i = i+1
 		print stuff
