@@ -2,8 +2,12 @@
 #Used to run .plan files
 #To run "run_LifePlanner [file_name.plan]
 
-python lifeplanner_parse.py $1 
-if [ "$?" = "1" ]; then
+python lifeplanner_parse.py $1 2>error.txt
+filesize=$(stat -c%s "error.txt")
+echo $filesize
+#errormessage ='python lifeplanner_parse.py $1 2'
+#echo $errormessage 
+if [ "$filesize" == "0" ]; then
     python calendar.py
     rm calendar.py
 else 
