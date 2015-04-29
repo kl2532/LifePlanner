@@ -1,3 +1,6 @@
+from datetime import datetime
+from dateutil import tz
+
 class ourCalendar:
 	"""Represents a calendar ics"""
 
@@ -23,10 +26,20 @@ class ourCalendar:
 					stuff.append({})
 				if(line.startswith('DTSTART')):
 					info = line.split(":")
-					stuff[i]["from"] = info[1].rstrip()
+					time = datetime.strptime(info[1].rstrip(), '%Y%m%dT%H%M%SZ')
+					from_zone = tz.tzutc()
+					to_zone = tz.tzlocal()
+					time = time.replace(tzinfo=from_zone)
+					time = time.astimezone(to_zone)
+					stuff[i]["from"] = time
 				if(line.startswith('DTEND')):
 					info = line.split(":")
-					stuff[i]["to"] = info[1].rstrip()
+					time = datetime.strptime(info[1].rstrip(), '%Y%m%dT%H%M%SZ')
+					from_zone = tz.tzutc()
+					to_zone = tz.tzlocal()
+					time = time.replace(tzinfo=from_zone)
+					time = time.astimezone(to_zone)
+					stuff[i]["to"] = time
 				if(line.startswith('with')):
 					info = line.split(":")
 					if(info[1].rstrip().startswith('with')):
