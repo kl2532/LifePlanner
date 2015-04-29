@@ -1,13 +1,16 @@
 import lex
+import re
 
 # ----DELINEATION OF KEYWORDS AND TOKENS----
 
-tokens = (
-    'INTEGER','DECIMAL','STRING', 'NUM', #'CHARACTER', 
+tokens = [
+    'INTEGER','DECIMAL','STRING', #'CHARACTER', 
     'PLUS','MINUS','DIVIDE', 'TIMES', 
     'NEWLINE', 'LEFTPAREN', 'COLON', 'COMMA', 'RIGHTPAREN', 'COMMENT', 
-    'PPLAND', 'SLASH', 'COMMENT', 'VARIABLE', 'USERSTRING',
-    )
+    'PPLAND', 'SLASH', 'USERSTRING',
+    'EE', 'GE', 'LE', 'EQUAL', 'GT', 'LT', 'QUOTATION',
+    'NUMTYPE', 'DECTYPE', 'STRTYPE',
+    ]
 
 reserved = {
     'from' : 'FROM',
@@ -68,12 +71,16 @@ reserved = {
     'length': 'LENGTH',
     'if' : 'IF',
     'elseif' : 'ELSEIF',
-    'else': ' ELSE', 
+    'else': 'ELSE', 
     'for' : 'FOR',
     'while' : 'WHILE',
     'return' : 'RETURN', 
     'add' : 'ADD', 
     'cancel' : 'CANCEL',
+    'and' : 'AND',
+    'not' : 'NOT',
+    'or' : 'OR',
+    'function' : 'FUNCTION'
     }
 
 tokens = tokens + reserved.values()
@@ -105,7 +112,7 @@ t_SEP = 'September'
 t_OCT = 'October'
 t_NOV = 'November'
 t_DEC = 'December'
-t_MIN = r'(minute) | (minutes)'
+t_MINUTE = r'(minute) | (minutes)'
 t_HOUR = r'(hour) | (hours)'
 t_DAY = r'(day) | (days)'
 t_WEEK = r'(week) | (weeks)'
@@ -171,24 +178,35 @@ t_PPLAND = r'\(&\)'
 t_QUOTATION = '\"'
 t_SLASH = r'/'
 
+# Keywords
+t_FUNCTION = r'function'
+t_NUMTYPE = r'number'
+t_DECTYPE = r'decimal'
+t_STRTYPE = r'string'
 
 # Regular expression patterns for basic constants 
 # (integer, decimal, character, ...)
-t_NUM       = r'[\-]?[0-9]+'
 t_INTEGER   = r'[\-]?[0-9]+'
 t_DECIMAL   = r'[\-]?[0-9]+\.[0-9]*'
-t_USERSTRING(t) = r'\"[a-zA-Z0-9_]+\"'
+# t_USERSTRING(t) = r'\"[a-zA-Z0-9_]*\"'
 
-def t_VARIABLE(t):
-    r'[a-zA-Z_][a-zA-Z0-9_]*'
-    if t.value in reserved:
-        t.type = reserved[t.value]
-    return t
+# def t_VARIABLE(t):
+#     r'[a-zA-Z_][a-zA-Z0-9_]*'
+#     if t.value in reserved:
+#         t.type = reserved[t.value]
+#     return t
 
 def t_STRING(t):
     r'[a-zA-Z0-9_]+'
-    if t.value in reserved:
+    int_re = re.compile('[\-]?[0-9]+')
+    dec_re = re.compile('[\-]?[0-9]+\.[0-9]*')
+    if int_re.match(t.value):
+        t.type = 'INTEGER'
+    elif dec_re.match(t.value):
+        t.type = 'DECIMAL'
+    elif t.value in reserved:
         t.type = reserved[t.value]
+
     return t
 
 # Regular expression patterns for arithmetic operators.
