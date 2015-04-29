@@ -60,7 +60,7 @@ def p_schedulestmt(p):
 
 def p_schedule_stmt_rep(p):
     '''schedule_stmts_rep : schedule_stmts'''
-    p[0] = p[1]
+    p[0] = ('schedule_stmts_rep', p[1])
 
 def p_day1(p):
     '''day : MONDAY
@@ -91,7 +91,7 @@ def p_events(p):
 
 def p_events_rep(p):
     '''event_list_rep : event_list'''
-    p[0] = p[1]
+    p[0] = ('event_list_rep', p[1])
     
 def p_event(p):
     '''event : event_title when where who newline tag_line'''
@@ -99,7 +99,7 @@ def p_event(p):
 
 def p_event_title(p):
     '''event_title : strings'''
-    p[0] = p[1]
+    p[0] = ('event_title', p[1])
 
 def p_when(p):
     '''when : from time to time'''
@@ -117,7 +117,7 @@ def p_where(p):
 
 def p_loc(p):
     '''location : strings'''
-    p[0] = p[1]
+    p[0] = ('location', p[1])
 
 def p_who(p):
     '''who : with people_list
@@ -167,7 +167,7 @@ def p_tagp(p):
 def p_tagop(p):
     '''tag_op : LT
               | GT'''
-    p[0] = p[1]
+    p[0] = ('tag_op', p[1])
 
 #change later
 def p_clean(p):
@@ -184,7 +184,7 @@ def p_expr_block(p):
 
 def p_expr_block_rep(p):
     '''expr_block_rep : expr_block'''
-    p[0] = p[1]
+    p[0] = ('expr_block_rep', p[1])
         
 def p_expr(p):
     '''expr : print_stmt newline
@@ -195,7 +195,7 @@ def p_expr(p):
             | comment_stmt newline
             | assignment_stmt newline
 	        | math_stmt newline'''
-    p[0] = p[1]
+    p[0] = ('expr', p[1])
 
 def p_mathstmt1(p):
     '''math_stmt : math_stmt PLUS math_stmt
@@ -208,7 +208,7 @@ def p_mathstmt1(p):
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
 		          | string'''
-    p[0] = p[1]
+    p[0] = ('math_stmt', p[1])
 
 def p_comment_stmt(p): 
     '''comment_stmt : COMMENT strings
@@ -219,7 +219,7 @@ def p_comment_stmt(p):
 def p_eventstmt(p):
     '''event_stmt : add_stmt
                 | cancel_stmt'''
-    p[0] = p[1]
+    p[0] = ('event_stmt', p[1])
     
 def p_addstmt(p):
     '''add_stmt : ADD strings'''
@@ -266,17 +266,17 @@ def p_value(p):
             | event
             | tag
             | math_stmt'''
-    p[0] = p[1]
+    p[0] = ('value', p[1])
 
 def p_variable(p):
     '''variable : STRING'''
-    p[0] = p[1]
+    p[0] = ('variable', p[1])
                             
 def p_bool_op(p):
     '''bool_operator : AND
                     | OR
                     | NOT'''
-    p[0] = p[1]
+    p[0] = ('bool_operator', p[1])
 
 def p_comp_op(p):
     '''comparison_operator : LT 
@@ -284,12 +284,12 @@ def p_comp_op(p):
                         | EE 
                         | LE 
                         | GE'''
-    p[0] = p[1]
+    p[0] = ('comparison_operator', p[1])
     
 def p_bool_value(p):
     '''bool_value : TRUE 
                 | FALSE'''
-    p[0] = p[1]
+    p[0] = ('bool_value', p[1])
 
 def p_ifstmt(p):
     '''if_stmt : if_block elseif_blocks else_block'''
@@ -332,7 +332,7 @@ def p_timemath(p):
 def p_timeop(p):
     '''op : PLUS
           | MINUS'''
-    p[0] = (p[1])
+    p[0] = ('op', p[1])
         
 def p_printstmt(p):
     '''print_stmt : print quote strings quote'''
@@ -347,7 +347,7 @@ def p_dateunit(p):
                  | MONTH
                  | WEEK
                  | YEAR'''
-    p[0] = p[1]
+    p[0] = ('date_unit', p[1])
 
 def p_timedur(p):
     '''time_duration : num time_unit'''
@@ -356,11 +356,11 @@ def p_timedur(p):
 def p_timeunit(p):
     '''time_unit : HOUR
                  | MINUTE'''
-    p[0] = p[1]
+    p[0] = ('time_unit', p[1])
 
 def p_quote(p):
     '''quote : QUOTATION'''
-    p[0] = p[1]
+    p[0] = ('quote', p[1])
 
 def p_exportstmt(p):
     '''export_stmt : export filename
@@ -369,19 +369,19 @@ def p_exportstmt(p):
     
 def p_filename(p):
     '''filename : string'''
-    p[0] = p[1]
+    p[0] = ('filename', p[1])
 
 def p_export(p):
     '''export : EXPORT'''
-    p[0] = p[1]
+    p[0] = ('export', p[1])
 
 def p_tagname(p):
     '''tag_name : strings'''
-    p[0] = p[1]
+    p[0] = ('tag_name', p[1])
 
 def p_tag(p):
     '''tag : TAG'''
-    p[0] = p[1]
+    p[0] = ('tag', p[1])
 
 def p_name(p):
     '''name : strings'''
@@ -389,59 +389,59 @@ def p_name(p):
 
 def p_and(p):
     '''and : AND'''
-    p[0] = p[1]
+    p[0] = ('and', p[1])
 
 def p_comma(p):
     '''comma : COMMA'''
-    p[0] = p[1]
+    p[0] = ('comma', p[1])
 
 def p_with(p):
     '''with : WITH'''
     print 'p_with', p[1]
-    p[0] = p[1]
+    p[0] = ('with', p[1])
 
 def p_at(p):
     '''at : AT'''
     print 'p_at', p[1]
-    p[0] = p[1]
+    p[0] = ('at', p[1])
 
 def p_num(p):
     '''num : INTEGER'''
     print 'p_num', p[1]
-    p[0] = p[1]
+    p[0] = ('num', p[1])
 
 def p_meridian(p):
     '''meridian : AM
                 | PM'''
     print 'p_meridian', p[1]
-    p[0] = p[1]
+    p[0] = ('meridian', p[1])
 
 def p_from(p):
     '''from : FROM'''
     print 'p_from', p[1]
-    p[0] = p[1]
+    p[0] = ('from', p[1])
 
 def p_to(p):
     '''to : TO'''
     print 'p_to', p[1]
-    p[0] = p[1]
+    p[0] = ('to', p[1])
 
 def p_colon(p):
     '''colon : COLON'''
     print "p_colon", p[1]
-    p[0] = p[1]
+    p[0] = ('colon', p[1])
 
 def p_build(p):
     '''build : BUILD'''
-    p[0] = p[1]
+    p[0] = ('build', p[1])
 
 def p_schedule(p):
     '''schedule : SCHEDULE'''
-    p[0] = p[1]
+    p[0] = ('schedule', p[1])
 
 def p_string(p):
     '''string : STRING'''
-    p[0] = p[1]
+    p[0] = ('string', p[1])
 
 def p_strings(p):
     '''strings : STRING strings
@@ -458,7 +458,7 @@ def p_strings(p):
 def p_string_rep(p):
     '''string_rep : strings'''
     print 'print p[1] ', p[1]
-    p[0] = p[1]
+    p[0] = ('string_rep', p[1])
 
 def p_empty(p):
     '''empty :'''
@@ -467,16 +467,16 @@ def p_empty(p):
 
 def p_import(p):
     '''import : IMPORT'''
-    p[0] = p[1]
+    p[0] = ('import', p[1])
 
 def p_print(p):
     '''print : PRINT'''
-    p[0] = p[1]
+    p[0] = ('print', p[1])
 
 def p_newline(p):
     '''newline : NEWLINE'''
     print "p_newline"
-    p[0] = p[1]
+    p[0] = ('newline', p[1])
     
 # def p_var_assignmet(p):
 #     '''var_assign : variable EQUAL STRING'''
@@ -503,7 +503,7 @@ def p_types(p):
     '''type : NUMTYPE
             | DECTYPE
             | STRTYPE'''
-    p[0] = p[1]
+    p[0] = ('type', p[1])
 
 def p_error(p):
     print p
@@ -577,7 +577,6 @@ print trans.translate(tree)
 #import sys
 
 #python_translation = ""
-
 #for line in tree:
 #    if line[0]=='print':
 #        for i in range(len(line) - 1, -1, -1):
