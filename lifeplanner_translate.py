@@ -35,7 +35,7 @@ def parse_import_stmt(tree, num_tabs):
 def parse_schedule_stmts(tree, num_tabs):
 	if len(tree) != 4:
 		return -1
-	if tree[0][0] != 'day':
+	if tree[0][0] != 'date':
 		return -1
 	if tree[1][0] != 'colon':
 		return -1
@@ -43,17 +43,53 @@ def parse_schedule_stmts(tree, num_tabs):
 		return -1
 	if tree[3][0] != 'schedule_stmts_rep':
 		return -1
+	month, day, year = dir_to_func['date'](tree[0][1:], 0)
 	return \
-	dir_to_func['day'](tree[0][1:], 0) + '\n' + \
-	dir_to_func['colon'](tree[1][1:], 0) + '\n' + \
-	dir_to_func['event_list'](tree[2][1:], 0) + '\n' + \
+	dir_to_func['event_list'](tree[2][1:], 0, month, day, year) + '\n' + \
 	dir_to_func['schedule_stmts_rep'](tree[3][1:], 0)
 	
 def parse_build_schedule(tree, num_tabs):
-	return 'build_schedule'
+	if len(tree) != 4:
+		return -1
+	if tree[0][0] != 'build':
+		return -1
+	if tree[1][0] != 'schedule':
+		return -1
+	if tree[2][0] != 'tag_priorities':
+		return -1
+	if tree[3][0] != 'clean':
+		return -1
+	return \
+	dir_to_func['build'](tree[0][1:], 0) + '\n' + \
+	dir_to_func['schedule'](tree[1][1:], 0) + '\n' + \
+	dir_to_func['tag_priorities'](tree[2][1:], 0) + '\n' + \
+	dir_to_func['clean'](tree[3][1:], 0)
 
 def parse_export_stmt(tree, num_tabs):
-	return 'export_stmt'
+	if len(tree) != 2:
+		return -1
+	if tree[0][0] != 'export':
+		return -1
+	if tree[1][0] != 'filename':
+		return -1
+	return \
+	dir_to_func['export'](tree[0][1:], 0) + '\n' + \
+	dir_to_func['filename'](tree[1][1:], 0)
+
+def parse_day(tree, num_tabs):
+	return tree[0], tree[1], tree[2]
+
+def parse_event_list(tree, num_tabs, month, day, year):
+	if len(tree) != 2:
+		return -1
+	if tree[0][0] != 'event':
+		return -1
+	if tree[1][0] != 'event_list':
+		return -1
+	return \
+	dir_to_func['export'](tree[0][1:], 0) + '\n' + \
+	dir_to_func['filename'](tree[1][1:], 0)
+
 
 def parse_function_block(tree, num_tabs):
 	pass
@@ -102,10 +138,7 @@ def parse_if_block(tree, num_tabs):
 	
 def parse_parameter_list(tree, num_tabs):
 	pass
-	
-def parse_event_list(tree, num_tabs):
-	pass
-	
+		
 def parse_return_stmt(tree, num_tabs):
 	pass
 	
@@ -218,6 +251,6 @@ dir_to_func = {
 	'function_declaration' : parse_function_declaration,
 	'parameter_list' : parse_parameter_list,
 	'return_stmt' : parse_return_stmt,
-	'day' : parse_day,
+	'date' : parse_date,
 }
 
