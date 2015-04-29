@@ -4,6 +4,7 @@ import ourCalendar as c
 from datetime import datetime
 from dateutil import tz
 
+#declaring a calendar
 cal = c.ourCalendar()
 begin = datetime.strptime('2015-01-01 02:30:40', '%Y-%m-%d %H:%M:%S')
 end = datetime.strptime('2015-01-01 03:00:40', '%Y-%m-%d %H:%M:%S')
@@ -15,12 +16,9 @@ l = event.createEvent()
 l2 = event2.createEvent()
 cal.addEvent(l)
 cal.addEvent(l2)
+cal.write_file('my.ics')
 
-x = cal.output()
-
-print x
-with open('my.ics', 'w') as f:
-	f.write(x)
+cal.readCalendar('my.ics')
 
 
 # UID and DTSTAMP are unique for each event
