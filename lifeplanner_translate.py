@@ -84,7 +84,7 @@ def parse_event_list(tree, num_tabs, month, day, year):
 		return -1
 	if tree[0][0] != 'event':
 		return -1
-	if tree[1][0] != 'event_list':
+	if tree[1][0] != 'event_list_rep':
 		return -1
 	return \
 	dir_to_func['export'](tree[0][1:], 0) + '\n' + \
@@ -160,7 +160,7 @@ def parse_math_stmt(tree, num_tabs):
 def parse_year(tree, num_tabs):
 	pass
 	
-def parse_event(tree, num_tabs):
+def parse_event(tree, num_tabs, month, day, year):
 	pass
 	
 def parse_tag_priorities(tree, num_tabs):
@@ -204,7 +204,123 @@ def parse_time(tree, num_tabs):
 	
 def parse_strings(tree, num_tabs):
 	pass
-	
+
+def parse_and(tree, num_tabs):
+	pass
+
+def parse_string(tree, num_tabs):
+	pass
+
+def parse_colon(tree, num_tabs):
+	pass
+
+def parse_from(tree, num_tabs):
+	pass
+
+def parse_event_title(tree, num_tabs):
+	pass
+
+def parse_quote(tree, num_tabs):
+	pass
+
+def parse_newline(tree, num_tabs):
+	pass
+
+def parse_build(tree, num_tabs):
+	pass
+
+def parse_tag_op(tree, num_tabs):
+	pass
+
+def parse_expr_block_rep(tree, num_tabs):
+	pass
+
+def parse_tag(tree, num_tabs):
+	pass
+
+def parse_export(tree, num_tabs):
+	pass
+
+def parse_time_unit(tree, num_tabs):
+	pass
+
+def parse_meridian(tree, num_tabs):
+	pass
+
+def parse_import(tree, num_tabs):
+	pass
+
+def parse_variable(tree, num_tabs):
+	pass
+
+def parse_event_list_rep(tree, num_tabs):
+	pass
+
+def parse_bool_operator(tree, num_tabs):
+	pass
+
+def parse_with(tree, num_tabs):
+	pass
+
+def parse_date_unit(tree, num_tabs):
+	pass
+
+def parse_num(tree, num_tabs):
+	pass
+
+def parse_string_rep(tree, num_tabs):
+	pass
+
+def parse_expr(tree, num_tabs):
+	pass
+
+def parse_schedule(tree, num_tabs):
+	pass
+
+def parse_bool_value(tree, num_tabs):
+	pass
+
+def parse_schedule_stmts_rep(tree, num_tabs):
+	pass
+
+def parse_value(tree, num_tabs):
+	pass
+
+def parse_filename(tree, num_tabs):
+	pass
+
+def parse_to(tree, num_tabs):
+	pass
+
+def parse_tag_name(tree, num_tabs):
+	pass
+
+def parse_event_stmt(tree, num_tabs):
+	pass
+
+def parse_location(tree, num_tabs):
+	pass
+
+def parse_print(tree, num_tabs):
+	pass
+
+def parse_at(tree, num_tabs):
+	pass
+
+def parse_comma(tree, num_tabs):
+	pass
+
+def parse_type(tree, num_tabs):
+	pass
+
+def parse_comparison_operator(tree, num_tabs):
+	pass
+
+def parse_op(tree, num_tabs):
+	pass
+
+
+
 dir_to_func = {
 	'program' : parse_program,
 	'function_block' : parse_function_block,
@@ -252,5 +368,43 @@ dir_to_func = {
 	'parameter_list' : parse_parameter_list,
 	'return_stmt' : parse_return_stmt,
 	'date' : parse_date,
+	'schedule_stmts_rep' : parse_schedule_stmts_rep,
+	'event_list_rep' : parse_event_list_rep,
+	'event_title' : parse_event_title,
+	'location' : parse_location,
+	'tag_op' : parse_tag_op,
+	'expr_block_rep' : parse_expr_block_rep,
+	'expr' : parse_expr,
+	'event_stmt' : parse_event_stmt,
+	'value' : parse_value,
+	'variable' : parse_variable,
+	'bool_operator' : parse_bool_operator,t
+	'comparison_operator' : parse_comparison_operator,
+	'bool_value' : parse_bool_value,
+	'op' : parse_op,
+	'date_unit' : parse_date_unit,
+	'time_unit' : parse_time_unit,
+	'quote' : parse_quote,
+	'filename' : parse_filename,
+	'export' : parse_export,
+	'tag_name' : parse_tag_name,
+	'tag' : parse_tag,
+	'and' : parse_and,
+	'comma' : parse_comma,
+	'with' : parse_with,
+	'at' : parse_at,
+	'num' : parse_num,
+	'meridian' : parse_meridian,
+	'from' : parse_from,
+	'to' : parse_to,
+	'colon' : parse_colon,
+	'build' : parse_build,
+	'schedule' : parse_schedule,
+	'string' : parse_string,
+	'string_rep' : parse_string_rep,
+	'import' : parse_import,
+	'print' : parse_print,
+	'newline' : parse_newline,
+	'type' : parse_type,
 }
 
