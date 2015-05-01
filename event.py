@@ -11,7 +11,7 @@ class Event:
 		self.location = location
 		self.person = person
 
-	def createEvent(self):
+	def create_string_event(self):
 		x = ""
 		x = x + "BEGIN:VEVENT\n"
 		to_zone = tz.tzutc()
