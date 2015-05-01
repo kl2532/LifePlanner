@@ -51,12 +51,16 @@ def p_imports(p):
                    | empty'''
     if len(p) == 4:
         p[0] = ('import_stmt', p[1], p[2])
+    else:
+        p[0] = ('import_stmt', None)
 
 def p_schedulestmt(p):
-    '''schedule_stmts : day colon newline event_list schedule_stmts_rep
+    '''schedule_stmts : date colon newline event_list schedule_stmts_rep
                       | empty'''
     if len(p) == 6:
         p[0] = ('schedule_stmts', p[1], p[2], p[4], p[5])
+    else:
+        p[0] = ('schedule_stmts',)
 
 def p_schedule_stmt_rep(p):
     '''schedule_stmts_rep : schedule_stmts'''
@@ -74,8 +78,8 @@ def p_day1(p):
     p[0] = ('day', p[1])
 
 def p_date(p):
-    '''date : num SLASH num year'''
-    p[0] = ('date', p[1], p[2]. p[3], p[4])
+    '''date : num SLASH num SLASH num'''
+    p[0] = ('date', p[1], p[3], p[5])
 
 def p_year(p):
     '''year : SLASH num
@@ -569,7 +573,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'import aho\nMonday:\nPLT from 2:30 PM to 4:00 PM with Alfie\nbuild schedule\nexport calendar'
+data = 'import aho\n5/1/2015:\nPLT from 2:30 PM to 4:00 PM at Mudd with Alfie\nbuild schedule\nexport calendar'
 tree = yacc.parse(data)
 print tree
 print trans.translate(tree)
