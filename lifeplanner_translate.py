@@ -1,10 +1,14 @@
 import yacc
-
+import sys
+import datetime as dt
+event_count = 0
+all_events = []
 
 def translate(tree):
 	if tree[0] != 'program':
 		return -1
-	return dir_to_func['program'](tree[1:], 0)
+	return 'import datetime as dt\n' + \
+		dir_to_func['program'](tree[1:], 0)
 
 def parse_program(tree, num_tabs):
 	if len(tree) != 5:
@@ -20,17 +24,22 @@ def parse_program(tree, num_tabs):
 	if tree[4][0] != 'export_stmt':
 		return -1
 	return \
-	dir_to_func['function_blocks'](tree[0][1:], 0) + '\n' + \
-	dir_to_func['import_stmt'](tree[1][1:], 0) + '\n' + \
-	dir_to_func['schedule_stmts'](tree[2][1:], 0) + '\n' + \
-	dir_to_func['build_schedule'](tree[3][1:], 0) + '\n' + \
-	dir_to_func['export_stmt'](tree[4][1:], 0)
+	dir_to_func['function_blocks'](tree[0][1:], num_tabs) + '\n' + \
+	dir_to_func['import_stmt'](tree[1][1:], num_tabs) + '\n' + \
+	dir_to_func['schedule_stmts'](tree[2][1:], num_tabs) + '\n' + \
+	dir_to_func['build_schedule'](tree[3][1:], num_tabs) + '\n' + \
+	dir_to_func['export_stmt'](tree[4][1:], num_tabs)
+	#need to finish translating
 
 def parse_function_blocks(tree, num_tabs):
 	return 'function_blocks'
+	#need to finish translating
 
 def parse_import_stmt(tree, num_tabs):
-	return 'readCalendar(%s)' %tree[1]
+	return 'readCalendar(' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + ')'
+
+def parse_filename(tree, num_tabs):
+	return tree[0][1]
 
 def parse_schedule_stmts(tree, num_tabs):
 	if len(tree) != 4:
@@ -43,11 +52,12 @@ def parse_schedule_stmts(tree, num_tabs):
 		return -1
 	if tree[3][0] != 'schedule_stmts_rep':
 		return -1
-	month, day, year = dir_to_func['date'](tree[0][1:], 0)
+	month, day, year = dir_to_func['date'](tree[0][1:], num_tabs)
 	return \
 	dir_to_func['event_list'](tree[2][1:], 0, month, day, year) + '\n' + \
-	dir_to_func['schedule_stmts_rep'](tree[3][1:], 0)
-	
+	dir_to_func['schedule_stmts_rep'](tree[3][1:], num_tabs)
+	#need to finish translating this
+
 def parse_build_schedule(tree, num_tabs):
 	if len(tree) != 4:
 		return -1
@@ -55,15 +65,17 @@ def parse_build_schedule(tree, num_tabs):
 		return -1
 	if tree[1][0] != 'schedule':
 		return -1
-	if tree[2][0] != 'tag_priorities':
+	if tree[2] and tree[2][0] != 'tag_priorities':
 		return -1
-	if tree[3][0] != 'clean':
+	if tree[3] and tree[3][0] != 'clean':
 		return -1
-	return \
-	dir_to_func['build'](tree[0][1:], 0) + '\n' + \
-	dir_to_func['schedule'](tree[1][1:], 0) + '\n' + \
-	dir_to_func['tag_priorities'](tree[2][1:], 0) + '\n' + \
-	dir_to_func['clean'](tree[3][1:], 0)
+	code = ''
+	if tree[2]:
+		code += dir_to_func['tag_priorities'](tree[2][1:], num_tabs) + '\n' 
+	if tree[3]:
+		code += dir_to_func['clean'](tree[3][1:], num_tabs)
+	return code
+	#need to finish translating
 
 def parse_export_stmt(tree, num_tabs):
 	if len(tree) != 2:
@@ -73,23 +85,158 @@ def parse_export_stmt(tree, num_tabs):
 	if tree[1][0] != 'filename':
 		return -1
 	return \
-	dir_to_func['export'](tree[0][1:], 0) + '\n' + \
-	dir_to_func['filename'](tree[1][1:], 0)
+	'export_cal(' + \
+	str(dir_to_func['filename'](tree[1][1:], num_tabs)) + ')'
 
-def parse_day(tree, num_tabs):
-	return tree[0], tree[1], tree[2]
+	
+def parse_date(tree, num_tabs):
+	month = tree[0][1]
+	day = tree[1][1]
+	year = tree[2][1]
+	if len(month) > 2:
+		sys.stderr.write('Month cannot be more than 2 digits')
+	if len(day) > 2:
+		sys.stderr.write('Day cannot be more than 2 digits')
+	if len(year) != 4:
+		if len(year) == 2:
+			year = '20' + year
+		else:
+			sys.stderr.write('Year cannot be more than 4 digits')
+	return month, day, year
 
 def parse_event_list(tree, num_tabs, month, day, year):
-	if len(tree) != 2:
-		return -1
+	print ''
+	print tree
+	# if len(tree) != 2:
+	# 	return -1
 	if tree[0][0] != 'event':
 		return -1
-	if tree[1][0] != 'event_list_rep':
-		return -1
+	# if tree[1][0] != 'event_list_rep':
+	# 	return -1
+	x = dir_to_func['event'](tree[0][1:], num_tabs, month, day, year)
 	return \
-	dir_to_func['export'](tree[0][1:], 0) + '\n' + \
-	dir_to_func['filename'](tree[1][1:], 0)
+	'var_all_events = []' + '\n' + x + '\n' #+ \
+	#dir_to_func['event_list_rep'](tree[1][1:], num_tabs, month, day, year)
 
+def parse_event(tree, num_tabs, month, day, year):
+	# if len(tree) != 4:
+	# 	return -1
+	if tree[0][0] != 'event_title':
+		return -1
+	if tree[1][0] != 'when':
+		return -1
+	if tree[2][0] != 'where':
+		return -1
+	if tree[3][0] != 'who':
+		return -1
+	# if tree[4][0] != 'tag_line':
+	# 	return -1
+
+	global event_count
+	event_initial = 'event_dict' + str(event_count) + ' = {}\n'
+	modify_event = dir_to_func['event_title'](tree[0][1:], num_tabs) \
+		+ '\n' + dir_to_func['when'](tree[1][1:], num_tabs, month, day, year) \
+		+ '\n' + dir_to_func['where'](tree[2][1:], num_tabs)\
+		+ '\n' #+ dir_to_func['who'](tree[3][1:], num_tabs)\
+		#+ '\n' + dir_to_func['tag_line'](tree[4][1:], num_tabs)
+	add_event = 'var_all_events.append(event_dict' + str(event_count) + ')'
+	event_count += 1
+	return event_initial + modify_event + add_event 
+
+def parse_event_title(tree, num_tabs):
+	event_title = tree[0][1]
+	global event_count
+	return 'event_dict' + str(event_count) + '[\"event_title\"] = ' + '"' +event_title + '"' 
+
+def parse_when(tree, num_tabs, month, day, year):
+	if len(tree) != 4:
+		return -1
+	if tree[0][0] != 'from':
+		return -1
+	if tree[1][0] != 'time':
+		return -1
+	if tree[2][0] != 'to':
+		return -1
+	if tree[3][0] != 'time':
+		return -1
+	code = ''
+	global event_count
+	create_day = 'date' + str(event_count) + ' = ' + \
+		'dt.date(' + year + ',' + month + ',' + day + ')'
+	hour, minute = dir_to_func['time'](tree[1][1:], num_tabs)
+	create_time = 'time' + str(event_count) + ' = ' + \
+		'dt.time(' + hour + ',' + minute + ')'
+	create_dt = 'from_dt' + str(event_count) + ' = ' + \
+		'dt.datetime_combine( date' + str(event_count) + \
+		', time' + str(event_count) +  ')'
+	add_dt = 'event_dict' + str(event_count) + '[\"from\"] = ' + 'from_dt' + str(event_count) 
+	code += create_day + '\n' + create_time + '\n' + \
+		create_dt + '\n' + add_dt + '\n'
+	meridian1 = getmeridian(tree[1][1:], num_tabs)
+	meridian2 = getmeridian(tree[3][1:], num_tabs)
+	if meridian1 == 'PM' and meridian2 == 'AM':
+		first_day = dt.date(int(float(year)), int(float(month)), int(float(day)))
+		first_day += dt.timedelta(days=1)
+		year = first_day.year
+		month = first_day.month
+		day = first_day.day
+		create_day = 'date' + str(event_count) + ' = ' + \
+		'dt.date(' + year + ',' + month + ',' + day + ')'
+	hour, minute = dir_to_func['time'](tree[3][1:], num_tabs)
+	create_time = 'time' + str(event_count) + ' = ' + \
+		'dt.time(' + hour + ',' + minute + ')'
+	create_dt = 'to_dt' + str(event_count) + ' = ' + \
+		'dt.datetime_combine( date' + str(event_count) + \
+		', time' + str(event_count) +  ')'
+	add_dt = 'event_dict' + str(event_count) + '[\"to\"] = ' + 'to_dt' + str(event_count) 
+	code += create_day + '\n' + create_time + '\n' + \
+			create_dt + '\n' + add_dt
+	return code
+
+
+def parse_meridian(tree, num_tabs):
+	if len(tree) != 1:
+		sys.stderr.write('Invalid meridian')
+		sys.exit(1)
+	return tree[0]
+
+def getmeridian(tree, num_tabs):
+	if len(tree) != 4 or tree[3] != 'meridian':
+		return -1 
+	return dir_to_func['meridian'](tree[3][1:], num_tabs)
+
+def parse_time(tree, num_tabs):
+	if len(tree) != 4:
+		sys.stderr.write('Invalid time input')
+		sys.exit(1)
+	hour = tree[0][1]
+	minute = tree[2][1]
+	print hour, minute
+	if getmeridian(tree, num_tabs) == 'PM':
+		hour = str(float(hour) + 12)
+	return hour, minute
+
+	
+def parse_where(tree, num_tabs):
+	if len(tree) != 2 or tree[0][1] != 'at' or tree[1][0] != 'location': 
+		sys.stderr.write('Invalid location for event')
+		sys.exit(1)
+	event_location = dir_to_func['location'](tree[1][1:], num_tabs)
+	return 'event_dict' + str(event_count) + '[\"location\"] = ' + event_location
+
+
+def parse_location(tree, num_tabs):
+	if len(tree) != 1:
+		print tree
+		sys.stderr.write('Invalid location')
+		sys.exit(1)
+	return tree[0][1]
+
+def parse_who(tree, num_tabs):
+	pass
+
+def parse_event_list_rep(tree, num_tabs, month, day, year=None):
+	pass
 
 def parse_function_block(tree, num_tabs):
 	pass
@@ -160,25 +307,14 @@ def parse_math_stmt(tree, num_tabs):
 def parse_year(tree, num_tabs):
 	pass
 	
-def parse_event(tree, num_tabs, month, day, year):
-	pass
 	
 def parse_tag_priorities(tree, num_tabs):
-	pass
+	return 'tag priorities'
 	
 def parse_comment_stmt(tree, num_tabs):
 	pass
-	
-def parse_when(tree, num_tabs):
-	pass
 
 def parse_add_stmt(tree, num_tabs):
-	pass
-	
-def parse_who(tree, num_tabs):
-	pass
-	
-def parse_date(tree, num_tabs):
 	pass
 	
 def parse_expr_block(tree, num_tabs):
@@ -190,17 +326,11 @@ def parse_function_declaration(tree, num_tabs):
 def parse_time_duration(tree, num_tabs):
 	pass
 	
-def parse_where(tree, num_tabs):
-	pass
-	
 def parse_while_stmt(tree, num_tabs):
 	pass
 	
 def parse_clean(tree, num_tabs):
-	pass
-	
-def parse_time(tree, num_tabs):
-	pass
+	return 'clean'
 	
 def parse_strings(tree, num_tabs):
 	pass
@@ -217,8 +347,6 @@ def parse_colon(tree, num_tabs):
 def parse_from(tree, num_tabs):
 	pass
 
-def parse_event_title(tree, num_tabs):
-	pass
 
 def parse_quote(tree, num_tabs):
 	pass
@@ -244,17 +372,12 @@ def parse_export(tree, num_tabs):
 def parse_time_unit(tree, num_tabs):
 	pass
 
-def parse_meridian(tree, num_tabs):
-	pass
-
 def parse_import(tree, num_tabs):
 	pass
 
 def parse_variable(tree, num_tabs):
 	pass
 
-def parse_event_list_rep(tree, num_tabs):
-	pass
 
 def parse_bool_operator(tree, num_tabs):
 	pass
@@ -281,12 +404,9 @@ def parse_bool_value(tree, num_tabs):
 	pass
 
 def parse_schedule_stmts_rep(tree, num_tabs):
-	pass
+	return 'schedule stmts rep'
 
 def parse_value(tree, num_tabs):
-	pass
-
-def parse_filename(tree, num_tabs):
 	pass
 
 def parse_to(tree, num_tabs):
@@ -296,9 +416,6 @@ def parse_tag_name(tree, num_tabs):
 	pass
 
 def parse_event_stmt(tree, num_tabs):
-	pass
-
-def parse_location(tree, num_tabs):
 	pass
 
 def parse_print(tree, num_tabs):
@@ -378,7 +495,7 @@ dir_to_func = {
 	'event_stmt' : parse_event_stmt,
 	'value' : parse_value,
 	'variable' : parse_variable,
-	'bool_operator' : parse_bool_operator,t
+	'bool_operator' : parse_bool_operator,
 	'comparison_operator' : parse_comparison_operator,
 	'bool_value' : parse_bool_value,
 	'op' : parse_op,
