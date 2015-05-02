@@ -137,8 +137,11 @@ def parse_event(tree, num_tabs, month, day, year):
 	modify_event = dir_to_func['event_title'](tree[0][1:], num_tabs) \
 		+ '\n' + dir_to_func['when'](tree[1][1:], num_tabs, month, day, year) \
 		+ '\n' + dir_to_func['where'](tree[2][1:], num_tabs)\
-		+ '\n' #+ dir_to_func['who'](tree[3][1:], num_tabs)\
-		#+ '\n' + dir_to_func['tag_line'](tree[4][1:], num_tabs)
+		+ '\n'
+	if tree[3]:
+		modify_event += dir_to_func['who'](tree[3][1:], num_tabs) + '\n'
+	if tree[4]:
+		modify_event += dir_to_func['tag_line'](tree[4][1:], num_tabs)
 	add_event = 'var_all_events.append(event_dict' + str(event_count) + ')'
 	event_count += 1
 	return event_initial + modify_event + add_event 
@@ -233,7 +236,50 @@ def parse_location(tree, num_tabs):
 	return tree[0][1]
 
 def parse_who(tree, num_tabs):
-	pass
+	if len(tree) != 2 or tree[0][1] != 'with' or tree[1][0] != 'people_list':
+		sys.stderr.write('Invalid who for event')
+		sys.exit(1)
+	pp_list = dir_to_func['people_list'](tree[1][1:], num_tabs)
+	return pp_list
+
+def parse_people_list(tree, num_tabs):
+	# if len(tree) != 2 or tree[0][1] != 'people_list' or tree[1][0] != 'name':
+	# 	sys.stderr.write('Invalid person for event')
+	# 	sys.exit(1)	
+	print ''
+	print tree
+	print ''
+	#(('name', ('strings', 'Alfie')), ('comma', ('name', ('strings', 'Jae')), ('comma', ('name', ('strings', 'Katie')), ('and', ('and', 'and'), ('name', ('strings', 'Cannon'))))))
+	code = 'pp_list' + str(event_count)  + '= []\n'
+	for branch in tree:
+		if branch[0] == 'name':
+			code += 'pp_list' + str(event_count) + '.append(' + dir_to_func['name'](branch[1], num_tabs) + ')\n'
+		if branch[0] == 'comma':
+			code += dir_to_func['comma'](branch[1:], num_tabs)
+		if branch[0] == 'and':
+			print branch[2][1]
+			code += 'pp_list' + str(event_count) + '.append(' + dir_to_func['name'](branch[2][1], num_tabs) + ')\n'
+	code += 'event_dict' + str(event_count) + '[\"with\"] = ppl_list' + str(event_count)
+
+	return code#'event_dict' + str(event_count) + '[\"event_title\"] = ' + '"' +event_title + '"' 
+
+def parse_name(tree, num_tabs):
+	return tree[1]
+
+def parse_comma(tree, num_tabs):
+	print ''
+	print tree
+	print
+	code = ''
+	for branch in tree:
+		if branch[0] == 'name':
+			code += 'pp_list' + str(event_count) + '.append(' + dir_to_func['name'](branch[1], num_tabs) + ')\n'
+		if branch[0] == 'comma':
+			code += dir_to_func['comma'](branch[1:], num_tabs)
+		if branch[0] == 'and':
+			print branch[2][1]
+			code += 'pp_list' + str(event_count) + '.append(' + dir_to_func['name'](branch[2][1], num_tabs) + ')\n'
+	return code
 
 def parse_event_list_rep(tree, num_tabs, month, day, year=None):
 	pass
@@ -241,16 +287,12 @@ def parse_event_list_rep(tree, num_tabs, month, day, year=None):
 def parse_function_block(tree, num_tabs):
 	pass
 
-def parse_comma(tree, num_tabs):
-	pass
+
 
 def parse_else_block(tree, num_tabs):
 	pass
 	
 def parse_elseif_blocks(tree, num_tabs):
-	pass
-	
-def parse_people_list(tree, num_tabs):
 	pass
 	
 def parse_cancel_stmt(tree, num_tabs):
@@ -274,8 +316,7 @@ def parse_bool_operation(tree, num_tabs):
 def parse_if_stmt(tree, num_tabs):
 	pass
 	
-def parse_name(tree, num_tabs):
-	pass
+
 	
 def parse_date_duration(tree, num_tabs):
 	pass
@@ -422,9 +463,6 @@ def parse_print(tree, num_tabs):
 	pass
 
 def parse_at(tree, num_tabs):
-	pass
-
-def parse_comma(tree, num_tabs):
 	pass
 
 def parse_type(tree, num_tabs):
