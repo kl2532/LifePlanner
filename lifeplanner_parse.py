@@ -573,7 +573,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'import aho\n5/1/2015:\nPLT from 2:30 PM to 4:00 PM at Mudd with Alfie\nbuild schedule\nexport calendar'
+data = 'import aho\n5/1/2015:\nPLT hi from 2:30 PM to 4:00 PM at Mudd with Alfie and Cannon\nbuild schedule\nexport calendar'
 tree = yacc.parse(data)
 print tree
 print trans.translate(tree)
