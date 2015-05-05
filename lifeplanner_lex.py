@@ -80,7 +80,9 @@ reserved = {
     'and' : 'AND',
     'not' : 'NOT',
     'or' : 'OR',
-    'function' : 'FUNCTION'
+    'function' : 'FUNCTION',
+    'before' : 'BEFORE',
+    'after' : 'AFTER'
     }
 
 tokens = tokens + reserved.values()
@@ -197,7 +199,7 @@ t_DECIMAL   = r'[\-]?[0-9]+\.[0-9]*'
 #     return t
 
 def t_STRING(t):
-    r'[a-zA-Z0-9_]+'
+    r'[a-zA-Z0-9_]*[.]?[a-zA-Z0-9_]+'
     int_re = re.compile('[\-]?[0-9]+')
     dec_re = re.compile('[\-]?[0-9]+\.[0-9]*')
     if int_re.match(t.value):
