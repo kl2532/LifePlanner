@@ -158,7 +158,7 @@ t_IN = r'(in)'
 
 #Control Sequences
 t_IF = r'(if)'
-t_ELSEIF = r'(elseif)'
+t_ELSEIF = r'(elif)'
 t_ELSE = r'(else)'
 t_FOR = r'(for)'
 t_WHILE = r'(while)'
