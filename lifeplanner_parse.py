@@ -262,11 +262,7 @@ def p_mathstmt1(p):
 
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
-<<<<<<< HEAD
                   | string'''
-=======
-		          | string'''
->>>>>>> origin/master
     p[0] = ['math_stmt', p[1]]
 
 def p_comment_stmt(p): 
