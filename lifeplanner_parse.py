@@ -38,13 +38,40 @@ def p_functionblocks(p):
     '''function_blocks : function_block function_blocks
                     | empty'''
     if len(p) == 3:
-        p[0] = ['function_blocks', p[1], p[2]]
+        p[0] = ['function_blocks', p[1], p[2][1]]
     else:
         p[0] = ['function_blocks', None]
 
 def p_functionblock(p):
     '''function_block : function_declaration expr_block return_stmt'''
     p[0] = ['function_block', p[1], p[2], p[3]]
+
+def p_function_declaration(p):
+    '''function_declaration : FUNCTION function_name LEFTPAREN parameter_list RIGHTPAREN newline'''
+    p[0] = ['function_declaration', p[1], p[2], p[4]]
+
+def p_function_name(p):
+    '''function_name : variable'''
+    p[0] = ['function_name', p[1][1]]
+
+def p_parameter_list(p):
+    '''parameter_list : STRING parameter_list 
+                    | COMMA STRING parameter_list
+                    | empty'''
+    if len(p) == 3:
+        p[0] = ['parameter_list', p[1], p[2]]
+    elif len(p) == 4:
+        p[0] = ['parameter_list', p[2], p[3]]
+    elif len(p) == 2:
+        p[0] = ['parameter_list', None]
+
+def p_return(p):
+    '''return_stmt : RETURN value newline
+                    | empty'''
+    if len(p) == 4:
+        p[0] = ['return_stmt', p[1], p[2]]
+    else:
+        p[0] = ['return_stmt', None]
 
 def p_imports(p):
     '''import_stmt : import filename newline
@@ -214,7 +241,7 @@ def p_expr(p):
             | event_stmt newline
             | comment_stmt newline
             | assignment_stmt newline
-            | math_stmt newline
+	        | math_stmt newline
             | time_math newline
             | day_math newline
             | func newline
@@ -227,15 +254,19 @@ def p_func(p):
 
 def p_mathstmt1(p):
     '''math_stmt : math_stmt PLUS math_stmt
-         | math_stmt MINUS math_stmt
-         | math_stmt TIMES math_stmt
-         | math_stmt DIVIDE math_stmt
+		 | math_stmt MINUS math_stmt
+		 | math_stmt TIMES math_stmt
+		 | math_stmt DIVIDE math_stmt
          | LEFTPAREN math_stmt RIGHTPAREN'''
     p[0] = ['math_stmt', p[1], p[2], p[3]]
 
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
+<<<<<<< HEAD
                   | string'''
+=======
+		          | string'''
+>>>>>>> origin/master
     p[0] = ['math_stmt', p[1]]
 
 def p_comment_stmt(p): 
@@ -539,27 +570,6 @@ def p_newline(p):
 # def p_var_assignmet(p):
 #     '''var_assign : variable EQUAL STRING'''
 #     p[0] = ('var_assign', p[1], p[2], p[3])
-
-def p_function_declaration(p):
-    '''function_declaration : FUNCTION variable LEFTPAREN parameter_list RIGHTPAREN newline'''
-    p[0] = ['function_declaration', p[1], p[2], p[4]]
-
-def p_parameter_list(p):
-    '''parameter_list : STRING parameter_list 
-                    | COMMA STRING parameter_list
-                    | empty'''
-    if len(p) == 3:
-        p[0] = ['parameter_list', p[1], p[2]]
-    elif len(p) == 4:
-        p[0] = ['parameter_list', p[2], p[3]]
-    elif len(p) == 2:
-        p[0] = ['parameter_list', None]
-
-def p_return(p):
-    '''return_stmt : RETURN value newline
-                        | empty'''
-    if len(p) == 4:
-        p[0] = ['return_stmt', p[1], p[2]]
 
 def p_types(p):
     '''type : NUMTYPE
