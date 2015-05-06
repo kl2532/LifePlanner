@@ -1,6 +1,6 @@
 # Use the lexer defined by lifeplanner_lex.py
 import lifeplanner_lex
-import lifeplanner_translate as trans
+#import lifeplanner_translate as trans
 
 # Utilizing the PLY LALR parser generator.
 import yacc
@@ -119,25 +119,25 @@ def p_where(p):
     '''where : at location
              | empty'''
     if len(p) == 3:
-        p[0] = ('where', p[1], p[2])
+        p[0] = ['where', p[1], p[2]]
     else:
-        p[0] = ('where', None)
+        p[0] = ['where', None]
 
 def p_loc(p):
     '''location : strings'''
-    p[0] = ('location', p[1])
+    p[0] = ['location', p[1]]
 
 def p_who(p):
     '''who : with people_list
            | empty'''
     if len(p) == 3:
-        p[0] = ('who', p[1], p[2])
+        p[0] = ['who', p[1], p[2]]
     else:
-        p[0] = ('who', None)
+        p[0] = ['who', None]
 
 def p_plist(p):
     '''people_list : name people_list1'''
-    p[0] = ('people_list', p[1], p[2])
+    p[0] = ['people_list', p[1], p[2]]
 
 def p_plist1(p):
     '''people_list1 : comma name people_list1
@@ -145,11 +145,11 @@ def p_plist1(p):
                     | and name
                     | empty'''
     if len(p) == 4:
-        p[0] = ('comma', p[2], p[3])
+        p[0] = ['comma', p[2], p[3]]
     elif len(p) == 3:
-        p[0] = ('and', p[1], p[2])
+        p[0] = ['and', p[1], p[2]]
     elif len(p) == 2:
-        p[0] = ('people_list1', None)
+        p[0] = ['people_list1', None]
 
 # def p_plist_rep(p):
 #     '''people_list_rep :
@@ -164,51 +164,51 @@ def p_tagline(p):
     '''tag_line : tag tag_name newline
                 | empty'''
     if len(p) == 4:
-        p[0] = ('tag_line', p[1], p[2])
+        p[0] = ['tag_line', p[1], p[2]]
     else:
-        p[0] = ('tag_line', None)
+        p[0] = ['tag_line', None]
 
 def p_buildstmts(p):
     '''build_schedule : build schedule newline tag_priorities clean'''
-    p[0] = ('build_schedule', p[1], p[2], p[4], p[5])
+    p[0] = ['build_schedule', p[1], p[2], p[4], p[5]]
 
 def p_tagp(p):
     '''tag_priorities : tag colon tag_name tag_op tag_name newline tag_priorities
                       | empty'''
     if len(p) == 8:
-        p[0] = ('tag_priorities', p[1], p[2], p[3], p[4], p[5], p[7])
+        p[0] = ['tag_priorities', p[1], p[2], p[3], p[4], p[5], p[7]]
     else:
-        p[0] = ('tag_priorities', None)
+        p[0] = ['tag_priorities', None]
     
 def p_tagop(p):
     '''tag_op : LT
               | GT'''
-    p[0] = ('tag_op', p[1])
+    p[0] = ['tag_op', p[1]]
 
 #change later
 def p_clean(p):
     '''clean : expr_block clean
              | empty'''
     if len(p) == 3:
-        p[0] = ('clean', p[1], p[2])
+        p[0] = ['clean', p[1], p[2]]
     else:
-        p[0] = ('clean', None)
+        p[0] = ['clean', None]
 
 def p_expr_block(p):
     '''expr_block : expr expr_block_rep
                     | empty'''
     if len(p) == 3:
-        p[0] = ('expr_block', p[1], p[2])
+        p[0] = ['expr_block', p[1], p[2]]
     else:
-        p[0] = ('expr_block', None)
+        p[0] = ['expr_block', None]
 
 def p_expr_block_rep(p):
     '''expr_block_rep : expr_block'''
-    p[0] = ('expr_block_rep', p[1])
+    p[0] = ['expr_block_rep', p[1]]
         
 def p_expr(p):
     '''expr : print_stmt newline
-            | if_stmt newline
+            | if_stmt
             | while_stmt newline
             | for_stmt newline
             | event_stmt newline
@@ -219,13 +219,11 @@ def p_expr(p):
             | day_math newline
             | func newline
             | time_range newline'''
-    p[0] = ('expr', p[1])
-
-
+    p[0] = ['expr', p[1]]
 
 def p_func(p):
     '''func : variable LEFTPAREN parameter_list RIGHTPAREN'''
-    p[0] = ('func', p[1], p[3])
+    p[0] = ['func', p[1], p[3]]
 
 def p_mathstmt1(p):
     '''math_stmt : math_stmt PLUS math_stmt
@@ -233,64 +231,70 @@ def p_mathstmt1(p):
          | math_stmt TIMES math_stmt
          | math_stmt DIVIDE math_stmt
          | LEFTPAREN math_stmt RIGHTPAREN'''
-    p[0] = ('math_stmt', p[1], p[2], p[3])
+    p[0] = ['math_stmt', p[1], p[2], p[3]]
 
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
+<<<<<<< HEAD
                   | string'''
     p[0] = ('math_stmt', p[1])
+=======
+		          | string'''
+    p[0] = ['math_stmt', p[1]]
+>>>>>>> origin/master
 
 def p_comment_stmt(p): 
     '''comment_stmt : COMMENT strings
                     | empty'''
     if len(p) == 3:
-        p[0] = ('comment_stmt', p[1], p[2])
+        p[0] = ['comment_stmt', p[1], p[2]]
     else:
-        p[0] = ('comment_stmt', None)
+        p[0] = ['comment_stmt', None]
         
 def p_eventstmt(p):
     '''event_stmt : add_stmt
                 | cancel_stmt'''
-    p[0] = ('event_stmt', p[1])
+    p[0] = ['event_stmt', p[1]]
     
 def p_addstmt(p):
     '''add_stmt : ADD strings'''
-    p[0] = ('add_stmt', p[1], p[2])
+    p[0] = ['add_stmt', p[1], p[2]]
     
 def p_cancel_stmt(p):
     '''cancel_stmt : CANCEL strings'''
-    p[0] = ('cancel_stmt', p[1], p[2])
+    p[0] = ['cancel_stmt', p[1], p[2]]
     
 def p_whilestmt(p):
     '''while_stmt : WHILE bool_expr newline expr_block END'''
-    p[0] = ('while_stmt', p[1], p[2], p[4])
+    p[0] = ['while_stmt', p[1], p[2], p[4]]
 
 def p_timerange(p):
     '''time_range : FROM date TO date newline expr_block END'''
-    p[0] = ('time_range', p[1], p[2], p[3], p[4], p[6])
+    p[0] = ['time_range', p[1], p[2], p[3], p[4], p[6]]
     
 def p_forstmt(p):
     '''for_stmt : FOR assignment_stmt COMMA bool_expr COMMA assignment_stmt newline expr_block END'''
-    p[0] = ('for_stmt', p[1], p[2], p[4], p[6], p[8])
+    p[0] = ['for_stmt', p[1], p[2], p[4], p[6], p[8]]
 
 def p_boolean(p):
     '''bool_expr : bool_expr bool_operator bool_expr 
             | bool_operation 
             | bool_value 
             | value'''
+    print 'p_boolean'
     if len(p) == 4:
-        p[0] = ('bool_expr', p[1], p[2], p[3])
+        p[0] = ['bool_expr', p[1], p[2], p[3]]
     else:
-        p[0] = ('bool_expr', p[1])
+        p[0] = ['bool_expr', p[1]]
         
 def p_boolean_opearation(p):
     '''bool_operation : value IN value
                         | value comparison_operator value'''
-    p[0] = ('bool_operation', p[1], p[2], p[3])
+    p[0] = ['bool_operation', p[1], p[2], p[3]]
 
 def p_assignmentstmt(p):
    '''assignment_stmt : variable EQUAL value'''
-   p[0] = ('assignment_stmt', p[1], p[2], p[3])
+   p[0] = ['assignment_stmt', p[1], p[2], p[3]]
 
 # gotta add array
 def p_value(p):
@@ -305,17 +309,18 @@ def p_value(p):
             | time_math
             | day_math
             | func'''
-    p[0] = ('value', p[1])
+    p[0] = ['value', p[1]]
 
 def p_variable(p):
     '''variable : STRING'''
-    p[0] = ('variable', p[1])
+    p[0] = ['variable', p[1]]
                             
 def p_bool_op(p):
     '''bool_operator : AND
                     | OR
                     | NOT'''
-    p[0] = ('bool_operator', p[1])
+    print 'p_bool_op'
+    p[0] = ['bool_operator', p[1]]
 
 def p_comp_op(p):
     '''comparison_operator : LT 
@@ -325,167 +330,177 @@ def p_comp_op(p):
                         | GE
                         | BEFORE
                         | AFTER'''
-    p[0] = ('comparison_operator', p[1])
+    p[0] = ['comparison_operator', p[1]]
     
 def p_bool_value(p):
     '''bool_value : TRUE 
                 | FALSE'''
-    p[0] = ('bool_value', p[1])
+    print 'p_bool_value'
+    p[0] = ['bool_value', p[1]]
 
 def p_ifstmt(p):
     '''if_stmt : if_block elseif_blocks else_block'''
-    p[0] = ('if_stmt', p[1], p[2], p[3])
+    p[0] = ['if_stmt', p[1], p[2], p[3]]
     
 def p_ifblock(p):
-    '''if_block : IF bool_expr newline expr_block END'''
-    p[0] = ('if_block', p[1], p[2], p[4])
+    '''if_block : IF bool_expr newline expr_block END newline'''
+    p[0] = ['if_block', p[1], p[2], p[4]]
     
 def p_elseifblocks(p):
     '''elseif_blocks : empty
-                    | elseif_blocks elseif_block
-                    | elseif_block'''
+                    | elseif_block elseif_blocks_rep'''
+#                    | elseif_block'''
+    print 'p_elseifblocks', len(p)
     if len(p) == 3:
-        p[0] = ('elseif_blocks', p[1], p[2])
+        p[0] = ['elseif_blocks', p[1], p[2]]
     elif len(p) == 2:
         if p[1]:
-            p[0] = ('elseif_blocks', p[1])
+            p[0] = ['elseif_blocks', p[1]]
         else:
-            p[0] = ('elseif_blocks', None)
+            print 'none'
+            p[0] = ['elseif_blocks', None]
+def p_elseifblocksrep(p):
+    '''elseif_blocks_rep : elseif_blocks'''
+    p[0] = ['elseif_blocks_rep', p[1]]
 
 def p_elseifblock(p):
-    '''elseif_block : ELSEIF bool_expr newline expr_block END'''
-    p[0] = ('elseif_block', p[1], p[2], p[4])
+    '''elseif_block : ELSEIF bool_expr newline expr_block END newline'''
+    p[0] = ['elseif_block', p[1], p[2], p[4]]
 
 def p_elseblock(p):
     '''else_block : empty
-                    | ELSE newline expr_block END'''
+                    | ELSE newline expr_block END newline'''
     if len(p) == 3:
-        p[0] = ('else_block', p[1], p[3])
+        p[0] = ['else_block', p[1], p[3]]
     else:
-        p[0] = ('else_block', None)
+        p[0] = ['else_block', None]
 
 def p_daymath(p):
     '''day_math : date op date_duration
                 | date_duration op date'''
-    p[0] = ('day_math', p[1], p[2], p[3])
+    p[0] = ['day_math', p[1], p[2], p[3]]
 
 def p_timemath(p):
     '''time_math : time op time_duration
                  | time_duration op time'''
-    p[0] = ('time_math', p[1], p[2], p[3])
+    p[0] = ['time_math', p[1], p[2], p[3]]
 
 def p_timeop(p):
     '''op : PLUS
           | MINUS'''
-    p[0] = ('op', p[1])
+    p[0] = ['op', p[1]]
         
 def p_printstmt(p):
-    '''print_stmt : print quote strings quote'''
-    p[0] = ('print_stmt', p[1], p[2], p[3], p[4])
+    '''print_stmt : print quote strings quote
+                  | print variable'''
+    if len(p) == 5:
+        p[0] = ['print_stmt', p[1], p[2], p[3], p[4]]
+    elif len(p) == 3:
+        p[0] = ['print_stmt', p[1], p[2]]
 
 def p_datedur(p):
     '''date_duration : num date_unit'''
-    p[0] = ('date_duration', p[1], p[2])
+    p[0] = ['date_duration', p[1], p[2]]
 
 def p_dateunit(p):
     '''date_unit : DAY
                  | MONTH
                  | WEEK
                  | YEAR'''
-    p[0] = ('date_unit', p[1])
+    p[0] = ['date_unit', p[1]]
 
 def p_timedur(p):
     '''time_duration : num time_unit'''
-    p[0] = ('time_duration', p[1], p[2])
+    p[0] = ['time_duration', p[1], p[2]]
 
 def p_timeunit(p):
     '''time_unit : HOUR
                  | MINUTE'''
-    p[0] = ('time_unit', p[1])
+    p[0] = ['time_unit', p[1]]
 
 def p_quote(p):
     '''quote : QUOTATION'''
-    p[0] = ('quote', p[1])
+    p[0] = ['quote', p[1]]
 
 def p_exportstmt(p):
     '''export_stmt : export filename
                     | empty'''
     if len(p) == 3:
-        p[0] = ('export_stmt', p[1], p[2])
+        p[0] = ['export_stmt', p[1], p[2]]
     else:
-        p[0] = ('export_stmt', None)
+        p[0] = ['export_stmt', None]
     
 def p_filename(p):
     '''filename : string'''
-    p[0] = ('filename', p[1])
+    p[0] = ['filename', p[1]]
 
 def p_export(p):
     '''export : EXPORT'''
-    p[0] = ('export', p[1])
+    p[0] = ['export', p[1]]
 
 def p_tagname(p):
     '''tag_name : strings'''
-    p[0] = ('tag_name', p[1])
+    p[0] = ['tag_name', p[1]]
 
 def p_tag(p):
     '''tag : TAG'''
-    p[0] = ('tag', p[1])
+    p[0] = ['tag', p[1]]
 
 def p_name(p):
     '''name : strings'''
-    p[0] = ('name', p[1])
+    p[0] = ['name', p[1]]
 
 def p_and(p):
     '''and : AND'''
-    p[0] = ('and', p[1])
+    p[0] = ['and', p[1]]
 
 def p_comma(p):
     '''comma : COMMA'''
-    p[0] = ('comma', p[1])
+    p[0] = ['comma', p[1]]
 
 def p_with(p):
     '''with : WITH'''
     print 'p_with', p[1]
-    p[0] = ('with', p[1])
+    p[0] = ['with', p[1]]
 
 def p_at(p):
     '''at : AT'''
     print 'p_at', p[1]
-    p[0] = ('at', p[1])
+    p[0] = ['at', p[1]]
 
 def p_num(p):
     '''num : INTEGER'''
     print 'p_num', p[1]
-    p[0] = ('num', p[1])
+    p[0] = ['num', p[1]]
 
 def p_meridian(p):
     '''meridian : AM
                 | PM'''
     print 'p_meridian', p[1]
-    p[0] = ('meridian', p[1])
+    p[0] = ['meridian', p[1]]
 
 def p_from(p):
     '''from : FROM'''
     print 'p_from', p[1]
-    p[0] = ('from', p[1])
+    p[0] = ['from', p[1]]
 
 def p_to(p):
     '''to : TO'''
     print 'p_to', p[1]
-    p[0] = ('to', p[1])
+    p[0] = ['to', p[1]]
 
 def p_colon(p):
     '''colon : COLON'''
     print "p_colon", p[1]
-    p[0] = ('colon', p[1])
+    p[0] = ['colon', p[1]]
 
 def p_build(p):
     '''build : BUILD'''
-    p[0] = ('build', p[1])
+    p[0] = ['build', p[1]]
 
 def p_schedule(p):
     '''schedule : SCHEDULE'''
-    p[0] = ('schedule', p[1])
+    p[0] = ['schedule', p[1]]
 
 def p_string(p):
     '''string : STRING'''
@@ -496,35 +511,35 @@ def p_strings(p):
                 | empty'''
     if len(p) == 3:
         if p[2] == None:
-            p[0] = ('strings', p[1])
+            p[0] = ['strings', p[1]]
         else:
             str_list = ""
             for string in p[2][1:]:
                 str_list = str_list + " " + string
-            p[0] = ('strings', p[1] + str_list)
+            p[0] = ['strings', p[1] + str_list]
 
 def p_string_rep(p):
     '''string_rep : strings'''
     print 'print p[1] ', p[1]
-    p[0] = ('string_rep', p[1])
+    p[0] = ['string_rep', p[1]]
 
 def p_empty(p):
     '''empty :'''
-    print 'empty!!'
+    #print 'empty!!'
     pass
 
 def p_import(p):
     '''import : IMPORT'''
-    p[0] = ('import', p[1])
+    p[0] = ['import', p[1]]
 
 def p_print(p):
     '''print : PRINT'''
-    p[0] = ('print', p[1])
+    p[0] = ['print', p[1]]
 
 def p_newline(p):
     '''newline : NEWLINE'''
     print "p_newline"
-    p[0] = ('newline', p[1])
+    p[0] = ['newline', p[1]]
     
 # def p_var_assignmet(p):
 #     '''var_assign : variable EQUAL STRING'''
@@ -532,30 +547,30 @@ def p_newline(p):
 
 def p_function_declaration(p):
     '''function_declaration : FUNCTION variable LEFTPAREN parameter_list RIGHTPAREN newline'''
-    p[0] = ('function_declaration', p[1], p[2], p[4])
+    p[0] = ['function_declaration', p[1], p[2], p[4]]
 
 def p_parameter_list(p):
     '''parameter_list : STRING parameter_list 
                     | COMMA STRING parameter_list
                     | empty'''
     if len(p) == 3:
-        p[0] = ('parameter_list', p[1], p[2])
+        p[0] = ['parameter_list', p[1], p[2]]
     elif len(p) == 4:
-        p[0] = ('parameter_list', p[2], p[3])
+        p[0] = ['parameter_list', p[2], p[3]]
     elif len(p) == 2:
-        p[0] = ('parameter_list', None)
+        p[0] = ['parameter_list', None]
 
 def p_return(p):
     '''return_stmt : RETURN value newline
                         | empty'''
     if len(p) == 4:
-        p[0] = ('return_stmt', p[1], p[2])
+        p[0] = ['return_stmt', p[1], p[2]]
 
 def p_types(p):
     '''type : NUMTYPE
             | DECTYPE
             | STRTYPE'''
-    p[0] = ('type', p[1])
+    p[0] = ['type', p[1]]
 
 def p_error(p):
     print p
@@ -621,7 +636,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'import hi.ics\nbuild schedule\nif 5/3/15 before 6/3/18\n\t\ti = i + 1\nend\nexport aho'
+data = 'build schedule\n\tprint hello\n'
 tree = yacc.parse(data)
 print tree
 #print trans.translate(tree)
