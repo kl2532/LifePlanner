@@ -32,6 +32,7 @@ def parse_program(tree, num_tabs):
 		entire_prog += dir_to_func['import_stmt'](tree[1][1:], num_tabs) + '\n'
 	if tree[2][1]:
 		entire_prog += 'var_all_events = []' + '\n' + dir_to_func['schedule_stmts'](tree[2][1:], num_tabs) + '\n'
+	print "\ntree[3][1]: ", tree[3][1]
 	if tree[3][1]:
 		entire_prog += dir_to_func['build_schedule'](tree[3][1:], num_tabs) + '\n'
 	if tree[4][1]:
@@ -91,6 +92,128 @@ def parse_build_schedule(tree, num_tabs):
 	if tree[3][1]:
 		code += dir_to_func['clean'](tree[3][1:], num_tabs)
 	return code
+
+def parse_clean(tree, num_tabs):
+	# print "parse_clean: ", str(tree)
+	# parse_clean:  [['expr_block', ['expr', ['print_stmt', ['print', 'print'], ['variable', 'hello']]], ['expr_block_rep', ['expr_block', None]]], 
+					# ['clean', None]]
+	if tree[0][0] != 'expr_block':
+		return -1
+	code = ''
+	# print "\ntree[0][1][1]: ", tree[0][1][1]
+	if tree[0][1][1]:
+		code += dir_to_func['expr_block'](tree[0][1:], num_tabs) + '\n'
+	return code
+
+def parse_expr_block(tree, num_tabs):
+	# print "parse_expr_block tree: ", str(tree)
+	# parse_expr_block tree:  [['expr', ['print_stmt', ['print', 'print'], ['variable', 'hello']]], ['expr_block_rep', ['expr_block', None]]]
+	if tree[0][0] != 'expr':
+		return -1
+	code = ''
+	code += dir_to_func['expr'](tree[0][1:], num_tabs)
+	# print "tree[1]: ", tree[1]
+	if tree[1][1][1]:
+		code += dir_to_func['expr_block_rep'](tree[1][1:], num_tabs) + '\n'
+	return code
+
+def parse_expr_block_rep(tree, num_tabs):
+	# print "parse_expr_block_rep: ", str(tree)
+	#parse_expr_block_rep:  [['expr', ['print_stmt', ['print', 'print'], ['variable', 'var']]], ['expr_block_rep', ['expr_block', None]]]
+	if tree and tree[0][0] == 'expr_block':
+		return dir_to_func['expr_block'](tree[0][1:], num_tabs)
+	return ''
+# [['expr_block', 0,0
+# ['expr', ['print_stmt', ['print', 'print'], ['quote', '"'], ['strings', 'hello world'], ['quote', '"']]], 0,1
+# ['expr_block_rep', ['expr_block', ['expr', ['print_stmt', ['print', 'print'], ['variable', 'var']]], ['expr_block_rep', ['expr_block', None]]]] 0,2
+# ], ['clean', None]] 1
+
+
+def parse_expr(tree, num_tabs):
+	# print 'parse_expr tree: ', str(tree)
+	# parse_expr tree:  [['print_stmt', ['print', 'print'], ['variable', 'hello']]]
+	code = ''
+	if tree[0][0] == 'print_stmt':
+		code += dir_to_func['print_stmt'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'if_stmt':
+		code += dir_to_func['if_stmt'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'while_stmt':
+		code += dir_to_func['while_stmt'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'for_stmt':
+		code += dir_to_func['for_stmt'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'event_stmt':
+		code += dir_to_func['event_stmt'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'comment_stmt':
+		code += dir_to_func['comment_stmt'](tree[0][1:], num_tabs)
+	if tree[0][0] == 'assignment_stmt':
+		code += dir_to_func['assignment_stmt'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'math_stmt':
+		code += dir_to_func['math_stmt'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'time_math':
+		code += dir_to_func['time_math'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'day_math':
+		code += dir_to_func['day_math'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'func':
+		code += dir_to_func['func'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'time_range':
+		code += dir_to_func['time_range'](tree[0][1:], num_tabs) + '\n'
+	return code
+
+def parse_assignment_stmt(tree, num_tabs):
+	print "\nparse_assignment_stmt: ", str(tree)
+	#parse_assignment_stmt:  [['variable', 'i'], '=', ['value', ['math_stmt', '0']]]
+	code = ''
+	if tree[0][0] == 'variable':
+		code += dir_to_func['variable'](tree[0][1], num_tabs) + ' = '
+	if tree[2][0] == 'value':
+		code += dir_to_func['value'](tree[2][1], num_tabs)
+	return code
+
+def parse_math_stmt(tree, num_tabs):
+	print '\nparse_math_stmt' + str(tree)
+	if len(tree) == 1:
+	    return str(tree[0])
+	elif tree[0] == '(':
+	    return '(' + parse_math_stmt(tree[1]) + ')'
+	elif tree[1] in ('+', '-', '*', '/'):
+	    return parse_math_stmt(tree[0]) + str(tree[1]) \
+	    + parse_math_stmt(tree[2])
+	else:
+		print 'Bad math statement'
+		return -1
+
+def parse_variable(tree, num_tabs):
+	print "parse_variable: ", str(tree)
+	return str(tree)
+
+def parse_value(tree, num_tabs):
+	print 'parse_value tree: ' + str(tree)
+	label = tree[0]
+	if label in \
+	['variable', 'num', 'time', 'date', 'event', 'tag', 'math_stmt']:
+		return dir_to_func[label](tree[1:], num_tabs)
+	else:
+		return -1
+
+def parse_print_stmt(tree, num_tabs):
+	# print "\nparse_print_stmt tree: ", str(tree)
+	#parse_print_stmt tree:  [['print', 'print'], ['variable', 'hello']]
+	#parse_print_stmt tree:  [['print', 'print'], ['quote', '"'], ['strings', 'hello world'], ['quote', '"']]
+	if tree[0][0] != 'print':
+		return -1
+	code = ''
+	i = 0
+	while i < num_tabs:
+		code += '\t'
+		i += 1
+	if tree[1][0] == 'variable':
+		code += 'print ' + dir_to_func['variable'](tree[1][1], num_tabs)
+	if tree[1][0] == 'quote':
+		code += 'print \"' + dir_to_func['strings'](tree[2][1], num_tabs) + '\"'
+	return code
+
+def parse_strings(tree, num_tabs):
+	return tree
 
 def parse_export_stmt(tree, num_tabs):
 	if len(tree) != 2:
@@ -320,9 +443,6 @@ def parse_cancel_stmt(tree, num_tabs):
 def parse_tag_line(tree, num_tabs):
 	return ''
 	
-def parse_print_stmt(tree, num_tabs):
-	pass
-	
 def parse_bool_expr(tree, num_tabs):
 	pass
 
@@ -361,18 +481,14 @@ def parse_day_math(tree, num_tabs):
 
 def parse_year(tree, num_tabs):
 	pass
-	
-	
+		
 def parse_tag_priorities(tree, num_tabs):
 	return 'tag priorities'
 	
 def parse_comment_stmt(tree, num_tabs):
-	pass
+	return ''
 
 def parse_add_stmt(tree, num_tabs):
-	pass
-	
-def parse_expr_block(tree, num_tabs):
 	pass
 	
 def parse_function_declaration(tree, num_tabs):
@@ -382,12 +498,6 @@ def parse_time_duration(tree, num_tabs):
 	pass
 	
 def parse_while_stmt(tree, num_tabs):
-	pass
-	
-def parse_clean(tree, num_tabs):
-	return 'clean'
-	
-def parse_strings(tree, num_tabs):
 	pass
 
 def parse_and(tree, num_tabs):
@@ -402,10 +512,6 @@ def parse_colon(tree, num_tabs):
 def parse_from(tree, num_tabs):
 	pass
 
-
-def parse_quote(tree, num_tabs):
-	pass
-
 def parse_newline(tree, num_tabs):
 	pass
 
@@ -413,9 +519,6 @@ def parse_build(tree, num_tabs):
 	pass
 
 def parse_tag_op(tree, num_tabs):
-	pass
-
-def parse_expr_block_rep(tree, num_tabs):
 	pass
 
 def parse_tag(tree, num_tabs):
@@ -444,41 +547,14 @@ def parse_date_unit(tree, num_tabs):
 def parse_string_rep(tree, num_tabs):
 	pass
 
-def parse_expr(tree, num_tabs):
-	pass
-
 def parse_schedule(tree, num_tabs):
 	pass
 
 def parse_bool_value(tree, num_tabs):
 	pass
 
-
-def parse_value(tree, num_tabs):
-    label = tree[0]
-    if label in \
-    ['variable', 'num', 'time', 'date', 'event', 'tag', 'math_stmt']:
-        return dir_to_func[label](tree[1:])
-    else:
-    	return -1
-
-def parse_variable(tree, num_tabs):
-	return tree[0]
-
 def parse_num(tree, num_tabs):
 	return tree[0]
-	
-def parse_math_stmt(tree, num_tabs):
-	if len(tree) == 1:
-	    return str(tree[0])
-	elif tree[0] == '(':
-	    return '(' + parse_math_stmt(tree[1]) + ')'
-	elif tree[1] in ('+', '-', '*', '/'):
-	    return parse_math_stmt(tree[0]) + str(tree[1]) \
-	    + parse_math_stmt(tree[2])
-	else:
-		print 'Bad math statement'
-		return -1
 
 def parse_to(tree, num_tabs):
 	pass
@@ -569,7 +645,6 @@ dir_to_func = {
 	'op' : parse_op,
 	'date_unit' : parse_date_unit,
 	'time_unit' : parse_time_unit,
-	'quote' : parse_quote,
 	'filename' : parse_filename,
 	'export' : parse_export,
 	'tag_name' : parse_tag_name,
@@ -591,5 +666,6 @@ dir_to_func = {
 	'print' : parse_print,
 	'newline' : parse_newline,
 	'type' : parse_type,
+	'assignment_stmt' : parse_assignment_stmt,
 }
 

@@ -1,6 +1,6 @@
 # Use the lexer defined by lifeplanner_lex.py
 import lifeplanner_lex
-#import lifeplanner_translate as trans
+import lifeplanner_translate as trans
 
 # Utilizing the PLY LALR parser generator.
 import yacc
@@ -235,13 +235,8 @@ def p_mathstmt1(p):
 
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
-<<<<<<< HEAD
                   | string'''
-    p[0] = ('math_stmt', p[1])
-=======
-		          | string'''
     p[0] = ['math_stmt', p[1]]
->>>>>>> origin/master
 
 def p_comment_stmt(p): 
     '''comment_stmt : COMMENT strings
@@ -636,10 +631,10 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'build schedule\n\tprint hello\n'
+data = 'build schedule\n\ti = 0\n:) commment here\nprint var\n'
 tree = yacc.parse(data)
 print tree
-#print trans.translate(tree)
+print trans.translate(tree)
 
 #import sys
 
