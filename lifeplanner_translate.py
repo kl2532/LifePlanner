@@ -11,6 +11,7 @@ def translate(tree):
 		dir_to_func['program'](tree[1:], 0)
 
 def parse_program(tree, num_tabs):
+	#print "parse_program tree: ", str(tree)
 	if len(tree) != 5:
 		return -1
 	if tree[0][0] != 'function_blocks':
@@ -23,13 +24,19 @@ def parse_program(tree, num_tabs):
 		return -1
 	if tree[4][0] != 'export_stmt':
 		return -1
-	return \
-	dir_to_func['function_blocks'](tree[0][1:], num_tabs) + '\n' + \
-	dir_to_func['import_stmt'](tree[1][1:], num_tabs) + '\n' + \
-	dir_to_func['schedule_stmts'](tree[2][1:], num_tabs) + '\n' + \
-	dir_to_func['build_schedule'](tree[3][1:], num_tabs) + '\n' + \
-	dir_to_func['export_stmt'](tree[4][1:], num_tabs)
-	#need to finish translating
+	entire_prog = ''
+
+	if tree[0][1]:
+		entire_prog += dir_to_func['function_blocks'](tree[0][1:], num_tabs) + '\n' 
+	if tree[1][1]:
+		entire_prog += dir_to_func['import_stmt'](tree[1][1:], num_tabs) + '\n'
+	if tree[2][1]:
+		entire_prog += 'var_all_events = []' + '\n' + dir_to_func['schedule_stmts'](tree[2][1:], num_tabs) + '\n'
+	if tree[3][1]:
+		entire_prog += dir_to_func['build_schedule'](tree[3][1:], num_tabs) + '\n'
+	if tree[4][1]:
+		entire_prog += dir_to_func['export_stmt'](tree[4][1:], num_tabs)
+	return entire_prog
 
 def parse_function_blocks(tree, num_tabs):
 	return 'function_blocks'
@@ -42,6 +49,7 @@ def parse_filename(tree, num_tabs):
 	return tree[0][1]
 
 def parse_schedule_stmts(tree, num_tabs):
+	# print "\nparse_schedule_stmts tree: ", str(tree)
 	if len(tree) != 4:
 		return -1
 	if tree[0][0] != 'date':
@@ -54,25 +62,19 @@ def parse_schedule_stmts(tree, num_tabs):
 		return -1
 	month, day, year = dir_to_func['date'](tree[0][1:], num_tabs)
 	code = dir_to_func['event_list'](tree[2][1:], 0, month, day, year) + '\n' 
-	if tree[3]:
-		print
-		print 'tree[3]' + str(tree[3][1:])
-		print
+
+	if tree[3][1][1]:
 		code += dir_to_func['schedule_stmts_rep'](tree[3][1:], num_tabs)
 	return code
-	
-	#need to finish translating this
 
 def parse_schedule_stmts_rep(tree, num_tabs):
-	print 
-	print 'tree: ' + str(tree[0][1:])
-	print
-	if len(tree) > 1:
-		#return "hello"
+	if tree and tree[0][0] == 'schedule_stmts':
 		return dir_to_func['schedule_stmts'](tree[0][1:], num_tabs)
 	return ''
 
 def parse_build_schedule(tree, num_tabs):
+	print "parse_build_schedule tree: ", tree
+	# return "hello"
 	if len(tree) != 4:
 		return -1
 	if tree[0][0] != 'build':
@@ -84,12 +86,11 @@ def parse_build_schedule(tree, num_tabs):
 	if tree[3] and tree[3][0] != 'clean':
 		return -1
 	code = ''
-	if tree[2]:
+	if tree[2][1]:
 		code += dir_to_func['tag_priorities'](tree[2][1:], num_tabs) + '\n' 
-	if tree[3]:
+	if tree[3][1]:
 		code += dir_to_func['clean'](tree[3][1:], num_tabs)
 	return code
-	#need to finish translating
 
 def parse_export_stmt(tree, num_tabs):
 	if len(tree) != 2:
@@ -101,7 +102,6 @@ def parse_export_stmt(tree, num_tabs):
 	return \
 	'export_cal(' + \
 	str(dir_to_func['filename'](tree[1][1:], num_tabs)) + ')'
-
 	
 def parse_date(tree, num_tabs):
 	month = tree[0][1]
@@ -134,7 +134,7 @@ def parse_event_list(tree, num_tabs, month, day, year):
 	if tree[1][0]:
 		code += dir_to_func['event_list_rep'](tree[1][1:], num_tabs, month, day, year)
 	return \
-	'var_all_events = []' + '\n' + code + '\n' 
+	code + '\n' 
 
 def parse_event_list_rep(tree, num_tabs, month, day, year=None):
 	print tree
@@ -146,6 +146,8 @@ def parse_event_list_rep(tree, num_tabs, month, day, year=None):
 	return ''
 
 def parse_event(tree, num_tabs, month, day, year):
+	# event[['event', ['event_title', ('strings', 'PLT')], ['when', ('from', 'from'), ['time', ('num', '4'), ('colon', ':'), ('num', '00'), ('meridian', 'PM')], ('to', 'to'), ['time', ('num', '9'), ('colon', ':'), ('num', '00'), ('meridian', 'PM')]], ('where', None), ('who', None), ('tag_line', None)], ['event_list_rep', ['event_list', ['event', ['event_title', ('strings', 'Dinner')], ['when', ('from', 'from'), ['time', ('num', '9'), ('colon', ':'), ('num', '00'), ('meridian', 'PM')], ('to', 'to'), ['time', ('num', '10'), ('colon', ':'), ('num', '00'), ('meridian', 'PM')]], ('where', None), ('who', None), ('tag_line', None)], ['event_list_rep', ['event_list', None]]]]]
+
 	# if len(tree) != 4:
 	# 	return -1
 	if tree[0][0] != 'event_title':
@@ -163,9 +165,10 @@ def parse_event(tree, num_tabs, month, day, year):
 	event_initial = 'event_dict' + str(event_count) + ' = {}\n'
 	modify_event = dir_to_func['event_title'](tree[0][1:], num_tabs) \
 		+ '\n' + dir_to_func['when'](tree[1][1:], num_tabs, month, day, year) \
-		+ '\n' + dir_to_func['where'](tree[2][1:], num_tabs)\
-		+ '\n'
-	if tree[3]:
+		+ '\n' 
+	if tree[2][1]:
+		modify_event += dir_to_func['where'](tree[2][1:], num_tabs) +'\n'
+	if tree[3][1]:
 		modify_event += dir_to_func['who'](tree[3][1:], num_tabs) + '\n'
 	if tree[4]:
 		modify_event += dir_to_func['tag_line'](tree[4][1:], num_tabs)
@@ -304,8 +307,6 @@ def parse_comma(tree, num_tabs):
 
 def parse_function_block(tree, num_tabs):
 	pass
-
-
 
 def parse_else_block(tree, num_tabs):
 	pass
@@ -458,8 +459,8 @@ def parse_value(tree, num_tabs):
     if label in \
     ['variable', 'num', 'time', 'date', 'event', 'tag', 'math_stmt']:
         return dir_to_func[label](tree[1:])
-	else:
-	    return -1
+    else:
+    	return -1
 
 def parse_variable(tree, num_tabs):
 	return tree[0]
@@ -475,9 +476,9 @@ def parse_math_stmt(tree, num_tabs):
 	elif tree[1] in ('+', '-', '*', '/'):
 	    return parse_math_stmt(tree[0]) + str(tree[1]) \
 	    + parse_math_stmt(tree[2])
-    else:
-        print 'Bad math statement'
-        return -1
+	else:
+		print 'Bad math statement'
+		return -1
 
 def parse_to(tree, num_tabs):
 	pass
