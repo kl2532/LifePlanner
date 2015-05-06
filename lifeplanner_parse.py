@@ -214,7 +214,7 @@ def p_expr(p):
             | event_stmt newline
             | comment_stmt newline
             | assignment_stmt newline
-	        | math_stmt newline
+            | math_stmt newline
             | time_math newline
             | day_math newline
             | func newline
@@ -229,15 +229,15 @@ def p_func(p):
 
 def p_mathstmt1(p):
     '''math_stmt : math_stmt PLUS math_stmt
-		 | math_stmt MINUS math_stmt
-		 | math_stmt TIMES math_stmt
-		 | math_stmt DIVIDE math_stmt
+         | math_stmt MINUS math_stmt
+         | math_stmt TIMES math_stmt
+         | math_stmt DIVIDE math_stmt
          | LEFTPAREN math_stmt RIGHTPAREN'''
     p[0] = ('math_stmt', p[1], p[2], p[3])
 
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
-		          | string'''
+                  | string'''
     p[0] = ('math_stmt', p[1])
 
 def p_comment_stmt(p): 
