@@ -1,6 +1,6 @@
 # Use the lexer defined by lifeplanner_lex.py
 import lifeplanner_lex
-import lifeplanner_translate as trans
+#import lifeplanner_translate as trans
 
 # Utilizing the PLY LALR parser generator.
 import yacc
@@ -386,8 +386,12 @@ def p_timeop(p):
     p[0] = ['op', p[1]]
         
 def p_printstmt(p):
-    '''print_stmt : print quote strings quote'''
-    p[0] = ['print_stmt', p[1], p[2], p[3], p[4]]
+    '''print_stmt : print quote strings quote
+                  | print variable'''
+    if len(p) == 5:
+        p[0] = ['print_stmt', p[1], p[2], p[3], p[4]]
+    elif len(p) == 3:
+        p[0] = ['print_stmt', p[1], p[2]]
 
 def p_datedur(p):
     '''date_duration : num date_unit'''
@@ -627,21 +631,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'build schedule\n\
-print "true"\n\
-print "false"\n\
-if False and True\n\
-\tprint "And is incorrect"\n\
-\tend\n\
-else\n\
-\tif False or False\n\
-\t\tprint "Or is incorrect"\n\
-\t\tend\n\
-\telse\n\
-\t\tprint "Or is correct"\n\
-\t\tend\n\
-\tend\n\
-export aho'
+data = 'build schedule\n\tprint hello\n'
 tree = yacc.parse(data)
 print tree
 #print trans.translate(tree)
