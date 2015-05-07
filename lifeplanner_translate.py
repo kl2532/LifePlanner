@@ -151,6 +151,7 @@ def parse_expr(tree, num_tabs):
 	#done
 	if tree[0][0] == 'math_stmt':
 		code += dir_to_func['math_stmt'](tree[0][1:], num_tabs) + '\n'
+	#done
 	if tree[0][0] == 'time_math':
 		code += dir_to_func['time_math'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'day_math':
@@ -166,11 +167,14 @@ def parse_expr(tree, num_tabs):
 # datetime.datetime(2015, 5, 7) + timedelta(days= 3)
 # datetime.datetime(2015, 5, 7, 2, 0) + timedelta(hours= 2)
 
+def parse_day_math(tree, num_tabs):
+	pass
+
 def parse_time_math(tree, num_tabs):
 	print "parse_time_math: ", str(tree)
-	[['time', ['num', '2'], ['colon', ':'], ['num', '00'], ['meridian', 'PM']], 
-	['op', '+'], 
-	['time_duration', ['num', '2'], ['time_unit', 'hours']]]
+	# [['time', ['num', '2'], ['colon', ':'], ['num', '00'], ['meridian', 'PM']], 
+	# ['op', '+'], 
+	# ['time_duration', ['num', '2'], ['time_unit', 'hours']]]
 	code = ''
 	if tree[0][0] == 'time':
 		hour, minute = dir_to_func['time'](tree[0][1:], num_tabs)
@@ -196,9 +200,6 @@ def parse_time_unit(tree, num_tabs):
 
 def parse_op(tree, num_tabs):
 	return tree[0]
-	
-def parse_day_math(tree, num_tabs):
-	pass
 
 def parse_event_stmt(tree, num_tabs):
 	print "parse_event_stmt: ", str(tree)
