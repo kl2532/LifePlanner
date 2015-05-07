@@ -13,7 +13,7 @@ tokens = lifeplanner_lex.tokens
 # Operator precedence
 precedence =    (
                    ('left','PLUS','MINUS'),
-                   ('left','TIMES','DIVIDE'),
+                   ('left','TIMES','SLASH'),
                    ('left','LEFTPAREN'),
                    ('left','BUILD'),
                    ('left', 'PRINT'),
@@ -256,7 +256,7 @@ def p_mathstmt1(p):
     '''math_stmt : math_stmt PLUS math_stmt
 		 | math_stmt MINUS math_stmt
 		 | math_stmt TIMES math_stmt
-		 | math_stmt DIVIDE math_stmt
+		 | math_stmt SLASH math_stmt
          | LEFTPAREN math_stmt RIGHTPAREN'''
     p[0] = ['math_stmt', p[1], p[2], p[3]]
 
@@ -275,12 +275,25 @@ def p_comment_stmt(p):
         
 def p_eventstmt(p):
     '''event_stmt : add_stmt
-                | cancel_stmt'''
+                | cancel_stmt
+                | update_stmt
+                | remove_stmt'''
     p[0] = ['event_stmt', p[1]]
-    
+
+def p_updatestmt(p):
+    '''update_stmt : UPDAT strings FROM variable
+                    | UPDAT strings TO variable
+                    | UPDAT strings AT variable'''
+    print 'updating'
+    p[0] = ['update_stmt', p[2], p[3], p[4]]
+
 def p_addstmt(p):
-    '''add_stmt : ADD strings'''
-    p[0] = ['add_stmt', p[1], p[2]]
+    '''add_stmt : ADD strings TO strings'''
+    p[0] = ['add_stmt', p[2], p[4]]
+
+def p_removestmt(p):
+    '''remove_stmt : REMOVE strings FROM strings'''
+    p[0] = ['remove_stmt', p[2], p[4]]
     
 def p_cancel_stmt(p):
     '''cancel_stmt : CANCEL strings'''
@@ -637,13 +650,12 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'build schedule\ncancel PLT\n'
+data = 'build schedule\ni = i / 5\n'
 tree = yacc.parse(data)
 print tree
 print trans.translate(tree)
 
 #import sys
-
 #python_translation = ""
 #for line in tree:
 #    if line[0]=='print':
