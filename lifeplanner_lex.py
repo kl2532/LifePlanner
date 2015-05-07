@@ -82,7 +82,8 @@ reserved = {
     'or' : 'OR',
     'function' : 'FUNCTION',
     'before' : 'BEFORE',
-    'after' : 'AFTER'
+    'after' : 'AFTER',
+    'update' : 'UPDAT'
     }
 
 tokens = tokens + reserved.values()
@@ -155,6 +156,7 @@ t_APPEND = r'(append)'
 t_REMOVE = r'(remove)'
 t_LENGTH = r'(length)'
 t_IN = r'(in)'
+t_UPDAT = r'(update)'
 
 #Control Sequences
 t_IF = r'(if)'

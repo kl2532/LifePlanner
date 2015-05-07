@@ -204,11 +204,48 @@ def parse_event_stmt(tree, num_tabs):
 	print "parse_event_stmt: ", str(tree)
 	if tree[0][0] == 'cancel_stmt':
 		return dir_to_func['cancel_stmt'](tree[0][1:], num_tabs)
+	if tree[0][0] == 'update_stmt':
+		return dir_to_func['update_stmt'](tree[0][1:], num_tabs)
+	if tree[0][0] == 'add_stmt':
+		return dir_to_func['add_stmt'](tree[0][1:], num_tabs)
+	if tree[0][0] == 'remove_stmt':
+		return dir_to_func['remove_stmt'](tree[0][1:], num_tabs)
 	return 'event_stmt'
 
+def parse_remove_stmt(tree, num_tabs):
+	tabs = ''
+	i = 0
+	while i < num_tabs:
+		tabs += '\t'
+		i += 1
+	code = tabs + 'for event in var_all_events:\n\t' + \
+	tabs + 'if event[\'event_title\'] == \'' + dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + \
+	tabs + 'event[\'with\'].remove(\''+dir_to_func['strings'](tree[0][1], num_tabs)+'\')'
+	return code
+
+def parse_add_stmt(tree, num_tabs):
+	tabs = ''
+	i = 0
+	while i < num_tabs:
+		tabs += '\t'
+		i += 1
+	code = tabs + 'for event in var_all_events:\n\t' + \
+	tabs + 'if event[\'event_title\'] == \'' + dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + \
+	tabs + 'event[\'with\'].append(\''+dir_to_func['strings'](tree[0][1], num_tabs)+'\')'
+	return code
+
+def parse_update_stmt(tree, num_tabs):
+	tabs = ''
+	i = 0
+	while i < num_tabs:
+		tabs += '\t'
+		i += 1
+	code = tabs + 'for event in var_all_events:\n\t' + \
+	tabs + 'if event[\'event_title\'] == \'' + dir_to_func['strings'](tree[0][1], num_tabs) + '\':\n\t\t' + \
+	tabs + 'event[\'' + tree[1] + '\'] = ' + dir_to_func['variable'](tree[2][1], num_tabs)
+	return code
+
 def parse_cancel_stmt(tree, num_tabs):
-	print "parse_cancel_stmt: ", str(tree)
-	#  ['cancel', ['strings', 'PLT']]
 	tabs = ''
 	j = 0
 	while(j < num_tabs):
@@ -222,8 +259,6 @@ def parse_cancel_stmt(tree, num_tabs):
 	return code
 
 def parse_assignment_stmt(tree, num_tabs):
-	print "\nparse_assignment_stmt: ", str(tree)
-	#parse_assignment_stmt:  [['variable', 'i'], '=', ['value', ['math_stmt', '0']]]
 	code = ''
 	i = 0
 	while i < num_tabs:
@@ -235,7 +270,6 @@ def parse_assignment_stmt(tree, num_tabs):
 	return code
 
 def parse_math_stmt(tree, num_tabs):
-	print '\nparse_math_stmt' + str(tree)
 	if len(tree) == 1:
 		if type(tree) is list:
 			if tree[0][0] == 'variable':
@@ -255,7 +289,6 @@ def parse_math_stmt(tree, num_tabs):
 		return -1
 
 def parse_variable(tree, num_tabs):
-	print "parse_variable: ", str(tree)
 	if type(tree) is list:
 		return str(tree[1])
 	return str(tree)
@@ -554,8 +587,7 @@ def parse_tag_priorities(tree, num_tabs):
 def parse_comment_stmt(tree, num_tabs):
 	return ''
 
-def parse_add_stmt(tree, num_tabs):
-	pass
+
 	
 def parse_function_declaration(tree, num_tabs):
 	pass
@@ -722,5 +754,7 @@ dir_to_func = {
 	'newline' : parse_newline,
 	'type' : parse_type,
 	'assignment_stmt' : parse_assignment_stmt,
+	'update_stmt' : parse_update_stmt,
+	'remove_stmt' : parse_remove_stmt
 }
 
