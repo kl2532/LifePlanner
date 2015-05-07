@@ -262,7 +262,7 @@ def p_mathstmt1(p):
 
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
-                  | string'''
+                  | variable'''
     p[0] = ['math_stmt', p[1]]
 
 def p_comment_stmt(p): 
@@ -637,7 +637,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'build schedule\n\ti = 0\n:) commment here\nprint var\n'
+data = 'build schedule\ncancel PLT\n'
 tree = yacc.parse(data)
 print tree
 print trans.translate(tree)
