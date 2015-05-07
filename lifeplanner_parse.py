@@ -268,6 +268,7 @@ def p_mathstmt1(p):
         p[0] = ['math_div', p[1], p[2], p[3]]
     else:
         p[0] = ['math_paren', p[1], p[2], p[3]]
+<<<<<<< HEAD
 
 # def p_mathrep(p):
 #     '''math_rep : PLUS math_stmt
@@ -278,6 +279,8 @@ def p_mathstmt1(p):
 #     if len(p) ==3:
 #         p[0] = ['math_rep', p[1], p[2]]
 #         print p[0]
+=======
+>>>>>>> a4f52be455b455e262968858dc4f972ea19c6aa7
 
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
@@ -324,6 +327,7 @@ def p_whilestmt(p):
     '''while_stmt : WHILE bool_expr newline expr_block END'''
     p[0] = ['while_stmt', p[1], p[2], p[4]]
 
+# REMOVE
 def p_timerange(p):
     '''time_range : FROM date TO date newline expr_block END'''
     p[0] = ['time_range', p[1], p[2], p[3], p[4], p[6]]
@@ -670,7 +674,7 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 yacc.yacc()
-data = 'build schedule\ni = ((1 + 2) + 3)\n'
+data = 'build schedule\ni=1+2+3*4\n'
 tree = yacc.parse(data)
 print 'parse tree: ', tree
 print trans.translate(tree)
