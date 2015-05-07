@@ -650,7 +650,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'build schedule\ni = i / 5\n'
+data = 'build schedule\nupdate PLT from i\n'
 tree = yacc.parse(data)
 print tree
 print trans.translate(tree)
