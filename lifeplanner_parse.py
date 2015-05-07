@@ -258,12 +258,24 @@ def p_mathstmt1(p):
 		 | math_stmt TIMES math_stmt
 		 | math_stmt SLASH math_stmt
          | LEFTPAREN math_stmt RIGHTPAREN'''
-    p[0] = ['math_stmt', p[1], p[2], p[3]]
+    if p[2] == '+':
+        p[0] = ['math_plus', p[1], p[2], p[3]]
+    elif p[2] == '-':
+        p[0] = ['math_minus', p[1], p[2], p[3]]
+    elif p[2] == '*':
+        p[0] = ['math_mult', p[1], p[2], p[3]]
+    elif p[2] == '/':
+        p[0] = ['math_div', p[1], p[2], p[3]]
+    else:
+        p[0] = ['math_paren', p[1], p[2], p[3]]
 
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
                   | variable'''
-    p[0] = ['math_stmt', p[1]]
+    if type(p[1]) == int:
+        p[0] = ['math_int', p[1]]
+    else:
+        p[0] = ['math_var', p[1]]
 
 def p_comment_stmt(p): 
     '''comment_stmt : COMMENT strings'''
@@ -650,7 +662,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'build schedule\nwhile 2 < 3\n\tprint\'hi\'\n\tend\nwhile 2 < 3\n\tprint\'hi\'\n\tend\n'
+data = 'build schedule\ni=1+2+3*4\n'
 tree = yacc.parse(data)
 print 'parse tree: ', tree
 print trans.translate(tree)
