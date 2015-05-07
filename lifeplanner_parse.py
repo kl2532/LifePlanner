@@ -217,7 +217,7 @@ def p_clean(p):
     '''clean : expr_block
              | empty'''
     if len(p) == 2:
-        p[0] = ['clean', p[1]
+        p[0] = ['clean', p[1]]
     else:
         p[0] = ['clean', None]
 
