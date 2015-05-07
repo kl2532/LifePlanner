@@ -214,10 +214,10 @@ def p_tagop(p):
 
 #change later
 def p_clean(p):
-    '''clean : expr_block clean
+    '''clean : expr_block
              | empty'''
-    if len(p) == 3:
-        p[0] = ['clean', p[1], p[2]]
+    if len(p) == 2:
+        p[0] = ['clean', p[1]]
     else:
         p[0] = ['clean', None]
 
@@ -266,8 +266,7 @@ def p_mathstmt3(p):
     p[0] = ['math_stmt', p[1]]
 
 def p_comment_stmt(p): 
-    '''comment_stmt : COMMENT strings
-                    | empty'''
+    '''comment_stmt : COMMENT strings'''
     if len(p) == 3:
         p[0] = ['comment_stmt', p[1], p[2]]
     else:
@@ -652,7 +651,7 @@ def p_error(p):
 yacc.yacc()
 data = 'build schedule\nupdate PLT from i\n'
 tree = yacc.parse(data)
-print tree
+print 'parse tree: ', tree
 print trans.translate(tree)
 
 #import sys
