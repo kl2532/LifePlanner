@@ -303,6 +303,7 @@ def p_whilestmt(p):
     '''while_stmt : WHILE bool_expr newline expr_block END'''
     p[0] = ['while_stmt', p[1], p[2], p[4]]
 
+# REMOVE
 def p_timerange(p):
     '''time_range : FROM date TO date newline expr_block END'''
     p[0] = ['time_range', p[1], p[2], p[3], p[4], p[6]]
@@ -650,7 +651,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'build schedule\ni = 2:00 PM + 2 hours\n'
+data = 'build schedule\nwhile 2 < 3\n\tprint\'hi\'\n\tend\nwhile 2 < 3\n\tprint\'hi\'\n\tend\n'
 tree = yacc.parse(data)
 print 'parse tree: ', tree
 print trans.translate(tree)
