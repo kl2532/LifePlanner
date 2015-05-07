@@ -158,7 +158,7 @@ def parse_expr(tree, num_tabs):
 		code += dir_to_func['day_math'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'func':
 		code += dir_to_func['func'](tree[0][1:], num_tabs) + '\n'
-	if tree[0][0] == 'time_range':
+	if tree[0][0] == 'time_range': # REMOVE
 		code += dir_to_func['time_range'](tree[0][1:], num_tabs) + '\n'
 	return code
 
@@ -528,7 +528,38 @@ def parse_comma(tree, num_tabs):
 			code += 'pp_list' + str(event_count) + '.append(' + dir_to_func['name'](branch[2][1], num_tabs) + ')\n'
 	return code
 
+def parse_while_stmt(tree, num_tabs):
+	# print "parse_while_stmt: ", str(tree)
+	if tree[0] != 'while':
+		return -1
+	code = 'while '
+	if tree[1][0] == 'bool_expr':
+		code += dir_to_func['bool_expr'](tree[1][1:], num_tabs)
+	if tree[2][0] == 'expr_block':
+		code += dir_to_func['expr_block'](tree[2][1:], num_tabs+1)
+	return code
 
+def parse_bool_expr(tree, num_tabs):
+	# print 'parse_bool_expr: ', str(tree)
+	code = ''
+	if tree[0][0] == 'bool_operation':
+		code += dir_to_func['bool_operation'](tree[0][1:], num_tabs)
+	return code
+
+def parse_bool_operation(tree, num_tabs):
+	# print 'parse_bool_operation: ', str(tree)
+	code = ''
+	if tree[0][0] == 'value':
+		code += dir_to_func['value'](tree[0][1], num_tabs)
+	if tree[1][0] == 'comparison_operator':
+		code += dir_to_func['comparison_operator'](tree[1][1], num_tabs)
+	if tree[2][0] == 'value':
+		code += dir_to_func['value'](tree[2][1], num_tabs)
+	return code + ":\n"
+
+def parse_comparison_operator(tree, num_tabs):
+	# print 'parse_comparison_operator: ', str(tree)
+	return tree[0]
 
 def parse_function_block(tree, num_tabs):
 	pass
@@ -541,14 +572,8 @@ def parse_elseif_blocks(tree, num_tabs):
 	
 def parse_tag_line(tree, num_tabs):
 	return ''
-	
-def parse_bool_expr(tree, num_tabs):
-	pass
 
 def parse_for_stmt(tree, num_tabs):
-	pass
-	
-def parse_bool_operation(tree, num_tabs):
 	pass
 	
 def parse_if_stmt(tree, num_tabs):
@@ -572,21 +597,16 @@ def parse_elseif_block(tree, num_tabs):
 def parse_and(tree, num_tabs):
 	pass
 
-def parse_year(tree, num_tabs):
-	pass
+# def parse_year(tree, num_tabs):
+# 	pass
 		
 def parse_tag_priorities(tree, num_tabs):
 	return 'tag priorities'
 	
 def parse_comment_stmt(tree, num_tabs):
 	return ''
-
-
 	
 def parse_function_declaration(tree, num_tabs):
-	pass
-	
-def parse_while_stmt(tree, num_tabs):
 	pass
 
 def parse_and(tree, num_tabs):
@@ -628,7 +648,6 @@ def parse_with(tree, num_tabs):
 def parse_date_unit(tree, num_tabs):
 	pass
 
-
 def parse_string_rep(tree, num_tabs):
 	pass
 
@@ -647,8 +666,6 @@ def parse_to(tree, num_tabs):
 def parse_tag_name(tree, num_tabs):
 	pass
 
-
-
 def parse_print(tree, num_tabs):
 	pass
 
@@ -658,11 +675,6 @@ def parse_at(tree, num_tabs):
 def parse_type(tree, num_tabs):
 	pass
 
-def parse_comparison_operator(tree, num_tabs):
-	pass
-
-
-
 dir_to_func = {
 	'program' : parse_program,
 	'function_block' : parse_function_block,
@@ -670,7 +682,7 @@ dir_to_func = {
 	'import_stmt' : parse_import_stmt,
 	'schedule_stmts' : parse_schedule_stmts,
 	'date' : parse_date,
-	'year' : parse_year,
+	#'year' : parse_year,
 	'event_list' : parse_event_list,
 	'event' : parse_event,
 	'when' : parse_when,
