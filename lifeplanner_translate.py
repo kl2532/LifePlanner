@@ -128,7 +128,6 @@ def parse_expr_block_rep(tree, num_tabs):
 # ['expr_block_rep', ['expr_block', ['expr', ['print_stmt', ['print', 'print'], ['variable', 'var']]], ['expr_block_rep', ['expr_block', None]]]] 0,2
 # ], ['clean', None]] 1
 
-
 def parse_expr(tree, num_tabs):
 	print 'parse_expr tree: ', str(tree)
 	code = ''
@@ -161,6 +160,45 @@ def parse_expr(tree, num_tabs):
 	if tree[0][0] == 'time_range':
 		code += dir_to_func['time_range'](tree[0][1:], num_tabs) + '\n'
 	return code
+
+# import datetime
+# from datetime import timedelta
+# datetime.datetime(2015, 5, 7) + timedelta(days= 3)
+# datetime.datetime(2015, 5, 7, 2, 0) + timedelta(hours= 2)
+
+def parse_time_math(tree, num_tabs):
+	print "parse_time_math: ", str(tree)
+	[['time', ['num', '2'], ['colon', ':'], ['num', '00'], ['meridian', 'PM']], 
+	['op', '+'], 
+	['time_duration', ['num', '2'], ['time_unit', 'hours']]]
+	code = ''
+	if tree[0][0] == 'time':
+		hour, minute = dir_to_func['time'](tree[0][1:], num_tabs)
+		code += 'dt.time(' + hour + ',' + minute + ')'
+	if tree[1][0] == 'op':
+		code += dir_to_func['op'](tree[1][1:], num_tabs)
+	if tree[2][0] == 'time_duration':
+		code += dir_to_func['time_duration'](tree[2][1:], num_tabs)
+	return code
+
+def parse_time_duration(tree, num_tabs):
+	print 'parse_time_duration: ', str(tree)
+	if tree[0][0] == 'num':
+		num = dir_to_func['num'](tree[0][1:], num_tabs)
+	if tree[1][0] == 'time_unit':
+		unit = dir_to_func['time_unit'](tree[1][1:], num_tabs)
+	print "unit:", unit
+	print "num: ", num
+	return 'timedelta(' + unit + '=' + num + ')'
+
+def parse_time_unit(tree, num_tabs):
+	return tree[0]
+
+def parse_op(tree, num_tabs):
+	return tree[0]
+	
+def parse_day_math(tree, num_tabs):
+	pass
 
 def parse_event_stmt(tree, num_tabs):
 	print "parse_event_stmt: ", str(tree)
@@ -226,7 +264,7 @@ def parse_value(tree, num_tabs):
 	print 'parse_value tree: ' + str(tree)
 	label = tree[0]
 	if label in \
-	['variable', 'num', 'time', 'date', 'event', 'tag', 'math_stmt']:
+	['variable', 'num', 'time', 'date', 'event', 'tag', 'math_stmt', 'time_math']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	else:
 		return -1
@@ -398,6 +436,7 @@ def getmeridian(tree, num_tabs):
 	return dir_to_func['meridian'](tree[3][1:], num_tabs)
 
 def parse_time(tree, num_tabs):
+	print "parse_time: ", str(tree)
 	if len(tree) != 4:
 		sys.stderr.write('Invalid time input')
 		sys.exit(1)
@@ -473,8 +512,6 @@ def parse_else_block(tree, num_tabs):
 def parse_elseif_blocks(tree, num_tabs):
 	pass
 	
-
-	
 def parse_tag_line(tree, num_tabs):
 	return ''
 	
@@ -507,12 +544,6 @@ def parse_elseif_block(tree, num_tabs):
 	
 def parse_and(tree, num_tabs):
 	pass
-	
-def parse_time_math(tree, num_tabs):
-	pass
-	
-def parse_day_math(tree, num_tabs):
-	pass
 
 def parse_year(tree, num_tabs):
 	pass
@@ -527,9 +558,6 @@ def parse_add_stmt(tree, num_tabs):
 	pass
 	
 def parse_function_declaration(tree, num_tabs):
-	pass
-	
-def parse_time_duration(tree, num_tabs):
 	pass
 	
 def parse_while_stmt(tree, num_tabs):
@@ -562,12 +590,8 @@ def parse_tag(tree, num_tabs):
 def parse_export(tree, num_tabs):
 	pass
 
-def parse_time_unit(tree, num_tabs):
-	pass
-
 def parse_import(tree, num_tabs):
 	pass
-
 
 def parse_bool_operator(tree, num_tabs):
 	pass
@@ -609,9 +633,6 @@ def parse_type(tree, num_tabs):
 	pass
 
 def parse_comparison_operator(tree, num_tabs):
-	pass
-
-def parse_op(tree, num_tabs):
 	pass
 
 

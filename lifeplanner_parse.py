@@ -637,9 +637,9 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 
 yacc.yacc()
-data = 'build schedule\ncancel PLT\n'
+data = 'build schedule\ni = 2:00 PM + 2 hours\n'
 tree = yacc.parse(data)
-print tree
+print 'parse tree: ', tree
 print trans.translate(tree)
 
 #import sys
