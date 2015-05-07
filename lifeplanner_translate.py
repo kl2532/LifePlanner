@@ -264,23 +264,55 @@ def parse_assignment_stmt(tree, num_tabs):
 	return code
 
 def parse_math_stmt(tree, num_tabs):
-	if len(tree) == 1:
-		if type(tree) is list:
-			if tree[0][0] == 'variable':
-				return dir_to_func['variable'](tree[0][1], num_tabs)
-		return str(tree[0])
-	elif tree[0] == '(':
-	    return '(' + parse_math_stmt(tree[1], num_tabs) + ')'
-	elif tree[1] in ('+', '-', '*', '/'):
-	    return parse_math_stmt(tree[0], num_tabs) + str(tree[1]) \
-	    + parse_math_stmt(tree[2], num_tabs)
-	elif tree[1][0] == 'variable':
-		return dir_to_func['variable'](tree[1][1], num_tabs)
-	elif tree[0] == 'math_stmt':
-		return dir_to_func['math_stmt'](tree[1], num_tabs)
-	else:
-		print 'Bad math statement'
-		return -1
+	print 'math tree: ', tree
+	label = tree[0]
+	if len(tree) == 4:
+		first = tree[1]
+		op = tree[2]
+		second = tree[3]
+		if type(first) == list and type(second) == list and \
+			len(first) > 0 and len(second) > 0:
+			if label == 'math_plus' or label == 'math_minus' or\
+				label == 'math_div' or label == 'math_multi':
+					first_label = first[0]
+					if 'math_' in first[0]:
+						first_label = 'math_stmt'
+					second_label = second[0]
+					if 'math_' in second[0]:
+						second_label = 'math_stmt'
+					return dir_to_func[first_label](first, num_tabs) + op \
+					+ dir_to_func[second_label](second, num_tabs)
+		elif label == 'math_paren' and type(op) == list and \
+			len(op) > 0:
+				mid_label = op[0]
+				if 'math_' in op[0]:
+					mid_label = 'math_stmt'
+				return first + dir_to_func[mid_label](op, num_tabs) + second
+	elif len(tree) == 2:
+		if label == 'math_int':
+			return tree[1]
+		elif label == 'math_var':
+			return tree[1]
+	print 'Invalid Math Stmt: ', tree
+	return -1
+
+	# if len(tree) == 1:
+	# 	if type(tree) is list:
+	# 		if tree[0][0] == 'variable':
+	# 			return dir_to_func['variable'](tree[0][1], num_tabs)
+	# 	return str(tree[0])
+	# elif tree[0] == '(':
+	#     return '(' + parse_math_stmt(tree[1], num_tabs) + ')'
+	# elif tree[1] in ('+', '-', '*', '/'):
+	#     return parse_math_stmt(tree[0], num_tabs) + str(tree[1]) \
+	#     + parse_math_stmt(tree[2], num_tabs)
+	# elif tree[1][0] == 'variable':
+	# 	return dir_to_func['variable'](tree[1][1], num_tabs)
+	# elif tree[0] == 'math_stmt':
+	# 	return dir_to_func['math_stmt'](tree[1], num_tabs)
+	# else:
+	# 	print 'Bad math statement'
+	# 	return -1
 
 def parse_variable(tree, num_tabs):
 	if type(tree) is list:
@@ -291,8 +323,10 @@ def parse_value(tree, num_tabs):
 	print 'parse_value tree: ' + str(tree)
 	label = tree[0]
 	if label in \
-	['variable', 'num', 'time', 'date', 'event', 'tag', 'math_stmt', 'time_math']:
+	['variable', 'num', 'time', 'date', 'event', 'tag', 'time_math']:
 		return dir_to_func[label](tree[1:], num_tabs)
+	if 'math_' in label:
+		return dir_to_func['math_stmt'](tree[:], num_tabs)
 	else:
 		return -1
 
