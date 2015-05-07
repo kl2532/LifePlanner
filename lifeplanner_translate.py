@@ -171,29 +171,22 @@ def parse_day_math(tree, num_tabs):
 	pass
 
 def parse_time_math(tree, num_tabs):
-	print "parse_time_math: ", str(tree)
-	# [['time', ['num', '2'], ['colon', ':'], ['num', '00'], ['meridian', 'PM']], 
-	# ['op', '+'], 
-	# ['time_duration', ['num', '2'], ['time_unit', 'hours']]]
 	code = ''
 	if tree[0][0] == 'time':
 		hour, minute = dir_to_func['time'](tree[0][1:], num_tabs)
-		code += 'dt.time(' + hour + ',' + minute + ')'
+		code += 'dt.datetime.combine(dt.date.today(), dt.time(' + hour + ',' + minute + '))'
 	if tree[1][0] == 'op':
 		code += dir_to_func['op'](tree[1][1:], num_tabs)
 	if tree[2][0] == 'time_duration':
 		code += dir_to_func['time_duration'](tree[2][1:], num_tabs)
-	return code
+	return '(' + code + ').time()'
 
 def parse_time_duration(tree, num_tabs):
-	print 'parse_time_duration: ', str(tree)
 	if tree[0][0] == 'num':
 		num = dir_to_func['num'](tree[0][1:], num_tabs)
 	if tree[1][0] == 'time_unit':
 		unit = dir_to_func['time_unit'](tree[1][1:], num_tabs)
-	print "unit:", unit
-	print "num: ", num
-	return 'timedelta(' + unit + '=' + num + ')'
+	return 'dt.timedelta(' + unit + '=' + num + ')'
 
 def parse_time_unit(tree, num_tabs):
 	return tree[0]
