@@ -175,6 +175,7 @@ def parse_expr(tree, num_tabs):
 		code += dir_to_func['time_math'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'day_math':
 		code += dir_to_func['day_math'](tree[0][1:], num_tabs) + '\n'
+	#done
 	if tree[0][0] == 'func':
 		code += dir_to_func['function'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'time_range':
