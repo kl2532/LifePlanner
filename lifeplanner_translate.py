@@ -7,7 +7,7 @@ all_events = []
 def translate(tree):
 	if tree[0] != 'program':
 		return -1
-	return 'import datetime as dt\n' + \
+	return 'import datetime as dt\nimport time\n' + \
 		dir_to_func['program'](tree[1:], 0)
 
 def parse_program(tree, num_tabs):
@@ -42,6 +42,24 @@ def parse_program(tree, num_tabs):
 def parse_function_blocks(tree, num_tabs):
 	return 'function_blocks'
 	#need to finish translating
+
+def parse_function_block(tree, num_tabs):
+	pass
+
+def parse_function_declaration(tree, num_tabs):
+	code = ''
+	i = 0
+	while i < num_tabs:
+		code += '\t'
+		i += 1
+	code += 'def ' + dir_to_func['variable'](tree[0][1], num_tabs) + '('
+	params = dir_to_func['parameter_list'](tree[1], num_tabs)
+	x = params.split()
+	params = x[0]
+	for i in range(1, len(x)):
+		params += ', ' + x[i]
+	code += params + '):\n'
+	return code
 
 def parse_import_stmt(tree, num_tabs):
 	return 'readCalendar(' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + ')'
@@ -141,6 +159,7 @@ def parse_expr(tree, num_tabs):
 		code += dir_to_func['while_stmt'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'for_stmt':
 		code += dir_to_func['for_stmt'](tree[0][1:], num_tabs) + '\n'
+	#done
 	if tree[0][0] == 'event_stmt':
 		code += dir_to_func['event_stmt'](tree[0][1:], num_tabs) + '\n'
 	#done
@@ -157,10 +176,34 @@ def parse_expr(tree, num_tabs):
 	if tree[0][0] == 'day_math':
 		code += dir_to_func['day_math'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'func':
-		code += dir_to_func['func'](tree[0][1:], num_tabs) + '\n'
+		code += dir_to_func['function'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'time_range':
 		code += dir_to_func['time_range'](tree[0][1:], num_tabs) + '\n'
 	return code
+
+def parse_func(tree, num_tabs):
+	code = ''
+	i = 0
+	while i < num_tabs:
+		code += '\t'
+		i += 1
+	code += dir_to_func['variable'](tree[0][1], num_tabs) + '('
+	params = dir_to_func['parameter_list'](tree[1], num_tabs)
+	x = params.split()
+	params = x[0]
+	for i in range(1, len(x)):
+		params += ', ' + x[i]
+	code += params + ')\n'
+	return code
+
+def parse_parameter_list(tree, num_tabs):
+	print '\nparams: ' + str(tree)
+	#['parameter_list', 'a', ['parameter_list', 'b', ['parameter_list', 'c', ['parameter_list', 'd', ['parameter_list', 'e', ['parameter_list', None]]]]]]
+	params = ''
+	if tree[1]:
+		params += tree[1]
+		return params + ' ' + parse_parameter_list(tree[2], num_tabs)
+	return ''
 
 def parse_time_math(tree, num_tabs):
 	return ''
@@ -206,8 +249,15 @@ def parse_update_stmt(tree, num_tabs):
 		tabs += '\t'
 		i += 1
 	code = tabs + 'for event in var_all_events:\n\t' + \
-	tabs + 'if event[\'event_title\'] == \'' + dir_to_func['strings'](tree[0][1], num_tabs) + '\':\n\t\t' + \
-	tabs + 'event[\'' + tree[1] + '\'] = ' + dir_to_func['variable'](tree[2][1], num_tabs)
+	tabs + 'if event[\'event_title\'] == \'' + dir_to_func['strings'](tree[0][1], num_tabs) + '\':\n\t\t'
+	
+	if tree[1] == 'from' or tree[1] == 'to':
+		code += tabs + 'date = str(event[\''+ tree[1]+'\'].date())\n\t\t'
+		code += tabs + 'time = ' + dir_to_func['variable'](tree[2][1], num_tabs) + '\n\t\t'
+		code += tabs + 'new_when = date + \' \' + time\n\t\t'
+		code += tabs + 'event[\''+tree[1]+'\'] = dt.datetime.strptime(new_when, \'%m-%d-%Y %I:%M %p\')\n'
+	if tree[1] == 'at':
+		code += tabs + 'event[\'' + tree[1] + '\'] = ' + dir_to_func['variable'](tree[2][1], num_tabs)
 	return code
 
 def parse_cancel_stmt(tree, num_tabs):
@@ -500,8 +550,7 @@ def parse_comma(tree, num_tabs):
 
 
 
-def parse_function_block(tree, num_tabs):
-	pass
+
 
 def parse_else_block(tree, num_tabs):
 	pass
@@ -531,9 +580,7 @@ def parse_date_duration(tree, num_tabs):
 	
 def parse_if_block(tree, num_tabs):
 	pass
-	
-def parse_parameter_list(tree, num_tabs):
-	pass
+
 		
 def parse_return_stmt(tree, num_tabs):
 	pass
@@ -556,10 +603,6 @@ def parse_tag_priorities(tree, num_tabs):
 def parse_comment_stmt(tree, num_tabs):
 	return ''
 
-
-	
-def parse_function_declaration(tree, num_tabs):
-	pass
 	
 def parse_time_duration(tree, num_tabs):
 	pass
@@ -734,6 +777,7 @@ dir_to_func = {
 	'type' : parse_type,
 	'assignment_stmt' : parse_assignment_stmt,
 	'update_stmt' : parse_update_stmt,
-	'remove_stmt' : parse_remove_stmt
+	'remove_stmt' : parse_remove_stmt,
+	'function' : parse_func
 }
 
