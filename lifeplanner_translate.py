@@ -640,10 +640,14 @@ def parse_bool_expr(tree, num_tabs):
 	if tree[0]:
 		if tree[0][0] == 'bool_operation':
 			code += dir_to_func['bool_operation'](tree[0][1:], num_tabs)
+		if tree[0] == 'bool_operation':
+			code += dir_to_func['bool_operation'](tree[1:], num_tabs)
 		if tree[0][0] == 'bool_value':
 			code += dir_to_func['bool_value'](tree[0][1], num_tabs)
 		if tree[0] == 'bool_value':
 			code += dir_to_func['bool_value'](tree[1], num_tabs)
+		if tree[0] == 'not':
+			code += 'not ' + dir_to_func['bool_expr'](tree[1][1], num_tabs)
 		if tree[0][0] == 'bool_expr':
 			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + ' ' + dir_to_func['bool_operator'](tree[1][1], num_tabs) + ' ' + dir_to_func['bool_expr'](tree[2][1], num_tabs)
 	return code
@@ -685,6 +689,7 @@ def parse_if_stmt(tree, num_tabs):
 	return code 
 
 def parse_if_block(tree, num_tabs):
+	print '\n if_block: ' + str(tree)
 	if len(tree) == 3 and len(tree[1]) > 1 \
 		and tree[1][0] == 'bool_expr' and len(tree[2]) > 1\
 		and tree[2][0] == 'expr_block':
