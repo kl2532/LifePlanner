@@ -166,8 +166,10 @@ def parse_expr(tree, num_tabs):
 	#done
 	if tree[0][0] == 'print_stmt':
 		code += dir_to_func['print_stmt'](tree[0][1:], num_tabs) + '\n'
+	#done
 	if tree[0][0] == 'if_stmt':
 		code += dir_to_func['if_stmt'](tree[0][1:], num_tabs) + '\n'
+	#done
 	if tree[0][0] == 'while_stmt':
 		code += dir_to_func['while_stmt'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'for_stmt':
@@ -575,7 +577,7 @@ def parse_where(tree, num_tabs):
 		sys.stderr.write('Invalid location for event')
 		sys.exit(1)
 	event_location = dir_to_func['location'](tree[1][1:], num_tabs)
-	return 'event_dict' + str(event_count) + '[\"location\"] = ' + event_location
+	return 'event_dict' + str(event_count) + '[\"at\"] = ' + event_location
 
 
 def parse_location(tree, num_tabs):
@@ -635,25 +637,36 @@ def parse_while_stmt(tree, num_tabs):
 def parse_bool_expr(tree, num_tabs):
 	print '\nparse_bool_expr: ', str(tree)
 	code = ''
-	if tree[0][0] == 'bool_operation':
-		code += dir_to_func['bool_operation'](tree[0][1:], num_tabs)
-	if tree[0][0] == 'bool_value':
-		code += dir_to_func['bool_value'](tree[0][1:], num_tabs)
+	if tree[0]:
+		if tree[0][0] == 'bool_operation':
+			code += dir_to_func['bool_operation'](tree[0][1:], num_tabs)
+		if tree[0][0] == 'bool_value':
+			code += dir_to_func['bool_value'](tree[0][1:], num_tabs)
+		if tree[0] == 'bool_value':
+			code += dir_to_func['bool_value'](tree[1], num_tabs)
+		if tree[0][0] == 'bool_expr':
+			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + ' ' + dir_to_func['bool_operator'](tree[1][1], num_tabs) + ' ' + dir_to_func['bool_expr'](tree[2][1], num_tabs)
 	return code
 
 def parse_bool_operation(tree, num_tabs):
 	print 'parse_bool_operation: ', str(tree)
 	code = ''
-	if tree[0][0] == 'value':
-		code += dir_to_func['value'](tree[0][1], num_tabs)
 	if tree[1][0] == 'comparison_operator':
-		code += dir_to_func['comparison_operator'](tree[1][1], num_tabs)
-	if tree[2][0] == 'value':
-		code += dir_to_func['value'](tree[2][1], num_tabs)
+		if tree[0][0] == 'value':
+			code += dir_to_func['value'](tree[0][1], num_tabs)
+		if tree[1][0] == 'comparison_operator':
+			code += dir_to_func['comparison_operator'](tree[1][1], num_tabs)
+		if tree[2][0] == 'value':
+			code += dir_to_func['value'](tree[2][1], num_tabs)
+	if tree[1] == 'in':
+		if tree[0][0] == 'value':
+			code += '\'' + dir_to_func['value'](tree[0][1], num_tabs) + '\' in '
+		if tree[2][0] == 'value':
+			code += dir_to_func['value'](tree[2][1], num_tabs)
 	return code
 
 def parse_bool_value(tree, num_tabs):
-	return tree[0]
+	return tree
 
 def parse_comparison_operator(tree, num_tabs):
 	# print 'parse_comparison_operator: ', str(tree)
@@ -664,8 +677,8 @@ def parse_if_stmt(tree, num_tabs):
 	if len(tree) > 0:
 		for item in tree:
 			if len(item) > 1:
-				#print 'item: ', item
-				#print 'item[1:], ', item[1:]
+				#print '\nitem: ', item
+				#print '\nitem[1:], ', item[1:]
 				code += dir_to_func[item[0]](item[1:], num_tabs)
 			else:
 				print "error in ", item
@@ -795,7 +808,7 @@ def parse_import(tree, num_tabs):
 	pass
 
 def parse_bool_operator(tree, num_tabs):
-	pass
+	return tree
 
 def parse_with(tree, num_tabs):
 	pass
