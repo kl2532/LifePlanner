@@ -1,0 +1,4 @@
+build schedule
+	time = 6:00 PM - 5 hours
+	print time
+	

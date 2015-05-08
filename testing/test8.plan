@@ -1,0 +1,7 @@
+build schedule
+	i = (8 + 1) * 4 / 2
+	print i
+	j = (i * 4) + 1
+	print j
+	f = j - 1 + i
+	print f
