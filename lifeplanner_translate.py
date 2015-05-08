@@ -8,6 +8,10 @@ def translate(tree):
 	if tree[0] != 'program':
 		return -1
 	return 'import datetime as dt\nimport time\n' + \
+		'def get_event(name, var_all_events):\n' + \
+		'\tfor event in var_all_events:\n' + \
+		'\t\tif event[\'event_title\'] == name:\n' + \
+		'\t\t\treturn event\n' + \
 		dir_to_func['program'](tree[1:], 0)
 
 def parse_program(tree, num_tabs):
@@ -356,12 +360,17 @@ def parse_value(tree, num_tabs):
 	print 'parse_value tree: ' + str(tree)
 	label = tree[0]
 	if label in \
-	['variable', 'num', 'time', 'date', 'event', 'tag', 'time_math']:
+	['variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if 'math_' in label:
 		return dir_to_func['math_stmt'](tree[:], num_tabs)
 	else:
-		return -1
+		return 'in parse_value'
+
+def parse_access(tree, num_tabs):
+	print '\nparse_access: ' + str(tree)
+	code = 'get_event(\'' + dir_to_func['strings'](tree[0][1], num_tabs) + '\', var_all_events)[\'' + tree[1] + '\']'
+	return code
 
 def parse_print_stmt(tree, num_tabs):
 	# print "\nparse_print_stmt tree: ", str(tree)
@@ -616,7 +625,7 @@ def parse_bool_expr(tree, num_tabs):
 	return code
 
 def parse_bool_operation(tree, num_tabs):
-	# print 'parse_bool_operation: ', str(tree)
+	print 'parse_bool_operation: ', str(tree)
 	code = ''
 	if tree[0][0] == 'value':
 		code += dir_to_func['value'](tree[0][1], num_tabs)
@@ -627,9 +636,7 @@ def parse_bool_operation(tree, num_tabs):
 	return code
 
 def parse_bool_value(tree, num_tabs):
-	code = ''
-	print '\n bool_value' + str(tree)
-	return 'in bool_value'
+	return tree[0]
 
 def parse_comparison_operator(tree, num_tabs):
 	# print 'parse_comparison_operator: ', str(tree)
@@ -876,6 +883,7 @@ dir_to_func = {
 	'update_stmt' : parse_update_stmt,
 	'remove_stmt' : parse_remove_stmt,
 	'function' : parse_func,
-	'elseif_blocks_rep' : parse_elseif_blocks_rep
+	'elseif_blocks_rep' : parse_elseif_blocks_rep,
+	'access' : parse_access
 }
 
