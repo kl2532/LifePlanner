@@ -312,7 +312,7 @@ def parse_update_stmt(tree, num_tabs):
 		code += tabs + 'new_when = date + \' \' + time\n\t\t'
 		code += tabs + 'event[\''+tree[1]+'\'] = dt.datetime.strptime(new_when, \'%m-%d-%Y %I:%M %p\')\n'
 	if tree[1] == 'at':
-		code += tabs + 'event[\'' + tree[1] + '\'] = ' + dir_to_func['variable'](tree[2][1], num_tabs)
+		code += tabs + 'event[\'' + tree[1] + '\'] = \'' + dir_to_func['variable'](tree[2][1], num_tabs) + '\''
 	return code
 
 def parse_cancel_stmt(tree, num_tabs):
@@ -606,7 +606,7 @@ def parse_where(tree, num_tabs):
 		sys.stderr.write('Invalid location for event')
 		sys.exit(1)
 	event_location = dir_to_func['location'](tree[1][1:], num_tabs)
-	return 'event_dict' + str(event_count) + '[\"at\"] = ' + event_location
+	return 'event_dict' + str(event_count) + '[\"at\"] = \'' + event_location + '\''
 
 
 def parse_location(tree, num_tabs):
