@@ -6,7 +6,8 @@ all_events = []
 
 def translate(tree):
 	if tree[0] != 'program':
-		return -1
+		sys.stderr.write('Invalid program')
+		sys.exit(1)
 	return 'import datetime as dt\nimport time\nimport event as e\nimport ourCalendar as c\nfrom dateutil import tz\n' + \
 		'\ndef get_event(name, var_all_events):\n' + \
 		'\tfor event in var_all_events:\n' + \
@@ -18,17 +19,23 @@ def translate(tree):
 def parse_program(tree, num_tabs):
 	#print "parse_program tree: ", str(tree)
 	if len(tree) != 5:
-		return -1
+		sys.stderr.write('Invalid program start')
+		sys.exit(1)
 	if tree[0][0] != 'function_blocks':
-		return -1
+		sys.stderr.write('Invalid function blocks')
+		sys.exit(1)
 	if tree[1][0] != 'import_stmt':
-		return -1
+		sys.stderr.write('Invalid import statement')
+		sys.exit(1)
 	if tree[2][0] != 'schedule_stmts':
-		return -1
+		sys.stderr.write('Invalid schedule')
+		sys.exit(1)
 	if tree[3][0] != 'build_schedule':
-		return -1
+		sys.stderr.write('Invalid building of schedule')
+		sys.exit(1)
 	if tree[4][0] != 'export_stmt':
-		return -1
+		sys.stderr.write('Invalid export statement')
+		sys.exit(1)
 	entire_prog = ''
 
 	if tree[0][1]:
@@ -84,15 +91,20 @@ def parse_filename(tree, num_tabs):
 def parse_schedule_stmts(tree, num_tabs):
 	# print "\nparse_schedule_stmts tree: ", str(tree)
 	if len(tree) != 4:
-		return -1
+		sys.stderr.write('Invalid schedule list')
+		sys.exit(1)
 	if tree[0][0] != 'date':
-		return -1
+		sys.stderr.write('Date not found')
+		sys.exit(1)
 	if tree[1][0] != 'colon':
-		return -1
+		sys.stderr.write('Colon not found')
+		sys.exit(1)
 	if tree[2][0] != 'event_list':
-		return -1
+		sys.stderr.write('Event list not found')
+		sys.exit(1)
 	if tree[3][0] != 'schedule_stmts_rep':
-		return -1
+		sys.stderr.write('Invalid schedule list')
+		sys.exit(1)
 	month, day, year = dir_to_func['date'](tree[0][1:], num_tabs)
 	code = dir_to_func['event_list'](tree[2][1:], 0, month, day, year) + '\n' 
 
