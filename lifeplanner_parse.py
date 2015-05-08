@@ -268,24 +268,11 @@ def p_mathstmt1(p):
         p[0] = ['math_div', p[1], p[2], p[3]]
     else:
         p[0] = ['math_paren', p[1], p[2], p[3]]
-<<<<<<< HEAD
-
-# def p_mathrep(p):
-#     '''math_rep : PLUS math_stmt
-#         | MINUS math_stmt
-#         | TIMES math_stmt
-#         | SLASH math_stmt
-#         | empty'''
-#     if len(p) ==3:
-#         p[0] = ['math_rep', p[1], p[2]]
-#         print p[0]
-=======
->>>>>>> a4f52be455b455e262968858dc4f972ea19c6aa7
 
 def p_mathstmt3(p):
     '''math_stmt : INTEGER
                   | variable'''
-    if type(p[1]) == int:
+    if not type(p[1]) == list:
         p[0] = ['math_int', p[1]]
     else:
         p[0] = ['math_var', p[1]]
@@ -346,6 +333,7 @@ def p_boolean(p):
         p[0] = ['bool_expr', p[1], p[2], p[3]]
     else:
         p[0] = ['bool_expr', p[1]]
+    print p[0]
         
 def p_boolean_opearation(p):
     '''bool_operation : value IN value
@@ -397,14 +385,17 @@ def p_bool_value(p):
                 | FALSE'''
     print 'p_bool_value'
     p[0] = ['bool_value', p[1]]
+    print p[0]
 
 def p_ifstmt(p):
     '''if_stmt : if_block elseif_blocks else_block'''
     p[0] = ['if_stmt', p[1], p[2], p[3]]
+    print p[0]
     
 def p_ifblock(p):
     '''if_block : IF bool_expr newline expr_block END newline'''
     p[0] = ['if_block', p[1], p[2], p[4]]
+    print p[0]
     
 def p_elseifblocks(p):
     '''elseif_blocks : empty
@@ -419,21 +410,26 @@ def p_elseifblocks(p):
         else:
             print 'none'
             p[0] = ['elseif_blocks', None]
+    print p[0]
+
 def p_elseifblocksrep(p):
     '''elseif_blocks_rep : elseif_blocks'''
     p[0] = ['elseif_blocks_rep', p[1]]
+    print p[0]
 
 def p_elseifblock(p):
     '''elseif_block : ELSEIF bool_expr newline expr_block END newline'''
     p[0] = ['elseif_block', p[1], p[2], p[4]]
+    print p[0]
 
 def p_elseblock(p):
     '''else_block : empty
                     | ELSE newline expr_block END newline'''
-    if len(p) == 3:
+    if len(p) == 6:
         p[0] = ['else_block', p[1], p[3]]
     else:
         p[0] = ['else_block', None]
+    print p[0]
 
 def p_daymath(p):
     '''day_math : date op date_duration
@@ -674,8 +670,9 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 yacc.yacc()
-data = 'build schedule\ni=1+2+3*4\n'
+data = 'build schedule\nif i == 0\nprint "hello"\ni=2+1\nend\nelseif\ni=2\nend\nelseif\ni=1/2\nend\nelse\nprint "happy"\nend\n'
 tree = yacc.parse(data)
+print
 print 'parse tree: ', tree
 print trans.translate(tree)
 

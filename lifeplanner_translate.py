@@ -307,6 +307,7 @@ def parse_assignment_stmt(tree, num_tabs):
 	i = 0
 	while i < num_tabs:
 		code += '\t'
+		i += 1
 	if tree[0][0] == 'variable':
 		code += dir_to_func['variable'](tree[0][1], num_tabs) + ' = '
 	if tree[2][0] == 'value':
@@ -323,11 +324,7 @@ def parse_math_stmt(tree, num_tabs):
 		if type(first) == list and type(second) == list and \
 			len(first) > 0 and len(second) > 0:
 			if label == 'math_plus' or label == 'math_minus' or\
-<<<<<<< HEAD
-				label == 'math_div' or label == 'math_multi':
-=======
 				label == 'math_div' or label == 'math_mult':
->>>>>>> a4f52be455b455e262968858dc4f972ea19c6aa7
 					first_label = first[0]
 					if 'math_' in first[0]:
 						first_label = 'math_stmt'
@@ -346,30 +343,9 @@ def parse_math_stmt(tree, num_tabs):
 		if label == 'math_int':
 			return tree[1]
 		elif label == 'math_var':
-			return tree[1]
+			return tree[1][1]
 	print 'Invalid Math Stmt: ', tree
 	return -1
-<<<<<<< HEAD
-
-	# if len(tree) == 1:
-	# 	if type(tree) is list:
-	# 		if tree[0][0] == 'variable':
-	# 			return dir_to_func['variable'](tree[0][1], num_tabs)
-	# 	return str(tree[0])
-	# elif tree[0] == '(':
-	#     return '(' + parse_math_stmt(tree[1], num_tabs) + ')'
-	# elif tree[1] in ('+', '-', '*', '/'):
-	#     return parse_math_stmt(tree[0], num_tabs) + str(tree[1]) \
-	#     + parse_math_stmt(tree[2], num_tabs)
-	# elif tree[1][0] == 'variable':
-	# 	return dir_to_func['variable'](tree[1][1], num_tabs)
-	# elif tree[0] == 'math_stmt':
-	# 	return dir_to_func['math_stmt'](tree[1], num_tabs)
-	# else:
-	# 	print 'Bad math statement'
-	# 	return -1
-=======
->>>>>>> a4f52be455b455e262968858dc4f972ea19c6aa7
 
 def parse_variable(tree, num_tabs):
 	if type(tree) is list:
@@ -646,40 +622,85 @@ def parse_bool_operation(tree, num_tabs):
 		code += dir_to_func['comparison_operator'](tree[1][1], num_tabs)
 	if tree[2][0] == 'value':
 		code += dir_to_func['value'](tree[2][1], num_tabs)
-	return code + ":\n"
+	return code
 
 def parse_comparison_operator(tree, num_tabs):
 	# print 'parse_comparison_operator: ', str(tree)
-	return tree[0]
+	return tree
 
+def parse_if_stmt(tree, num_tabs):
+	code = ''
+	if len(tree) > 0:
+		for item in tree:
+			if len(item) > 1:
+				print 'item: ', item
+				print 'item[1:], ', item[1:]
+				code += dir_to_func[item[0]](item[1:], num_tabs)
+			else:
+				print "error in ", item
+	return code 
 
+def parse_if_block(tree, num_tabs):
+	if len(tree) == 3 and len(tree[1]) > 1 \
+		and tree[1][0] == 'bool_expr' and len(tree[2]) > 1\
+		and tree[2][0] == 'expr_block':
+		code = 'if' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) \
+			+ ':\n' + dir_to_func[tree[2][0]](tree[2][1:], num_tabs + 1)
+		return code
+	else:
+		print 'error in if statement: ', tree[1]
+	return -1
 
 def parse_else_block(tree, num_tabs):
-	pass
+	if not tree[0]:
+		return ''
+	print 'else: ', tree
+	if len(tree) == 2 and tree[1][0] == 'expr_block':
+		return 'else:\n' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs + 1)
+	return -1
 	
 def parse_elseif_blocks(tree, num_tabs):
-	pass
-	
+	print 'else if blocks tree: ', tree
+	if not tree[0]:
+		return ''
+	if len(tree) == 2 and len(tree[0]) > 1 and len(tree[1]) > 1\
+		and tree[0][0] == 'elseif_block' and tree[1][0] == 'elseif_blocks_rep':
+		return dir_to_func[tree[0][0]](tree[0][1:], num_tabs) + \
+			dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
+	print 'error in elseif blocks'
+	return -1
+		
+def parse_elseif_block(tree, num_tabs):
+	print 'else if tree: ', tree
+	if not tree[0]:
+		return ''
+	if len(tree) == 3 and len(tree[1]) > 1 and len(tree[2]) > 1\
+		and tree[1][0] == 'bool_expr' and tree[2][0] == 'expr_block':
+		return 'elif ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) + \
+			':\n' + dir_to_func[tree[2][0]](tree[2][1:], num_tabs + 1)
+	print 'error in elseif block'
+	return -1
+
+def parse_elseif_blocks_rep(tree, num_tabs):
+	print 'elseif rep tree: ', tree
+	if not tree[0]:
+		return ''
+	if len(tree) == 1 and len(tree[0]) > 1 and tree[0][0] == 'elseif_blocks':
+		return dir_to_func[tree[0][0]](tree[0][1:], num_tabs)
+	print 'error in else if rep'
+	return -1
+
 def parse_tag_line(tree, num_tabs):
 	return ''
 
 def parse_for_stmt(tree, num_tabs):
 	pass
 	
-def parse_if_stmt(tree, num_tabs):
-	pass
-	
+
 def parse_date_duration(tree, num_tabs):
 	pass
-	
-def parse_if_block(tree, num_tabs):
-	pass
-
-		
+			
 def parse_return_stmt(tree, num_tabs):
-	pass
-	
-def parse_elseif_block(tree, num_tabs):
 	pass
 	
 def parse_and(tree, num_tabs):
@@ -850,6 +871,7 @@ dir_to_func = {
 	'assignment_stmt' : parse_assignment_stmt,
 	'update_stmt' : parse_update_stmt,
 	'remove_stmt' : parse_remove_stmt,
-	'function' : parse_func
+	'function' : parse_func,
+	'elseif_blocks_rep' : parse_elseif_blocks_rep
 }
 
