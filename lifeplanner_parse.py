@@ -678,7 +678,7 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 yacc.yacc()
-data = 'build schedule\ni = PLT[with]\ni = y\n'
+data = 'build schedule\nfor i = 0, i < 3, i = i + 1\n\tprint \"hello\"\n\tend\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree
