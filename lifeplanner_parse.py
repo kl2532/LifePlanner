@@ -670,7 +670,7 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 yacc.yacc()
-data = 'build schedule\ni = 6:00 PM\n'
+data = 'build schedule\ni = 6:00 PM + 2 hours\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree

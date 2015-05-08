@@ -214,9 +214,10 @@ def parse_day_math(tree, num_tabs):
 	pass
 
 def parse_time_math(tree, num_tabs):
+	print 'parse_time_math: ', str(tree)
 	code = ''
 	if tree[0][0] == 'time':
-		hour, minute = dir_to_func['time'](tree[0][1:], num_tabs)
+		hour, minute = dir_to_func['time_elements'](tree[0][1:], num_tabs)
 		code += 'dt.datetime.combine(dt.date.today(), dt.time(' + hour + ',' + minute + '))'
 	if tree[1][0] == 'op':
 		code += dir_to_func['op'](tree[1][1:], num_tabs)
