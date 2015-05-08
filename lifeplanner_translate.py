@@ -7,11 +7,12 @@ all_events = []
 def translate(tree):
 	if tree[0] != 'program':
 		return -1
-	return 'import datetime as dt\nimport time\n' + \
-		'def get_event(name, var_all_events):\n' + \
+	return 'import datetime as dt\nimport time\nimport event as e\nimport ourCalendar as c\nfrom dateutil import tz\n' + \
+		'\ndef get_event(name, var_all_events):\n' + \
 		'\tfor event in var_all_events:\n' + \
 		'\t\tif event[\'event_title\'] == name:\n' + \
-		'\t\t\treturn event\n' + \
+		'\t\t\treturn event\n\n' + \
+		'cal = c.ourCalendar()\n\n' + \
 		dir_to_func['program'](tree[1:], 0)
 
 def parse_program(tree, num_tabs):
@@ -66,7 +67,16 @@ def parse_function_declaration(tree, num_tabs):
 	return code
 
 def parse_import_stmt(tree, num_tabs):
-	return 'readCalendar(' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + ')'
+	code = 'orig_event_dict = cal.readCalendar(\'' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')\n'
+	code += 'for orig_e in orig_event_dict:\n'
+	code += '\te_name = orig_e[\'event_title\']\n'
+	code += '\te_to = orig_e[\'to\']\n'
+	code += '\te_from = orig_e[\'from\']\n'
+	code += '\te_at = orig_e[\'at\']\n'
+	code += '\te_with = orig_e[\'with\']\n'
+	code += '\torig_event = e.Event(e_name, e_from, e_to, e_at, e_with)\n'
+	code += '\tcal.addEvent(orig_event.create_string_event())\n'
+	return code
 
 def parse_filename(tree, num_tabs):
 	return tree[0][1]
@@ -501,7 +511,7 @@ def parse_when(tree, num_tabs, month, day, year):
 	create_time = 'time' + str(event_count) + ' = ' + \
 		'dt.time(' + hour + ',' + minute + ')'
 	create_dt = 'from_dt' + str(event_count) + ' = ' + \
-		'dt.datetime_combine( date' + str(event_count) + \
+		'dt.datetime.combine( date' + str(event_count) + \
 		', time' + str(event_count) +  ')'
 	add_dt = 'event_dict' + str(event_count) + '[\"from\"] = ' + 'from_dt' + str(event_count) 
 	code += create_day + '\n' + create_time + '\n' + \
@@ -520,7 +530,7 @@ def parse_when(tree, num_tabs, month, day, year):
 	create_time = 'time' + str(event_count) + ' = ' + \
 		'dt.time(' + hour + ',' + minute + ')'
 	create_dt = 'to_dt' + str(event_count) + ' = ' + \
-		'dt.datetime_combine( date' + str(event_count) + \
+		'dt.datetime.combine( date' + str(event_count) + \
 		', time' + str(event_count) +  ')'
 	add_dt = 'event_dict' + str(event_count) + '[\"to\"] = ' + 'to_dt' + str(event_count)
 	code += create_day + '\n' + create_time + '\n' + \
@@ -589,12 +599,12 @@ def parse_people_list(tree, num_tabs):
 	code = 'pp_list' + str(event_count)  + '= []\n'
 	for branch in tree:
 		if branch[0] == 'name':
-			code += 'pp_list' + str(event_count) + '.append(' + dir_to_func['name'](branch[1], num_tabs) + ')\n'
+			code += 'pp_list' + str(event_count) + '.append(\'' + dir_to_func['name'](branch[1], num_tabs) + '\')\n'
 		if branch[0] == 'comma':
 			code += dir_to_func['comma'](branch[1:], num_tabs)
 		if branch[0] == 'and':
-			code += 'pp_list' + str(event_count) + '.append(' + dir_to_func['name'](branch[2][1], num_tabs) + ')\n'
-	code += 'event_dict' + str(event_count) + '[\"with\"] = ppl_list' + str(event_count)
+			code += 'pp_list' + str(event_count) + '.append(\'' + dir_to_func['name'](branch[2][1], num_tabs) + '\')\n'
+	code += 'event_dict' + str(event_count) + '[\"with\"] = pp_list' + str(event_count)
 	return code
 
 def parse_name(tree, num_tabs):
@@ -604,11 +614,11 @@ def parse_comma(tree, num_tabs):
 	code = ''
 	for branch in tree:
 		if branch[0] == 'name':
-			code += 'pp_list' + str(event_count) + '.append(' + dir_to_func['name'](branch[1], num_tabs) + ')\n'
+			code += 'pp_list' + str(event_count) + '.append(\'' + dir_to_func['name'](branch[1], num_tabs) + '\')\n'
 		if branch[0] == 'comma':
 			code += dir_to_func['comma'](branch[1:], num_tabs)
 		if branch[0] == 'and':
-			code += 'pp_list' + str(event_count) + '.append(' + dir_to_func['name'](branch[2][1], num_tabs) + ')\n'
+			code += 'pp_list' + str(event_count) + '.append(\'' + dir_to_func['name'](branch[2][1], num_tabs) + '\')\n'
 	return code
 
 def parse_while_stmt(tree, num_tabs):
