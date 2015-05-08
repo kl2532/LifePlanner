@@ -728,9 +728,27 @@ def parse_tag_line(tree, num_tabs):
 	return ''
 
 def parse_for_stmt(tree, num_tabs):
-	pass
+	print 'parse_for_stmt: ', str(tree)
+	# ['for', 
+	# ['assignment_stmt', ['variable', 'i'], '=', ['value', ['math_int', '0']]], 
+	# ['bool_expr', ['bool_operation', ['value', ['math_var', ['variable', 'i']]], ['comparison_operator', '<'], ['value', ['math_int', '3']]]], 
+	# ['assignment_stmt', ['variable', 'i'], '=', ['value', ['math_plus', ['math_var', ['variable', 'i']], '+', ['math_int', '1']]]], 
+	# ['expr_block', ['expr', ['print_stmt', ['print', 'print'], ['quote', '"'], ['strings', 'hello'], ['quote', '"']]], ['expr_block_rep', ['expr_block', None]]]
+	# ]
+	if tree[0] != 'for':
+		return -1
+	code = ''
+	if tree[1][0] == 'assignment_stmt':
+		code += dir_to_func['assignment_stmt'](tree[1][1:], num_tabs) + '\n'
+	if tree[2][0] == 'bool_expr':
+		code += 'while ' + dir_to_func['bool_expr'](tree[2][1:], num_tabs) + ':\n'
+	if tree[3][0] == 'assignment_stmt':
+		increment = dir_to_func['assignment_stmt'](tree[3][1:], num_tabs+1)
+	if tree[4][0] == 'expr_block':
+		code += dir_to_func['expr_block'](tree[4][1:], num_tabs+1)
+	code += increment
+	return code
 	
-
 def parse_date_duration(tree, num_tabs):
 	pass
 			
@@ -750,9 +768,6 @@ def parse_comment_stmt(tree, num_tabs):
 	return ''
 	
 def parse_function_declaration(tree, num_tabs):
-	pass
-
-def parse_and(tree, num_tabs):
 	pass
 
 def parse_string(tree, num_tabs):
