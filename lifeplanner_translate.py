@@ -412,10 +412,18 @@ def parse_export_stmt(tree, num_tabs):
 		return -1
 	if tree[1][0] != 'filename':
 		return -1
+	code = 'try:\n\tevent_dict\nexcept NameError:\n\tpass\nelse:\n'
+	code += '\tfor ev in event_dict:\n'
+	code += '\t\te_name = ev[\'event_title\']\n'
+	code += '\t\te_to = ev[\'to\']\n'
+	code += '\t\te_from = ev[\'from\']\n'
+	code += '\t\te_at = ev[\'at\']\n'
+	code += '\t\te_with = ev[\'with\']\n'
+	code += '\t\tev_event = e.Event(e_name, e_from, e_to, e_at, e_with)\n'
+	code += '\t\tcal.addEvent(ev_event.create_string_event())\n'
 	return \
-	'export_cal(' + \
-	str(dir_to_func['filename'](tree[1][1:], num_tabs)) + ')'
-	
+	code + 'cal.write_file(\'' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')'
+
 def parse_date(tree, num_tabs):
 	month = tree[0][1]
 	day = tree[1][1]
@@ -629,10 +637,10 @@ def parse_while_stmt(tree, num_tabs):
 		return -1
 	code = 'while '
 	if tree[1][0] == 'bool_expr':
-		code += dir_to_func['bool_expr'](tree[1][1:], num_tabs)
+		code += dir_to_func['bool_expr'](tree[1][1:], num_tabs) + ":\n"
 	if tree[2][0] == 'expr_block':
 		code += dir_to_func['expr_block'](tree[2][1:], num_tabs+1)
-	return code + ":\n"
+	return code
 
 def parse_bool_expr(tree, num_tabs):
 	print '\nparse_bool_expr: ', str(tree)
