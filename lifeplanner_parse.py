@@ -681,7 +681,7 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 yacc.yacc()
-data = 'build schedule\ni = 1\nwhile i < 3\n\ti = i + 1\n\tprint i\nend\n'
+data = 'import my.ics\nbuild schedule\ni = 1\nexport new.ics'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree
