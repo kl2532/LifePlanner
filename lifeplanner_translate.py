@@ -8,7 +8,7 @@ def translate(tree):
 	if tree[0] != 'program':
 		sys.stderr.write('Invalid program')
 		sys.exit(1)
-	return 'import datetime as dt\nimport time\nimport event as e\nimport ourCalendar as c\nfrom dateutil import tz\n' + \
+	return 'import datetime as dt\nimport time\nimport event as e\nimport ourCalendar as c\n' + \
 		'\ndef get_event(name, var_all_events):\n' + \
 		'\tfor event in var_all_events:\n' + \
 		'\t\tif event[\'event_title\'] == name:\n' + \

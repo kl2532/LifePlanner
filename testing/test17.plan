@@ -3,10 +3,10 @@ if False and True
 	print "And is incorrect"
 end
 else
-if False or False
-	print "Or is incorrect"
-end
-else
-	print "Still incorrect"
-end
+	if False or False
+		print "Or is incorrect"
+	end
+	else
+		print "correct"
+	end
 end

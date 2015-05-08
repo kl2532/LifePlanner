@@ -1,0 +1,6 @@
+12/01/2016:
+	PLT from 2:40 PM to 3:55 PM with Aho
+build schedule
+	i = PLT[from]
+	print i
+	
