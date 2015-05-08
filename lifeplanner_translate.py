@@ -405,14 +405,6 @@ def parse_print_stmt(tree, num_tabs):
 def parse_strings(tree, num_tabs):
 	return tree
 
-try:
-  event_dict
-except NameError:
-  print "well, it WASN'T defined after all!"
-else:
-  print "sure, it was defined."
-
-
 def parse_export_stmt(tree, num_tabs):
 	if len(tree) != 2:
 		return -1
