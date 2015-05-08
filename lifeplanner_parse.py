@@ -332,11 +332,11 @@ def p_boolean(p):
     print 'p_boolean'
     if len(p) == 4:
         p[0] = ['bool_expr', p[1], p[2], p[3]]
+    elif len(p) == 3:
+        p[0] = ['bool_expr', p[1], p[2]]
     elif len(p) == 2:
         p[0] = ['bool_expr', p[1]]
-    elif len(p) == 3:
-        p[0] == ['bool_expr', p[1], p[2]]
-    print p[0]
+    #print p[0]
         
 def p_boolean_opearation(p):
     '''bool_operation : value IN value
@@ -376,8 +376,7 @@ def p_variable(p):
                             
 def p_bool_op(p):
     '''bool_operator : AND
-                    | OR
-                    | NOT'''
+                    | OR'''
     print 'p_bool_op'
     p[0] = ['bool_operator', p[1]]
 
@@ -681,7 +680,8 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 yacc.yacc()
-data = 'import my.ics\nbuild schedule\ni = 1\nexport new.ics'
+#data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
+data = 'build schedule\nif i > 5 and i < 6\nprint "true"\nend\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree
