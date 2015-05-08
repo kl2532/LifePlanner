@@ -1,0 +1,11 @@
+build schedule
+	i = 2
+	if i < 5 and i > 1
+		print i
+	end
+	if i < 5 or i < 1
+		print i
+	end
+	if not i <= 1
+		print i
+	end
