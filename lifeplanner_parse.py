@@ -356,8 +356,16 @@ def p_value(p):
             | math_stmt
             | time_math
             | day_math
-            | func'''
+            | func
+            | access'''
     p[0] = ['value', p[1]]
+
+def p_access(p):
+    '''access : strings LBRACKET TO RBRACKET
+            | strings LBRACKET FROM RBRACKET
+            | strings LBRACKET WITH RBRACKET
+            | strings LBRACKET AT RBRACKET'''
+    p[0] = ['access', p[1], p[3]]
 
 def p_variable(p):
     '''variable : STRING'''
@@ -670,7 +678,7 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 yacc.yacc()
-data = 'build schedule\nif True\nprint "hello"\ni=2+1\nend\n'
+data = 'build schedule\ni = PLT[with]\ni = y\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree
