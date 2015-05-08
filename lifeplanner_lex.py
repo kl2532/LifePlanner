@@ -9,7 +9,7 @@ tokens = [
     'NEWLINE', 'LEFTPAREN', 'COLON', 'COMMA', 'RIGHTPAREN', 'COMMENT', 
     'PPLAND', 'SLASH', 'USERSTRING',
     'EE', 'GE', 'LE', 'EQUAL', 'GT', 'LT', 'QUOTATION',
-    'NUMTYPE', 'DECTYPE', 'STRTYPE',
+    'NUMTYPE', 'DECTYPE', 'STRTYPE', 'LBRACKET', 'RBRACKET'
     ]
 
 reserved = {
@@ -175,6 +175,8 @@ t_CANCEL = r'(cancel)'
 t_NEWLINE = r'\n'
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
 t_COLON = r'\:'
 t_COMMA = r'\,'
 t_COMMENT = r'\:\)'
