@@ -53,7 +53,7 @@ class ourCalendar:
 					event_list[i]["at"] = info[1].rstrip()
 				if(line.startswith('SUMMARY')):
 					info = line.split(":")
-					event_list[i]["name"] = info[1].rstrip()
+					event_list[i]["event_title"] = info[1].rstrip()
 				if(line.startswith('END:VEVENT')):
 					i = i+1
 		return event_list

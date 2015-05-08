@@ -74,7 +74,7 @@ def parse_function_declaration(tree, num_tabs):
 	return code
 
 def parse_import_stmt(tree, num_tabs):
-	code = 'orig_event_dict = cal.readCalendar(\'' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')\n'
+	code = 'orig_event_dict = cal.read_calendar(\'' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')\n'
 	code += 'for orig_e in orig_event_dict:\n'
 	code += '\te_name = orig_e[\'event_title\']\n'
 	code += '\te_to = orig_e[\'to\']\n'
@@ -82,7 +82,7 @@ def parse_import_stmt(tree, num_tabs):
 	code += '\te_at = orig_e[\'at\']\n'
 	code += '\te_with = orig_e[\'with\']\n'
 	code += '\torig_event = e.Event(e_name, e_from, e_to, e_at, e_with)\n'
-	code += '\tcal.addEvent(orig_event.create_string_event())\n'
+	code += '\tcal.add_event(orig_event.create_string_event())\n'
 	return code
 
 def parse_filename(tree, num_tabs):
@@ -430,7 +430,7 @@ def parse_export_stmt(tree, num_tabs):
 	code += '\t\te_at = ev[\'at\']\n'
 	code += '\t\te_with = ev[\'with\']\n'
 	code += '\t\tev_event = e.Event(e_name, e_from, e_to, e_at, e_with)\n'
-	code += '\t\tcal.addEvent(ev_event.create_string_event())\n'
+	code += '\t\tcal.add_event(ev_event.create_string_event())\n'
 	return \
 	code + 'cal.write_file(\'' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')'
 
