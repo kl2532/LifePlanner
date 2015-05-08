@@ -1,0 +1,5 @@
+build schedule
+	i = 9 / 3
+	print i
+
+	

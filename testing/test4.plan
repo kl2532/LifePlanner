@@ -1,0 +1,6 @@
+build schedule
+	i = 6 - 5
+	print i
+	i = i - 8
+	print i
+	

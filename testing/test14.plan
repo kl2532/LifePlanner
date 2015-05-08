@@ -1,0 +1,6 @@
+build schedule
+	boolt = 1 > 0
+	print boolt
+	boolf = 1 < 0
+	print boolf
+	
