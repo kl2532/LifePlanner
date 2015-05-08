@@ -607,10 +607,12 @@ def parse_while_stmt(tree, num_tabs):
 	return code + ":\n"
 
 def parse_bool_expr(tree, num_tabs):
-	# print 'parse_bool_expr: ', str(tree)
+	print '\nparse_bool_expr: ', str(tree)
 	code = ''
 	if tree[0][0] == 'bool_operation':
 		code += dir_to_func['bool_operation'](tree[0][1:], num_tabs)
+	if tree[0][0] == 'bool_value':
+		code += dir_to_func['bool_value'](tree[0][1:], num_tabs)
 	return code
 
 def parse_bool_operation(tree, num_tabs):
@@ -624,6 +626,11 @@ def parse_bool_operation(tree, num_tabs):
 		code += dir_to_func['value'](tree[2][1], num_tabs)
 	return code
 
+def parse_bool_value(tree, num_tabs):
+	code = ''
+	print '\n bool_value' + str(tree)
+	return 'in bool_value'
+
 def parse_comparison_operator(tree, num_tabs):
 	# print 'parse_comparison_operator: ', str(tree)
 	return tree
@@ -633,8 +640,8 @@ def parse_if_stmt(tree, num_tabs):
 	if len(tree) > 0:
 		for item in tree:
 			if len(item) > 1:
-				print 'item: ', item
-				print 'item[1:], ', item[1:]
+				#print 'item: ', item
+				#print 'item[1:], ', item[1:]
 				code += dir_to_func[item[0]](item[1:], num_tabs)
 			else:
 				print "error in ", item
@@ -644,7 +651,7 @@ def parse_if_block(tree, num_tabs):
 	if len(tree) == 3 and len(tree[1]) > 1 \
 		and tree[1][0] == 'bool_expr' and len(tree[2]) > 1\
 		and tree[2][0] == 'expr_block':
-		code = 'if' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) \
+		code = 'if ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) \
 			+ ':\n' + dir_to_func[tree[2][0]](tree[2][1:], num_tabs + 1)
 		return code
 	else:
@@ -761,9 +768,6 @@ def parse_string_rep(tree, num_tabs):
 	pass
 
 def parse_schedule(tree, num_tabs):
-	pass
-
-def parse_bool_value(tree, num_tabs):
 	pass
 
 def parse_num(tree, num_tabs):
