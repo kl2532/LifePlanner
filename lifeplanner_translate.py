@@ -7,7 +7,7 @@ all_events = []
 def translate(tree):
 	if tree[0] != 'program':
 		return -1
-	return 'import datetime as dt\nimport time\n' + \
+	return 'import datetime as dt\n' + \
 		dir_to_func['program'](tree[1:], 0)
 
 def parse_program(tree, num_tabs):
@@ -487,7 +487,7 @@ def parse_when(tree, num_tabs, month, day, year):
 	global event_count
 	create_day = 'date' + str(event_count) + ' = ' + \
 		'dt.date(' + year + ',' + month + ',' + day + ')'
-	hour, minute = dir_to_func['time'](tree[1][1:], num_tabs)
+	hour, minute = dir_to_func['time_elements'](tree[1][1:], num_tabs)
 	create_time = 'time' + str(event_count) + ' = ' + \
 		'dt.time(' + hour + ',' + minute + ')'
 	create_dt = 'from_dt' + str(event_count) + ' = ' + \
@@ -506,7 +506,7 @@ def parse_when(tree, num_tabs, month, day, year):
 		day = first_day.day
 		create_day = 'date' + str(event_count) + ' = ' + \
 		'dt.date(' + year + ',' + month + ',' + day + ')'
-	hour, minute = dir_to_func['time'](tree[3][1:], num_tabs)
+	hour, minute = dir_to_func['time_elements'](tree[3][1:], num_tabs)
 	create_time = 'time' + str(event_count) + ' = ' + \
 		'dt.time(' + hour + ',' + minute + ')'
 	create_dt = 'to_dt' + str(event_count) + ' = ' + \
@@ -525,12 +525,19 @@ def parse_meridian(tree, num_tabs):
 	return tree[0]
 
 def getmeridian(tree, num_tabs):
-	if len(tree) != 4 or tree[3] != 'meridian':
+	# print 'getmeridian: ', str(tree)
+	if len(tree) != 4 or tree[3][0] != 'meridian':
 		return -1 
 	return dir_to_func['meridian'](tree[3][1:], num_tabs)
 
 def parse_time(tree, num_tabs):
-	print "parse_time: ", str(tree)
+	# print 'parse_time: ', str(tree)
+	hour, minute = dir_to_func['time_elements'](tree, num_tabs)
+	code = 'dt.time(' + hour + ',' + minute + ')'
+	return code
+
+def parse_time_elements(tree, num_tabs):
+	# print "parse_time_elements: ", str(tree)
 	if len(tree) != 4:
 		sys.stderr.write('Invalid time input')
 		sys.exit(1)
@@ -538,9 +545,8 @@ def parse_time(tree, num_tabs):
 	minute = tree[2][1]
 	print hour, minute
 	if getmeridian(tree, num_tabs) == 'PM':
-		hour = str(float(hour) + 12)
+		hour = str(int(hour) + 12)
 	return hour, minute
-
 	
 def parse_where(tree, num_tabs):
 	if not tree[0]:
@@ -796,6 +802,7 @@ dir_to_func = {
 	'event' : parse_event,
 	'when' : parse_when,
 	'time' : parse_time,
+	'time_elements' : parse_time_elements,
 	'where' : parse_where,
 	'who' : parse_who,
 	'people_list' : parse_people_list,
