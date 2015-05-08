@@ -184,6 +184,7 @@ def parse_expr(tree, num_tabs):
 	#done
 	if tree[0][0] == 'while_stmt':
 		code += dir_to_func['while_stmt'](tree[0][1:], num_tabs) + '\n'
+	#done
 	if tree[0][0] == 'for_stmt':
 		code += dir_to_func['for_stmt'](tree[0][1:], num_tabs) + '\n'
 	#done
@@ -764,12 +765,6 @@ def parse_tag_line(tree, num_tabs):
 
 def parse_for_stmt(tree, num_tabs):
 	print 'parse_for_stmt: ', str(tree)
-	# ['for', 
-	# ['assignment_stmt', ['variable', 'i'], '=', ['value', ['math_int', '0']]], 
-	# ['bool_expr', ['bool_operation', ['value', ['math_var', ['variable', 'i']]], ['comparison_operator', '<'], ['value', ['math_int', '3']]]], 
-	# ['assignment_stmt', ['variable', 'i'], '=', ['value', ['math_plus', ['math_var', ['variable', 'i']], '+', ['math_int', '1']]]], 
-	# ['expr_block', ['expr', ['print_stmt', ['print', 'print'], ['quote', '"'], ['strings', 'hello'], ['quote', '"']]], ['expr_block_rep', ['expr_block', None]]]
-	# ]
 	if tree[0] != 'for':
 		return -1
 	code = ''
