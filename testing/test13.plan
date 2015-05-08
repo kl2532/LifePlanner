@@ -1,8 +1,7 @@
 build schedule
 	if 1 > 0
-		print “greater”
+		print "greater than"
 	end
-
-	if 1 < 0
-		print "less"
+	if -1 < 0
+		print "less than"
 	end
