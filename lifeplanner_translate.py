@@ -604,7 +604,7 @@ def parse_while_stmt(tree, num_tabs):
 		code += dir_to_func['bool_expr'](tree[1][1:], num_tabs)
 	if tree[2][0] == 'expr_block':
 		code += dir_to_func['expr_block'](tree[2][1:], num_tabs+1)
-	return code
+	return code + ":\n"
 
 def parse_bool_expr(tree, num_tabs):
 	# print 'parse_bool_expr: ', str(tree)
