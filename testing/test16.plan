@@ -1,0 +1,14 @@
+build schedule
+	if True
+		print "true"
+	end
+	else
+		print “false”
+	end
+	if False
+		print "true"
+	end
+	else
+		print “false”
+	end
+	
