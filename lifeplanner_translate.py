@@ -121,15 +121,20 @@ def parse_build_schedule(tree, num_tabs):
 	print "parse_build_schedule tree: ", tree
 	# return "hello"
 	if len(tree) != 4:
-		return -1
+		sys.stderr.write('Invalid build schedule')
+		sys.exit(1)
 	if tree[0][0] != 'build':
-		return -1
+		sys.stderr.write('Build not found')
+		sys.exit(1)
 	if tree[1][0] != 'schedule':
-		return -1
+		sys.stderr.write('Schedule not found')
+		sys.exit(1)
 	if tree[2] and tree[2][0] != 'tag_priorities':
-		return -1
+		sys.stderr.write('Tag priorities not found')
+		sys.exit(1)
 	if tree[3] and tree[3][0] != 'clean':
-		return -1
+		sys.stderr.write('Build schedule body not found')
+		sys.exit(1)
 	code = ''
 	if tree[2][1]:
 		code += dir_to_func['tag_priorities'](tree[2][1:], num_tabs) + '\n' 
@@ -142,7 +147,8 @@ def parse_clean(tree, num_tabs):
 	# parse_clean:  [['expr_block', ['expr', ['print_stmt', ['print', 'print'], ['variable', 'hello']]], ['expr_block_rep', ['expr_block', None]]], 
 					# ['clean', None]]
 	if tree[0][0] != 'expr_block':
-		return -1
+		sys.stderr.write('Expression block not found')
+		sys.exit(1)
 	code = ''
 	# print "\ntree[0][1][1]: ", tree[0][1][1]
 	if tree[0][1][1]:
@@ -153,7 +159,8 @@ def parse_expr_block(tree, num_tabs):
 	# print "parse_expr_block tree: ", str(tree)
 	# parse_expr_block tree:  [['expr', ['print_stmt', ['print', 'print'], ['variable', 'hello']]], ['expr_block_rep', ['expr_block', None]]]
 	if tree[0][0] != 'expr':
-		return -1
+		sys.stderr.write('Expression not found')
+		sys.exit(1)
 	code = ''
 	code += dir_to_func['expr'](tree[0][1:], num_tabs)
 	# print "tree[1]: ", tree[1]
@@ -162,15 +169,9 @@ def parse_expr_block(tree, num_tabs):
 	return code
 
 def parse_expr_block_rep(tree, num_tabs):
-	# print "parse_expr_block_rep: ", str(tree)
-	#parse_expr_block_rep:  [['expr', ['print_stmt', ['print', 'print'], ['variable', 'var']]], ['expr_block_rep', ['expr_block', None]]]
 	if tree and tree[0][0] == 'expr_block':
 		return dir_to_func['expr_block'](tree[0][1:], num_tabs)
 	return ''
-# [['expr_block', 0,0
-# ['expr', ['print_stmt', ['print', 'print'], ['quote', '"'], ['strings', 'hello world'], ['quote', '"']]], 0,1
-# ['expr_block_rep', ['expr_block', ['expr', ['print_stmt', ['print', 'print'], ['variable', 'var']]], ['expr_block_rep', ['expr_block', None]]]] 0,2
-# ], ['clean', None]] 1
 
 def parse_expr(tree, num_tabs):
 	print 'parse_expr tree: ', str(tree)
@@ -228,16 +229,11 @@ def parse_func(tree, num_tabs):
 
 def parse_parameter_list(tree, num_tabs):
 	print '\nparams: ' + str(tree)
-	#['parameter_list', 'a', ['parameter_list', 'b', ['parameter_list', 'c', ['parameter_list', 'd', ['parameter_list', 'e', ['parameter_list', None]]]]]]
 	params = ''
 	if tree[1]:
 		params += tree[1]
 		return params + ' ' + parse_parameter_list(tree[2], num_tabs)
 	return ''
-# import datetime
-# from datetime import timedelta
-# datetime.datetime(2015, 5, 7) + timedelta(days= 3)
-# datetime.datetime(2015, 5, 7, 2, 0) + timedelta(hours= 2)
 
 def parse_day_math(tree, num_tabs):
 	pass
@@ -399,11 +395,9 @@ def parse_access(tree, num_tabs):
 	return code
 
 def parse_print_stmt(tree, num_tabs):
-	# print "\nparse_print_stmt tree: ", str(tree)
-	#parse_print_stmt tree:  [['print', 'print'], ['variable', 'hello']]
-	#parse_print_stmt tree:  [['print', 'print'], ['quote', '"'], ['strings', 'hello world'], ['quote', '"']]
 	if tree[0][0] != 'print':
-		return -1
+		sys.stderr.write('Print statement incorrect')
+		sys.exit(1)
 	code = ''
 	i = 0
 	while i < num_tabs:
@@ -420,11 +414,14 @@ def parse_strings(tree, num_tabs):
 
 def parse_export_stmt(tree, num_tabs):
 	if len(tree) != 2:
-		return -1
+		sys.stderr.write('Invalid export')
+		sys.exit(1)
 	if tree[0][0] != 'export':
-		return -1
+		sys.stderr.write('Export not found')
+		sys.exit(1)
 	if tree[1][0] != 'filename':
-		return -1
+		sys.stderr.write('Filename not found')
+		sys.exit(1)
 	code = 'try:\n\tevent_dict\nexcept NameError:\n\tpass\nelse:\n'
 	code += '\tfor ev in event_dict:\n'
 	code += '\t\te_name = ev[\'event_title\']\n'
@@ -443,13 +440,16 @@ def parse_date(tree, num_tabs):
 	year = tree[2][1]
 	if len(month) > 2:
 		sys.stderr.write('Month cannot be more than 2 digits')
+		sys.exit(1)
 	if len(day) > 2:
 		sys.stderr.write('Day cannot be more than 2 digits')
+		sys.exit(1)
 	if len(year) != 4:
 		if len(year) == 2:
 			year = '20' + year
 		else:
 			sys.stderr.write('Year cannot be more than 4 digits')
+			sys.exit(1)
 	return month, day, year
 
 def parse_event_list(tree, num_tabs, month, day, year):
@@ -480,18 +480,21 @@ def parse_event_list_rep(tree, num_tabs, month, day, year=None):
 	return ''
 
 def parse_event(tree, num_tabs, month, day, year):
-	# event[['event', ['event_title', ('strings', 'PLT')], ['when', ('from', 'from'), ['time', ('num', '4'), ('colon', ':'), ('num', '00'), ('meridian', 'PM')], ('to', 'to'), ['time', ('num', '9'), ('colon', ':'), ('num', '00'), ('meridian', 'PM')]], ('where', None), ('who', None), ('tag_line', None)], ['event_list_rep', ['event_list', ['event', ['event_title', ('strings', 'Dinner')], ['when', ('from', 'from'), ['time', ('num', '9'), ('colon', ':'), ('num', '00'), ('meridian', 'PM')], ('to', 'to'), ['time', ('num', '10'), ('colon', ':'), ('num', '00'), ('meridian', 'PM')]], ('where', None), ('who', None), ('tag_line', None)], ['event_list_rep', ['event_list', None]]]]]
 
 	# if len(tree) != 4:
 	# 	return -1
 	if tree[0][0] != 'event_title':
-		return -1
+		sys.stderr.write('Event title not found')
+		sys.exit(1)
 	if tree[1][0] != 'when':
-		return -1
+		sys.stderr.write('Time not found')
+		sys.exit(1)
 	if tree[2][0] != 'where':
-		return -1
+		sys.stderr.write('Location not found')
+		sys.exit(1)
 	if tree[3][0] != 'who':
-		return -1
+		sys.stderr.write('People list not found')
+		sys.exit(1)
 	# if tree[4][0] != 'tag_line':
 	# 	return -1
 
@@ -517,15 +520,20 @@ def parse_event_title(tree, num_tabs):
 
 def parse_when(tree, num_tabs, month, day, year):
 	if len(tree) != 4:
-		return -1
+		sys.stderr.write('Time given invalid')
+		sys.exit(1)
 	if tree[0][0] != 'from':
-		return -1
+		sys.stderr.write('Start time keyword not found')
+		sys.exit(1)
 	if tree[1][0] != 'time':
-		return -1
+		sys.stderr.write('Start time not found')
+		sys.exit(1)
 	if tree[2][0] != 'to':
-		return -1
+		sys.stderr.write('End time keyword not found')
+		sys.exit(1)
 	if tree[3][0] != 'time':
-		return -1
+		sys.stderr.write('End time not found')
+		sys.exit(1)
 	code = ''
 	global event_count
 	create_day = 'date' + str(event_count) + ' = ' + \
@@ -570,7 +578,8 @@ def parse_meridian(tree, num_tabs):
 def getmeridian(tree, num_tabs):
 	# print 'getmeridian: ', str(tree)
 	if len(tree) != 4 or tree[3][0] != 'meridian':
-		return -1 
+		sys.stderr.write('Invalid meridian')
+		sys.exit(1)
 	return dir_to_func['meridian'](tree[3][1:], num_tabs)
 
 def parse_time(tree, num_tabs):
@@ -586,7 +595,6 @@ def parse_time_elements(tree, num_tabs):
 		sys.exit(1)
 	hour = tree[0][1]
 	minute = tree[2][1]
-	print hour, minute
 	if getmeridian(tree, num_tabs) == 'PM':
 		hour = str(int(hour) + 12)
 	return hour, minute
@@ -603,7 +611,6 @@ def parse_where(tree, num_tabs):
 
 def parse_location(tree, num_tabs):
 	if len(tree) != 1:
-		print tree
 		sys.stderr.write('Invalid location')
 		sys.exit(1)
 	return tree[0][1]
@@ -616,9 +623,6 @@ def parse_who(tree, num_tabs):
 	return pp_list
 
 def parse_people_list(tree, num_tabs):
-	# if len(tree) != 2 or tree[0][1] != 'people_list' or tree[1][0] != 'name':
-	# 	sys.stderr.write('Invalid person for event')
-	# 	sys.exit(1)	
 	code = 'pp_list' + str(event_count)  + '= []\n'
 	for branch in tree:
 		if branch[0] == 'name':
@@ -647,7 +651,8 @@ def parse_comma(tree, num_tabs):
 def parse_while_stmt(tree, num_tabs):
 	# print "parse_while_stmt: ", str(tree)
 	if tree[0] != 'while':
-		return -1
+		sys.stderr.write('Invalid while')
+		sys.exit(1)
 	code = 'while '
 	if tree[1][0] == 'bool_expr':
 		code += dir_to_func['bool_expr'](tree[1][1:], num_tabs) + ":\n"
