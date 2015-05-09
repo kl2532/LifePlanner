@@ -83,7 +83,8 @@ reserved = {
     'function' : 'FUNCTION',
     'before' : 'BEFORE',
     'after' : 'AFTER',
-    'update' : 'UPDAT'
+    'update' : 'UPDAT',
+    'subtract' : 'SUBTRACT'
     }
 
 tokens = tokens + reserved.values()
@@ -170,6 +171,7 @@ t_END = r'(end)'
 #Add/Cancel Events
 t_ADD = r'(add)'
 t_CANCEL = r'(cancel)'
+t_SUBTRACT = r'(subtract)'
 
 # Punctuation
 t_NEWLINE = r'\n'

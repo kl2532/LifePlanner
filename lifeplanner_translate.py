@@ -292,7 +292,9 @@ def parse_time_unit(tree, num_tabs):
 	return tree[0]
 
 def parse_op(tree, num_tabs):
-	return tree[0]
+	if tree[0] == 'add':
+		return '+'
+	return '-'
 
 def parse_event_stmt(tree, num_tabs):
 	# print "parse_event_stmt: ", str(tree)
@@ -381,7 +383,7 @@ def parse_assignment_stmt(tree, num_tabs):
 	return code
 
 def parse_math_stmt(tree, num_tabs):
-	# print 'math tree: ', tree
+	print 'math tree: ', tree
 	label = tree[0]
 	if len(tree) == 4:
 		first = tree[1]
