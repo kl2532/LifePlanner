@@ -1,0 +1,9 @@
+function a(x,y)
+	b = y * x
+	return b
+function b(x,y)
+	b = x - y
+build schedule
+	x = a(1, 2)
+	y = b(19, 2)
+	print x+y
