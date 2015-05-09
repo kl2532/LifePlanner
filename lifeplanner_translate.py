@@ -422,8 +422,8 @@ def parse_export_stmt(tree, num_tabs):
 	if tree[1][0] != 'filename':
 		sys.stderr.write('Filename not found')
 		sys.exit(1)
-	code = 'try:\n\tevent_dict\nexcept NameError:\n\tpass\nelse:\n'
-	code += '\tfor ev in event_dict:\n'
+	code = 'try:\n\tvar_all_events\nexcept NameError:\n\tpass\nelse:\n'
+	code += '\tfor ev in var_all_events:\n'
 	code += '\t\te_name = ev[\'event_title\']\n'
 	code += '\t\te_to = ev[\'to\']\n'
 	code += '\t\te_from = ev[\'from\']\n'
