@@ -742,7 +742,7 @@ def parse_bool_expr(tree, num_tabs):
 		elif tree[0] == 'bool_value':
 			code += dir_to_func['bool_value'](tree[1], num_tabs)
 		elif tree[0] == 'not':
-			code += 'not ' + dir_to_func['bool_expr'](tree[1][1], num_tabs)
+			code += 'not ' + dir_to_func['bool_expr'](tree[1][1:], num_tabs)
 		elif tree[0][0] == 'bool_expr':
 			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + \
 			' ' + dir_to_func['bool_operator'](tree[1][1], num_tabs) +\
