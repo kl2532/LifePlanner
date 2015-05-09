@@ -3,16 +3,17 @@ import sys
 import datetime as dt
 event_count = 0
 all_events = []
+get_event = '\ndef get_event(name, var_all_events):\n' + \
+		'\tfor event in var_all_events:\n' + \
+		'\t\tif event[\'event_title\'] == name:\n' + \
+		'\t\t\treturn event'
 
 def translate(tree):
 	if tree[0] != 'program':
 		sys.stderr.write('Invalid program')
 		sys.exit(1)
 	return 'import datetime as dt\nimport time\nimport event as e\nimport ourCalendar as c\n' + \
-		'\ndef get_event(name, var_all_events):\n' + \
-		'\tfor event in var_all_events:\n' + \
-		'\t\tif event[\'event_title\'] == name:\n' + \
-		'\t\t\treturn event\n\n' + \
+		get_event + '\n' + \
 		'cal = c.ourCalendar()\n\n' + \
 		dir_to_func['program'](tree[1:], 0)
 
@@ -263,7 +264,7 @@ def parse_day_math(tree, num_tabs):
 
 def parse_time_math(tree, num_tabs):
 	print '\nparse_time_math: ', str(tree)	
-	print '\n[0][0]:' + str(tree[0][0])
+	print '\n[2][0]:' + str(tree[2][0])
 	code = ''
 	if tree[0][0] == 'time':
 		hour, minute = dir_to_func['time_elements'](tree[0][1:], num_tabs)
