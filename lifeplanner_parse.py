@@ -699,7 +699,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
-data = 'build schedule\nprint True\n'
+data = 'build schedule\nif a or b or c or d\nend\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree, '\n'
