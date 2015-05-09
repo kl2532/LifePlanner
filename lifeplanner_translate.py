@@ -971,7 +971,7 @@ dir_to_func = {
 	'assignment_stmt' : parse_assignment_stmt,
 	'update_stmt' : parse_update_stmt,
 	'remove_stmt' : parse_remove_stmt,
-	'function' : parse_func,
+	'func' : parse_func,
 	'elseif_blocks_rep' : parse_elseif_blocks_rep,
 	'access' : parse_access
 }
