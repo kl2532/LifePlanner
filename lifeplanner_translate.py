@@ -12,10 +12,9 @@ def translate(tree):
 	if tree[0] != 'program':
 		sys.stderr.write('Invalid program')
 		sys.exit(1)
-	return 'import datetime as dt\nimport time\nimport event as e\nimport ourCalendar as c\n' + \
-		get_event + '\n' + \
-		'cal = c.ourCalendar()\n\n' + \
-		dir_to_func['program'](tree[1:], 0)
+	return 'import datetime as dt\nimport time\nimport event as e\n' + \
+		'import ourCalendar as c\n' + get_event + '\n' + \
+		'cal = c.ourCalendar()\n\n' + dir_to_func['program'](tree[1:], 0)
 
 def parse_program(tree, num_tabs):
 	#print "parse_program tree: ", str(tree)
@@ -40,14 +39,17 @@ def parse_program(tree, num_tabs):
 	entire_prog = ''
 
 	if tree[0][1]:
-		entire_prog += dir_to_func['function_blocks'](tree[0][1:], num_tabs) + '\n' 
+		entire_prog += dir_to_func['function_blocks'](tree[0][1:], num_tabs) \
+		+ '\n' 
 	if tree[1][1]:
-		entire_prog += dir_to_func['import_stmt'](tree[1][1:], num_tabs) + '\n'
+		entire_prog += dir_to_func['import_stmt'](tree[1][1:], num_tabs) \
+		+ '\n'
 	if tree[2][1]:
-		entire_prog += 'var_all_events = []' + '\n' + dir_to_func['schedule_stmts'](tree[2][1:], num_tabs) + '\n'
-	print "\ntree[3][1]: ", tree[3][1]
+		entire_prog += 'var_all_events = []' + '\n' \
+		+ dir_to_func['schedule_stmts'](tree[2][1:], num_tabs) + '\n'
 	if tree[3][1]:
-		entire_prog += dir_to_func['build_schedule'](tree[3][1:], num_tabs) + '\n'
+		entire_prog += dir_to_func['build_schedule'](tree[3][1:], num_tabs) \
+		+ '\n'
 	if tree[4][1]:
 		entire_prog += dir_to_func['export_stmt'](tree[4][1:], num_tabs)
 	return entire_prog
@@ -98,7 +100,8 @@ def parse_return_stmt(tree, num_tabs):
 
 
 def parse_import_stmt(tree, num_tabs):
-	code = 'orig_event_dict = cal.read_calendar(\'' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')\n'
+	code = 'orig_event_dict = cal.read_calendar(\'' 
+	code += str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')\n'
 	code += 'for orig_e in orig_event_dict:\n'
 	code += '\te_name = orig_e[\'event_title\']\n'
 	code += '\te_to = orig_e[\'to\']\n'
@@ -268,7 +271,8 @@ def parse_time_math(tree, num_tabs):
 	code = ''
 	if tree[0][0] == 'time':
 		hour, minute = dir_to_func['time_elements'](tree[0][1:], num_tabs)
-		code += 'dt.datetime.combine(dt.date.today(), dt.time(' + hour + ',' + minute + '))'
+		code += 'dt.datetime.combine(dt.date.today(), dt.time(' + hour + ',' \
+			+ minute + '))'
 	if tree[0][0] == 'variable':
 		code += dir_to_func['variable'](tree[0][1:], num_tabs)
 	if tree[1][0] == 'op':
@@ -308,9 +312,11 @@ def parse_remove_stmt(tree, num_tabs):
 	while i < num_tabs:
 		tabs += '\t'
 		i += 1
-	code = tabs + 'for event in var_all_events:\n\t' + \
-	tabs + 'if event[\'event_title\'] == \'' + dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + \
-	tabs + 'event[\'with\'].remove(\''+dir_to_func['strings'](tree[0][1], num_tabs)+'\')'
+	code = tabs + 'for event in var_all_events:\n\t' + tabs \
+		+ 'if event[\'event_title\'] == \'' \
+		+ dir_to_func['strings'](tree[1][1], num_tabs) \
+		+ '\':\n\t\t' + tabs + 'event[\'with\'].remove(\'' \
+		+ dir_to_func['strings'](tree[0][1], num_tabs) + '\')'
 	return code
 
 def parse_add_stmt(tree, num_tabs):
@@ -319,9 +325,11 @@ def parse_add_stmt(tree, num_tabs):
 	while i < num_tabs:
 		tabs += '\t'
 		i += 1
-	code = tabs + 'for event in var_all_events:\n\t' + \
-	tabs + 'if event[\'event_title\'] == \'' + dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + \
-	tabs + 'event[\'with\'].append(\''+dir_to_func['strings'](tree[0][1], num_tabs)+'\')'
+	code = tabs + 'for event in var_all_events:\n\t' \
+		+ tabs + 'if event[\'event_title\'] == \'' \
+		+ dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + tabs \
+		+ 'event[\'with\'].append(\'' \
+		+ dir_to_func['strings'](tree[0][1], num_tabs) + '\')'
 	return code
 
 def parse_update_stmt(tree, num_tabs):
@@ -331,15 +339,20 @@ def parse_update_stmt(tree, num_tabs):
 		tabs += '\t'
 		i += 1
 	code = tabs + 'for event in var_all_events:\n\t' + \
-	tabs + 'if event[\'event_title\'] == \'' + dir_to_func['strings'](tree[0][1], num_tabs) + '\':\n\t\t'
+		tabs + 'if event[\'event_title\'] == \'' + \
+		dir_to_func['strings'](tree[0][1], num_tabs) + '\':\n\t\t'
 	
 	if tree[1] == 'from' or tree[1] == 'to':
-		code += tabs + 'date = str(event[\''+ tree[1]+'\'].date())\n\t\t'
-		code += tabs + 'time = ' + dir_to_func['variable'](tree[2][1], num_tabs) + '\n\t\t'
-		code += tabs + 'new_when = date + \' \' + time.strftime("%I:%M %p")\n\t\t'
-		code += tabs + 'event[\''+tree[1]+'\'] = dt.datetime.strptime(new_when, \'%Y-%m-%d %I:%M %p\')\n'
+		code += tabs + 'date = str(event[\''+ tree[1] + '\'].date())\n\t\t'
+		code += tabs + 'time = ' \
+			+ dir_to_func['variable'](tree[2][1], num_tabs) + '\n\t\t'
+		code += tabs \
+			+ 'new_when = date + \' \' + time.strftime("%I:%M %p")\n\t\t'
+		code += tabs + 'event[\'' + tree[1] \
+			+ '\'] = dt.datetime.strptime(new_when, \'%Y-%m-%d %I:%M %p\')\n'
 	if tree[1] == 'at':
-		code += tabs + 'event[\'' + tree[1] + '\'] = ' + dir_to_func['variable'](tree[2][1], num_tabs)
+		code += tabs + 'event[\'' + tree[1] + '\'] = ' \
+			+ dir_to_func['variable'](tree[2][1], num_tabs)
 	return code
 
 def parse_cancel_stmt(tree, num_tabs):
@@ -350,7 +363,8 @@ def parse_cancel_stmt(tree, num_tabs):
 		j += 1
 	code = tabs + 'for i in range(len(var_all_events)):\n\t' + tabs + \
 	'event = var_all_events[i]\n\t' + tabs + \
-	'if event[\'event_title\'] == \'' + dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + tabs + \
+	'if event[\'event_title\'] == \'' + \
+	dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + tabs + \
 	'var_all_events.pop(i)'
 
 	return code
@@ -376,7 +390,7 @@ def parse_math_stmt(tree, num_tabs):
 		second = tree[3]
 		if type(first) == list and type(second) == list and \
 			len(first) > 0 and len(second) > 0:
-			if label == 'math_plus' or label == 'math_minus' or\
+			if label == 'math_plus' or label == 'math_minus' or \
 				label == 'math_div' or label == 'math_mult':
 					first_label = first[0]
 					if 'math_' in first[0]:
@@ -414,7 +428,8 @@ def parse_value(tree, num_tabs):
 	# print 'LABEL:', label[0:4]
 	print tree
 	if label in \
-	['bool_value', 'user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access', 'func']:
+	['bool_value', 'user_string', 'variable', 'num', 'time', 'date', \
+	'event', 'tag', 'time_math', 'access', 'func']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if label[0:4] == 'math':
 		print 'value: ', dir_to_func['math_stmt'](tree, num_tabs)
@@ -425,7 +440,8 @@ def parse_value(tree, num_tabs):
 
 def parse_access(tree, num_tabs):
 	# print '\nparse_access: ' + str(tree)
-	code = 'get_event(\'' + dir_to_func['strings'](tree[0][1], num_tabs) + '\', var_all_events)[\'' + tree[1] + '\']'
+	code = 'get_event(\'' + dir_to_func['strings'](tree[0][1], num_tabs) + \
+		'\', var_all_events)[\'' + tree[1] + '\']'
 	return code
 
 def parse_user_string(tree, num_tabs):
@@ -433,9 +449,11 @@ def parse_user_string(tree, num_tabs):
 	return tree[0]
 
 def parse_print_stmt(tree, num_tabs):
-	if len(tree) == 2 and len(tree[0]) > 0 and tree[0][0] == 'print' and len(tree[1]) > 0:
+	if len(tree) == 2 and len(tree[0]) > 0 and tree[0][0] == 'print' and \
+	len(tree[1]) > 0:
 		print dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
-		code = '\t'*num_tabs + 'print ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
+		code = '\t'*num_tabs + 'print ' + \
+		dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
 		return code
 	else:
 		sys.stderr.write('Print statement incorrect')
@@ -477,8 +495,8 @@ def parse_export_stmt(tree, num_tabs):
 	code += '\t\te_with = ev[\'with\']\n'
 	code += '\t\tev_event = e.Event(e_name, e_from, e_to, e_at, e_with)\n'
 	code += '\t\tcal.add_event(ev_event.create_string_event())\n'
-	return \
-	code + 'cal.write_file(\'' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')'
+	return code + 'cal.write_file(\'' + \
+		str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')'
 
 def parse_date(tree, num_tabs):
 	month = tree[0][1]
@@ -512,9 +530,9 @@ def parse_event_list(tree, num_tabs, month, day, year):
 		return -1 
 	code = dir_to_func['event'](tree[0][1:], num_tabs, month, day, year) + '\n'
 	if tree[1][0]:
-		code += dir_to_func['event_list_rep'](tree[1][1:], num_tabs, month, day, year)
-	return \
-	code + '\n' 
+		code += dir_to_func['event_list_rep'](tree[1][1:], num_tabs, month, \
+			day, year)
+	return code + '\n' 
 
 def parse_event_list_rep(tree, num_tabs, month, day, year=None):
 	# print tree
@@ -522,7 +540,8 @@ def parse_event_list_rep(tree, num_tabs, month, day, year=None):
 	if tree and tree[0][0] == 'event_list':
 		# print tree[0][1:]
 		# print
-		return dir_to_func['event_list'](tree[0][1:], num_tabs, month, day, year)
+		return dir_to_func['event_list'](tree[0][1:], num_tabs, month, day, \
+			year)
 	return ''
 
 def parse_event(tree, num_tabs, month, day, year):
@@ -562,7 +581,8 @@ def parse_event(tree, num_tabs, month, day, year):
 def parse_event_title(tree, num_tabs):
 	event_title = tree[0][1]
 	global event_count
-	return 'event_dict' + str(event_count) + '[\"event_title\"] = ' + '"' +event_title + '"' 
+	return 'event_dict' + str(event_count) + '[\"event_title\"] = ' + '"' + \
+	event_title + '"' 
 
 def parse_when(tree, num_tabs, month, day, year):
 	if len(tree) != 4:
@@ -590,13 +610,15 @@ def parse_when(tree, num_tabs, month, day, year):
 	create_dt = 'from_dt' + str(event_count) + ' = ' + \
 		'dt.datetime.combine( date' + str(event_count) + \
 		', time' + str(event_count) +  ')'
-	add_dt = 'event_dict' + str(event_count) + '[\"from\"] = ' + 'from_dt' + str(event_count) 
+	add_dt = 'event_dict' + str(event_count) + '[\"from\"] = ' + 'from_dt' + \
+	str(event_count) 
 	code += create_day + '\n' + create_time + '\n' + \
 		create_dt + '\n' + add_dt + '\n'
 	meridian1 = getmeridian(tree[1][1:], num_tabs)
 	meridian2 = getmeridian(tree[3][1:], num_tabs)
 	if meridian1 == 'PM' and meridian2 == 'AM':
-		first_day = dt.date(int(float(year)), int(float(month)), int(float(day)))
+		first_day = dt.date(int(float(year)), int(float(month)), \
+			int(float(day)))
 		first_day += dt.timedelta(days=1)
 		year = first_day.year
 		month = first_day.month
@@ -609,7 +631,8 @@ def parse_when(tree, num_tabs, month, day, year):
 	create_dt = 'to_dt' + str(event_count) + ' = ' + \
 		'dt.datetime.combine( date' + str(event_count) + \
 		', time' + str(event_count) +  ')'
-	add_dt = 'event_dict' + str(event_count) + '[\"to\"] = ' + 'to_dt' + str(event_count)
+	add_dt = 'event_dict' + str(event_count) + '[\"to\"] = ' + 'to_dt' + \
+	str(event_count)
 	code += create_day + '\n' + create_time + '\n' + \
 			create_dt + '\n' + add_dt
 	return code
@@ -652,7 +675,8 @@ def parse_where(tree, num_tabs):
 		sys.stderr.write('Invalid location for event')
 		sys.exit(1)
 	event_location = dir_to_func['location'](tree[1][1:], num_tabs)
-	return 'event_dict' + str(event_count) + '[\"at\"] = \'' + event_location + '\''
+	return 'event_dict' + str(event_count) + '[\"at\"] = \'' + \
+	event_location + '\''
 
 
 def parse_location(tree, num_tabs):
@@ -672,12 +696,15 @@ def parse_people_list(tree, num_tabs):
 	code = 'pp_list' + str(event_count)  + '= []\n'
 	for branch in tree:
 		if branch[0] == 'name':
-			code += 'pp_list' + str(event_count) + '.append(\'' + dir_to_func['name'](branch[1], num_tabs) + '\')\n'
+			code += 'pp_list' + str(event_count) + '.append(\'' + \
+				dir_to_func['name'](branch[1], num_tabs) + '\')\n'
 		if branch[0] == 'comma':
 			code += dir_to_func['comma'](branch[1:], num_tabs)
 		if branch[0] == 'and':
-			code += 'pp_list' + str(event_count) + '.append(\'' + dir_to_func['name'](branch[2][1], num_tabs) + '\')\n'
-	code += 'event_dict' + str(event_count) + '[\"with\"] = pp_list' + str(event_count)
+			code += 'pp_list' + str(event_count) + '.append(\'' + \
+				dir_to_func['name'](branch[2][1], num_tabs) + '\')\n'
+	code += 'event_dict' + str(event_count) + '[\"with\"] = pp_list' + \
+	str(event_count)
 	return code
 
 def parse_name(tree, num_tabs):
@@ -687,11 +714,13 @@ def parse_comma(tree, num_tabs):
 	code = ''
 	for branch in tree:
 		if branch[0] == 'name':
-			code += 'pp_list' + str(event_count) + '.append(\'' + dir_to_func['name'](branch[1], num_tabs) + '\')\n'
+			code += 'pp_list' + str(event_count) + '.append(\'' + \
+				dir_to_func['name'](branch[1], num_tabs) + '\')\n'
 		if branch[0] == 'comma':
 			code += dir_to_func['comma'](branch[1:], num_tabs)
 		if branch[0] == 'and':
-			code += 'pp_list' + str(event_count) + '.append(\'' + dir_to_func['name'](branch[2][1], num_tabs) + '\')\n'
+			code += 'pp_list' + str(event_count) + '.append(\'' + \
+				dir_to_func['name'](branch[2][1], num_tabs) + '\')\n'
 	return code
 
 def parse_while_stmt(tree, num_tabs):
@@ -721,7 +750,9 @@ def parse_bool_expr(tree, num_tabs):
 		elif tree[0] == 'not':
 			code += 'not ' + dir_to_func['bool_expr'](tree[1][1], num_tabs)
 		elif tree[0][0] == 'bool_expr':
-			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + ' ' + dir_to_func['bool_operator'](tree[1][1], num_tabs) + ' ' + dir_to_func['bool_expr'](tree[2][1], num_tabs)
+			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + ' ' + \
+			dir_to_func['bool_operator'](tree[1][1], num_tabs) + ' ' + \
+			dir_to_func['bool_expr'](tree[2][1], num_tabs)
 		elif tree[0] == 'value':
 			code += dir_to_func['value'](tree[1], num_tabs)
 		elif tree[0][0] == 'value':
@@ -744,7 +775,8 @@ def parse_bool_operation(tree, num_tabs):
 			code += dir_to_func['value'](tree[2][1], num_tabs)
 	if tree[1] == 'in':
 		if tree[0][0] == 'value':
-			code += '\'' + dir_to_func['value'](tree[0][1], num_tabs) + '\' in '
+			code += '\'' + dir_to_func['value'](tree[0][1], num_tabs) + \
+			'\' in '
 		if tree[2][0] == 'value':
 			code += dir_to_func['value'](tree[2][1], num_tabs)
 	return code
@@ -773,8 +805,9 @@ def parse_if_block(tree, num_tabs):
 	if len(tree) == 3 and len(tree[1]) > 1 \
 		and tree[1][0] == 'bool_expr' and len(tree[2]) > 1\
 		and tree[2][0] == 'expr_block':
-		code = '\t' * num_tabs + 'if ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) \
-			+ ':\n' + dir_to_func[tree[2][0]](tree[2][1:], num_tabs + 1)
+		code = '\t' * num_tabs + 'if ' + \
+			dir_to_func[tree[1][0]](tree[1][1:], num_tabs) + \
+			':\n' + dir_to_func[tree[2][0]](tree[2][1:], num_tabs + 1)
 		return code
 	else:
 		print 'error in if statement: ', tree[1]
@@ -785,15 +818,16 @@ def parse_else_block(tree, num_tabs):
 		return ''
 	print 'else: ', tree
 	if len(tree) == 2 and tree[1][0] == 'expr_block':
-		return '\t' * num_tabs + 'else:\n' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs + 1)
+		return '\t' * num_tabs + 'else:\n' + \
+		dir_to_func[tree[1][0]](tree[1][1:], num_tabs + 1)
 	return -1
 	
 def parse_elseif_blocks(tree, num_tabs):
 	print 'else if blocks tree: ', tree
 	if not tree[0]:
 		return ''
-	if len(tree) == 2 and len(tree[0]) > 1 and len(tree[1]) > 1\
-		and tree[0][0] == 'elseif_block' and tree[1][0] == 'elseif_blocks_rep':
+	if len(tree) == 2 and len(tree[0]) > 1 and len(tree[1]) > 1 and \
+		tree[0][0] == 'elseif_block' and tree[1][0] == 'elseif_blocks_rep':
 		return dir_to_func[tree[0][0]](tree[0][1:], num_tabs) + \
 			dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
 	print 'error in elseif blocks'
@@ -805,7 +839,8 @@ def parse_elseif_block(tree, num_tabs):
 		return ''
 	if len(tree) == 3 and len(tree[1]) > 1 and len(tree[2]) > 1\
 		and tree[1][0] == 'bool_expr' and tree[2][0] == 'expr_block':
-		return '\t' * num_tabs + 'elif ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) + \
+		return '\t' * num_tabs + 'elif ' + \
+			dir_to_func[tree[1][0]](tree[1][1:], num_tabs) + \
 			':\n' + dir_to_func[tree[2][0]](tree[2][1:], num_tabs + 1)
 	print 'error in elseif block'
 	return -1
@@ -827,7 +862,8 @@ def parse_for_stmt(tree, num_tabs):
 	if tree[1][0] == 'assignment_stmt':
 		code += dir_to_func['assignment_stmt'](tree[1][1:], num_tabs) + '\n'
 	if tree[2][0] == 'bool_expr':
-		code += 'while ' + dir_to_func['bool_expr'](tree[2][1:], num_tabs) + ':\n'
+		code += 'while ' + dir_to_func['bool_expr'](tree[2][1:], num_tabs) \
+		+ ':\n'
 	if tree[3][0] == 'assignment_stmt':
 		increment = dir_to_func['assignment_stmt'](tree[3][1:], num_tabs+1)
 	if tree[4][0] == 'expr_block':
