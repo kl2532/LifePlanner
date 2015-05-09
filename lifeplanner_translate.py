@@ -820,32 +820,25 @@ def parse_for_stmt(tree, num_tabs):
 	code += increment
 	return code
 	
-def parse_date_duration(tree, num_tabs):
-	pass
-	
-def parse_and(tree, num_tabs):
-	pass
-
-# def parse_year(tree, num_tabs):
-# 	pass
-		
-def parse_tag_priorities(tree, num_tabs):
-	return 'tag priorities'
-	
 def parse_comment_stmt(tree, num_tabs):
 	return ''
 
-
-def parse_string(tree, num_tabs):
-	pass
-
-def parse_colon(tree, num_tabs):
-	pass
-
-def parse_from(tree, num_tabs):
-	pass
+def parse_num(tree, num_tabs):
+	return tree[0]
 
 def parse_newline(tree, num_tabs):
+	return '\n'
+
+
+
+
+def parse_date_duration(tree, num_tabs):
+	pass
+		
+def parse_tag_priorities(tree, num_tabs):
+	return 'tag priorities'
+
+def parse_string(tree, num_tabs):
 	pass
 
 def parse_build(tree, num_tabs):
@@ -857,17 +850,8 @@ def parse_tag_op(tree, num_tabs):
 def parse_tag(tree, num_tabs):
 	pass
 
-def parse_export(tree, num_tabs):
-	pass
-
-def parse_import(tree, num_tabs):
-	pass
-
 def parse_bool_operator(tree, num_tabs):
 	return tree
-
-def parse_with(tree, num_tabs):
-	pass
 
 def parse_date_unit(tree, num_tabs):
 	pass
@@ -878,23 +862,44 @@ def parse_string_rep(tree, num_tabs):
 def parse_schedule(tree, num_tabs):
 	pass
 
-def parse_num(tree, num_tabs):
-	return tree[0]
-
-def parse_to(tree, num_tabs):
-	pass
-
 def parse_tag_name(tree, num_tabs):
 	pass
 
 def parse_print(tree, num_tabs):
 	pass
 
+def parse_type(tree, num_tabs):
+	pass
+
+
+# NOT needed.
 def parse_at(tree, num_tabs):
 	pass
 
-def parse_type(tree, num_tabs):
+def parse_colon(tree, num_tabs):
+	return ':'
+
+def parse_import(tree, num_tabs):
 	pass
+
+def parse_export(tree, num_tabs):
+	pass
+
+def parse_and(tree, num_tabs):
+	pass
+
+def parse_year(tree, num_tabs):
+	pass
+
+def parse_to(tree, num_tabs):
+	pass
+
+def parse_from(tree, num_tabs):
+	pass
+
+def parse_with(tree, num_tabs):
+	pass
+
 
 dir_to_func = {
 	'program' : parse_program,
