@@ -397,8 +397,12 @@ def parse_math_stmt(tree, num_tabs):
 	return -1
 
 def parse_variable(tree, num_tabs):
+	print '\n parse_variable: ' + str(tree)
 	if type(tree) is list:
-		return str(tree[1])
+		if tree[0] == 'variable':
+			return str(tree[1])
+		else:
+			return str(tree[0])
 	return str(tree)
 
 def parse_value(tree, num_tabs):
@@ -406,8 +410,7 @@ def parse_value(tree, num_tabs):
 	# print 'LABEL:', label[0:4]
 	print tree
 	if label in \
-	['func', 'bool_value', 'user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access']:
-		print tree[1:]
+	['bool_value', 'user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access', 'func']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if label[0:4] == 'math':
 		print 'value: ', dir_to_func['math_stmt'](tree, num_tabs)
