@@ -56,9 +56,11 @@ def p_function_name(p):
 
 def p_parameter_list(p):
     '''parameter_list : STRING parameter_list 
-                    | COMMA STRING parameter_list
                     | INTEGER parameter_list 
+                    | DECIMAL parameter_list
+                    | COMMA STRING parameter_list
                     | COMMA INTEGER parameter_list
+                    | COMMA DECIMAL parameter_list
                     | empty'''
     if len(p) == 3:
         p[0] = ['parameter_list', p[1], p[2]]
