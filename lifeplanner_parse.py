@@ -263,30 +263,7 @@ def p_func(p):
     '''func : variable LEFTPAREN parameter_list RIGHTPAREN'''
     p[0] = ['func', p[1], p[3]]
 
-def p_mathstmt1(p):
-    '''math_stmt : math_stmt PLUS math_stmt
-		 | math_stmt MINUS math_stmt
-		 | math_stmt TIMES math_stmt
-		 | math_stmt SLASH math_stmt
-         | LEFTPAREN math_stmt RIGHTPAREN'''
-    if p[2] == '+':
-        p[0] = ['math_plus', p[1], p[2], p[3]]
-    elif p[2] == '-':
-        p[0] = ['math_minus', p[1], p[2], p[3]]
-    elif p[2] == '*':
-        p[0] = ['math_mult', p[1], p[2], p[3]]
-    elif p[2] == '/':
-        p[0] = ['math_div', p[1], p[2], p[3]]
-    else:
-        p[0] = ['math_paren', p[1], p[2], p[3]]
 
-def p_mathstmt3(p):
-    '''math_stmt : INTEGER
-                  | variable'''
-    if not type(p[1]) == list:
-        p[0] = ['math_int', p[1]]
-    else:
-        p[0] = ['math_var', p[1]]
 
 def p_comment_stmt(p): 
     '''comment_stmt : COMMENT strings'''
@@ -468,8 +445,8 @@ def p_timemath(p):
     print '\ntimemath: ' + str(p[0])
 
 def p_timeop(p):
-    '''op : PLUS
-          | MINUS'''
+    '''op : ADD
+          | SUBTRACT'''
     p[0] = ['op', p[1]]
         
 def p_printstmt(p):
@@ -502,6 +479,31 @@ def p_timeunit(p):
     '''time_unit : HOUR
                  | MINUTE'''
     p[0] = ['time_unit', p[1]]
+
+def p_mathstmt1(p):
+    '''math_stmt : math_stmt PLUS math_stmt
+         | math_stmt MINUS math_stmt
+         | math_stmt TIMES math_stmt
+         | math_stmt SLASH math_stmt
+         | LEFTPAREN math_stmt RIGHTPAREN'''
+    if p[2] == '+':
+        p[0] = ['math_plus', p[1], p[2], p[3]]
+    elif p[2] == '-':
+        p[0] = ['math_minus', p[1], p[2], p[3]]
+    elif p[2] == '*':
+        p[0] = ['math_mult', p[1], p[2], p[3]]
+    elif p[2] == '/':
+        p[0] = ['math_div', p[1], p[2], p[3]]
+    else:
+        p[0] = ['math_paren', p[1], p[2], p[3]]
+
+def p_mathstmt3(p):
+    '''math_stmt : INTEGER
+                  | variable'''
+    if not type(p[1]) == list:
+        p[0] = ['math_int', p[1]]
+    else:
+        p[0] = ['math_var', p[1]]
 
 def p_quote(p):
     '''quote : QUOTATION'''
@@ -701,7 +703,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
-data = 'build schedule\ntime = 6:00 PM - 5 hours\nprint time\ntime = time + 2 hours\n'
+data = 'build schedule\n i = 6:00 PM subtract 2 hours\ni = i - j\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree, '\n'
