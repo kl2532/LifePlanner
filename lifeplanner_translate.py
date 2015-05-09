@@ -262,11 +262,14 @@ def parse_day_math(tree, num_tabs):
 	pass
 
 def parse_time_math(tree, num_tabs):
-	# print 'parse_time_math: ', str(tree)
+	print '\nparse_time_math: ', str(tree)	
+	print '\n[0][0]:' + str(tree[0][0])
 	code = ''
 	if tree[0][0] == 'time':
 		hour, minute = dir_to_func['time_elements'](tree[0][1:], num_tabs)
 		code += 'dt.datetime.combine(dt.date.today(), dt.time(' + hour + ',' + minute + '))'
+	if tree[0][0] == 'variable':
+		code += dir_to_func['variable'](tree[0][1:], num_tabs)
 	if tree[1][0] == 'op':
 		code += dir_to_func['op'](tree[1][1:], num_tabs)
 	if tree[2][0] == 'time_duration':
@@ -332,8 +335,8 @@ def parse_update_stmt(tree, num_tabs):
 	if tree[1] == 'from' or tree[1] == 'to':
 		code += tabs + 'date = str(event[\''+ tree[1]+'\'].date())\n\t\t'
 		code += tabs + 'time = ' + dir_to_func['variable'](tree[2][1], num_tabs) + '\n\t\t'
-		code += tabs + 'new_when = date + \' \' + time\n\t\t'
-		code += tabs + 'event[\''+tree[1]+'\'] = dt.datetime.strptime(new_when, \'%m-%d-%Y %I:%M %p\')\n'
+		code += tabs + 'new_when = date + \' \' + time.strftime("%I:%M %p")\n\t\t'
+		code += tabs + 'event[\''+tree[1]+'\'] = dt.datetime.strptime(new_when, \'%Y-%m-%d %I:%M %p\')\n'
 	if tree[1] == 'at':
 		code += tabs + 'event[\'' + tree[1] + '\'] = ' + dir_to_func['variable'](tree[2][1], num_tabs)
 	return code
@@ -397,17 +400,23 @@ def parse_math_stmt(tree, num_tabs):
 	return -1
 
 def parse_variable(tree, num_tabs):
+	print '\n parse_variable: ' + str(tree)
 	if type(tree) is list:
-		return str(tree[1])
+		if tree[0] == 'variable':
+			return str(tree[1])
+		else:
+			return str(tree[0])
 	return str(tree)
 
 def parse_value(tree, num_tabs):
 	label = tree[0]
 	# print 'LABEL:', label[0:4]
+	print tree
 	if label in \
 	['bool_value', 'user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access', 'func']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if label[0:4] == 'math':
+		print 'value: ', dir_to_func['math_stmt'](tree, num_tabs)
 		return dir_to_func['math_stmt'](tree, num_tabs)
 	else:
 		sys.stderr.write('Error in parse_value: ' + tree)
@@ -712,6 +721,8 @@ def parse_bool_expr(tree, num_tabs):
 			code += 'not ' + dir_to_func['bool_expr'](tree[1][1], num_tabs)
 		if tree[0][0] == 'bool_expr':
 			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + ' ' + dir_to_func['bool_operator'](tree[1][1], num_tabs) + ' ' + dir_to_func['bool_expr'](tree[2][1], num_tabs)
+		if tree[0][0] == 'value':
+			code += dir_to_func['value'](tree[0][1], num_tabs)
 	return code
 
 def parse_bool_operation(tree, num_tabs):

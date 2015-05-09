@@ -475,7 +475,10 @@ def p_printstmt(p):
     '''print_stmt : print user_string
                   | print variable
                   | print num
-                  | print bool_value'''
+                  | print bool_value
+                  | print math_stmt
+                  | print bool_expr
+                  | print func'''
     p[0] = ['print_stmt', p[1], p[2]]
 
 def p_datedur(p):
@@ -696,7 +699,11 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
+<<<<<<< HEAD
 data = 'build schedule\nvar = "True or not"\nexport nigga'
+=======
+data = 'build schedule\nprint sum(1,2)\n'
+>>>>>>> d09e1ecb5073a73ca583d437bcc94e1ed3ca1cd7
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree, '\n'
