@@ -397,8 +397,12 @@ def parse_math_stmt(tree, num_tabs):
 	return -1
 
 def parse_variable(tree, num_tabs):
+	print '\n parse_variable: ' + str(tree)
 	if type(tree) is list:
-		return str(tree[1])
+		if tree[0] == 'variable':
+			return str(tree[1])
+		else:
+			return str(tree[0])
 	return str(tree)
 
 def parse_value(tree, num_tabs):
