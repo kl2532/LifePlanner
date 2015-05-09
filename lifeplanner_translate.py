@@ -711,20 +711,36 @@ def parse_bool_expr(tree, num_tabs):
 	code = ''
 	if tree[0]:
 		if tree[0][0] == 'bool_operation':
+			print tree[0][0]
+			print tree[0][1:]
 			code += dir_to_func['bool_operation'](tree[0][1:], num_tabs)
 		elif tree[0] == 'bool_operation':
+			print tree[0]
+			print tree[1:]
 			code += dir_to_func['bool_operation'](tree[1:], num_tabs)
 		elif tree[0][0] == 'bool_value':
+			print tree[0][0]
+			print tree[0][1:]
 			code += dir_to_func['bool_value'](tree[0][1], num_tabs)
 		elif tree[0] == 'bool_value':
-			code += dir_to_func['bool_value'](tree[1], num_tabs)
+			print tree[0]
+			print tree[1][1]
+			code += dir_to_func['bool_value'](tree[1][1], num_tabs)
 		elif tree[0] == 'not':
+			print tree[0]
+			print tree[1][1]
 			code += 'not ' + dir_to_func['bool_expr'](tree[1][1], num_tabs)
 		elif tree[0][0] == 'bool_expr':
+			print tree[0][0]
+			print tree[0][1]
 			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + ' ' + dir_to_func['bool_operator'](tree[1][1], num_tabs) + ' ' + dir_to_func['bool_expr'](tree[2][1], num_tabs)
 		elif tree[0] == 'value':
+			print tree[0]
+			print tree[1]
 			code += dir_to_func['value'](tree[1], num_tabs)
 		elif tree[0][0] == 'value':
+			print tree[0][0]
+			print tree[0][1]
 			code += dir_to_func['value'](tree[0][1], num_tabs)
 		else:
 			sys.stderr.write('Invalid bool expr: ', tree)
@@ -750,7 +766,10 @@ def parse_bool_operation(tree, num_tabs):
 	return code
 
 def parse_bool_value(tree, num_tabs):
-	return tree[0]
+	if type(tree) == list:
+		return tree[0]
+	else:
+		return tree
 
 def parse_comparison_operator(tree, num_tabs):
 	# print 'parse_comparison_operator: ', str(tree)
