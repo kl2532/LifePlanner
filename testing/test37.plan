@@ -1,0 +1,6 @@
+function addTogether(i, j)
+	x = i + j
+	return x
+build schedule
+	print addTogether(1, 2)
+	
