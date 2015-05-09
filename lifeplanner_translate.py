@@ -51,7 +51,6 @@ def parse_program(tree, num_tabs):
 		entire_prog += dir_to_func['export_stmt'](tree[4][1:], num_tabs)
 	return entire_prog
 
-# [['function_block', ['function_declaration', 'function', ['function_name', 'a'], ['parameter_list', None]], ['expr_block', ['expr', ['assignment_stmt', ['variable', 'x'], '=', ['value', ['math_int', '1']]]], ['expr_block_rep', ['expr_block', None]]], ['return_stmt', 'return', ['value', ['math_var', ['variable', 'x']]]]], ['function_block', ['function_declaration', 'function', ['function_name', 'b'], ['parameter_list', 'x', ['parameter_list', 'y', ['parameter_list', 'z', ['parameter_list', None]]]]], ['expr_block', ['expr', ['print_stmt', ['print', 'print'], ['quote', '"'], ['strings', 'hello'], ['quote', '"']]], ['expr_block_rep', ['expr_block', None]]], ['return_stmt', None]]]
 
 def parse_function_blocks(tree, num_tabs):
 	print tree
@@ -62,8 +61,6 @@ def parse_function_blocks(tree, num_tabs):
 		code += parse_function_block(f_block[1:], num_tabs)
 	return code
 
-
-# [['function_declaration', 'function', ['function_name', 'f'], ['parameter_list', None]], ['expr_block', ['expr', ['assignment_stmt', ['variable', 'x'], '=', ['value', ['math_int', '1']]]], ['expr_block_rep', ['expr_block', None]]], ['return_stmt', 'return', ['value', ['math_var', ['variable', 'x']]]]]
 
 def parse_function_block(tree, num_tabs):
 	# print tree[1][1:]
