@@ -56,7 +56,11 @@ def p_function_name(p):
 
 def p_parameter_list(p):
     '''parameter_list : STRING parameter_list 
+                    | INTEGER parameter_list 
+                    | DECIMAL parameter_list
                     | COMMA STRING parameter_list
+                    | COMMA INTEGER parameter_list
+                    | COMMA DECIMAL parameter_list
                     | empty'''
     if len(p) == 3:
         p[0] = ['parameter_list', p[1], p[2]]
@@ -197,6 +201,7 @@ def p_tagline(p):
 
 def p_buildstmts(p):
     '''build_schedule : build schedule newline tag_priorities clean'''
+    print 'buildingggg'
     p[0] = ['build_schedule', p[1], p[2], p[4], p[5]]
 
 def p_tagp(p):
@@ -216,6 +221,7 @@ def p_tagop(p):
 def p_clean(p):
     '''clean : expr_block
              | empty'''
+    print 'clean!!!'
     if len(p) == 2:
         p[0] = ['clean', p[1]]
     else:
@@ -536,7 +542,6 @@ def p_at(p):
 
 def p_num(p):
     '''num : INTEGER'''
-    print 'p_num', p[1]
     p[0] = ['num', p[1]]
 
 def p_meridian(p):
@@ -607,7 +612,6 @@ def p_print(p):
 
 def p_newline(p):
     '''newline : NEWLINE'''
-    print "p_newline"
     p[0] = ['newline', p[1]]
     
 # def p_var_assignmet(p):
@@ -684,10 +688,12 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
+# data = 'function a()\nx = 1\nreturn x\nfunction b(x, y, z)\nprint \"hello\"\nbuild schedule\nb(3,3,3)\n'
+print data
 data = 'build schedule\nvar = 1\nprint "happy"\nprint 1\nprint True\n'
 tree = yacc.parse(data)
 print
-print 'parse tree: ', tree
+print 'parse tree: ', tree, '\n'
 print trans.translate(tree)
 
 #import sys
