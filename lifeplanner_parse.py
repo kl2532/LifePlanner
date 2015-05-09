@@ -463,8 +463,9 @@ def p_daymath(p):
 
 def p_timemath(p):
     '''time_math : time op time_duration
-                 | time_duration op time'''
+                 | variable op time_duration'''
     p[0] = ['time_math', p[1], p[2], p[3]]
+    print '\ntimemath: ' + str(p[0])
 
 def p_timeop(p):
     '''op : PLUS
@@ -495,6 +496,7 @@ def p_dateunit(p):
 def p_timedur(p):
     '''time_duration : num time_unit'''
     p[0] = ['time_duration', p[1], p[2]]
+    print '\ntime_duration: ' + str(p[0])
 
 def p_timeunit(p):
     '''time_unit : HOUR

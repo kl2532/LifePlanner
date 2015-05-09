@@ -1,0 +1,4 @@
+build schedule
+	s = "Hello my old friend"
+	print s
+	

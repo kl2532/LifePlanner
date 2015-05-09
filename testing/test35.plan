@@ -1,0 +1,9 @@
+build schedule
+	print 1
+	print True
+	print False
+	print "True"
+	print "and"
+	print "not"
+	print "add"
+	print "remove and cancel or update"

@@ -1,0 +1,6 @@
+build schedule
+	print 1 + 2 * 3
+	i = 1
+	j = 19
+	print (i*j+1)/2
+	

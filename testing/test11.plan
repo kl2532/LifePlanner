@@ -1,4 +1,6 @@
 build schedule
 	time = 6:00 PM + 2 hours
 	print time
+	time = time + 5 hours
+	print time
 	
