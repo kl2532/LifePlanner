@@ -411,10 +411,12 @@ def parse_variable(tree, num_tabs):
 def parse_value(tree, num_tabs):
 	label = tree[0]
 	# print 'LABEL:', label[0:4]
+	print tree
 	if label in \
 	['bool_value', 'user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access', 'func']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if label[0:4] == 'math':
+		print 'value: ', dir_to_func['math_stmt'](tree, num_tabs)
 		return dir_to_func['math_stmt'](tree, num_tabs)
 	else:
 		sys.stderr.write('Error in parse_value: ' + tree)
@@ -719,6 +721,8 @@ def parse_bool_expr(tree, num_tabs):
 			code += 'not ' + dir_to_func['bool_expr'](tree[1][1], num_tabs)
 		if tree[0][0] == 'bool_expr':
 			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + ' ' + dir_to_func['bool_operator'](tree[1][1], num_tabs) + ' ' + dir_to_func['bool_expr'](tree[2][1], num_tabs)
+		if tree[0][0] == 'value':
+			code += dir_to_func['value'](tree[0][1], num_tabs)
 	return code
 
 def parse_bool_operation(tree, num_tabs):
