@@ -31,8 +31,13 @@ precedence =    (
 start = 'program'
 
 def p_program(p):
-    '''program : function_blocks import_stmt schedule_stmts build_schedule export_stmt'''
+    '''program : function_blocks import_stmt schedule_stmts build_schedule export_stmt whatever'''
     p[0] = ['program', p[1], p[2], p[3], p[4], p[5]]
+
+def p_end(p):
+    '''whatever : newline whatever
+                | empty'''
+    pass
 
 def p_functionblocks(p):
     '''function_blocks : function_block function_blocks
@@ -694,7 +699,15 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
+<<<<<<< HEAD
 data = 'build schedule\nif not var\nprint "hi"\nend\n'
+=======
+<<<<<<< HEAD
+data = 'build schedule\nvar = "True or not"\nexport nigga'
+=======
+data = 'build schedule\nprint sum(1,2)\n'
+>>>>>>> d09e1ecb5073a73ca583d437bcc94e1ed3ca1cd7
+>>>>>>> 80ff8a90a2d9b3b8ccf6fd0c5d0634b39ff88308
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree, '\n'
