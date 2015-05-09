@@ -753,6 +753,8 @@ def parse_bool_expr(tree, num_tabs):
 			code += dir_to_func['value'](tree[1], num_tabs)
 		elif tree[0][0] == 'value':
 			code += dir_to_func['value'](tree[0][1], num_tabs)
+		elif tree[0] == '(':
+			code += '(' + dir_to_func['bool_expr'](tree[1][1:], num_tabs) + ')'
 		else:
 			sys.stderr.write('Invalid bool expr: ' + str(tree))
 			sys.exit(1)
