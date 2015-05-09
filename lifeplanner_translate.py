@@ -818,9 +818,6 @@ def parse_elseif_blocks_rep(tree, num_tabs):
 	print 'error in else if rep'
 	return -1
 
-def parse_tag_line(tree, num_tabs):
-	return ''
-
 def parse_for_stmt(tree, num_tabs):
 	print 'parse_for_stmt: ', str(tree)
 	if tree[0] != 'for':
@@ -836,6 +833,9 @@ def parse_for_stmt(tree, num_tabs):
 		code += dir_to_func['expr_block'](tree[4][1:], num_tabs+1)
 	code += increment
 	return code
+
+def parse_bool_operator(tree, num_tabs):
+	return tree
 	
 def parse_comment_stmt(tree, num_tabs):
 	return ''
@@ -848,49 +848,44 @@ def parse_newline(tree, num_tabs):
 
 
 
+# tag functions
+def parse_tag(tree, num_tabs):
+	pass
 
-def parse_date_duration(tree, num_tabs):
+def parse_tag_line(tree, num_tabs):
+	return ''
+
+def parse_tag_name(tree, num_tabs):
+	pass
+
+def parse_tag_op(tree, num_tabs):
 	pass
 		
 def parse_tag_priorities(tree, num_tabs):
 	return 'tag priorities'
 
-def parse_string(tree, num_tabs):
-	pass
 
-def parse_build(tree, num_tabs):
-	pass
 
-def parse_tag_op(tree, num_tabs):
+# NOT used.
+def parse_date_duration(tree, num_tabs):
 	pass
-
-def parse_tag(tree, num_tabs):
-	pass
-
-def parse_bool_operator(tree, num_tabs):
-	return tree
 
 def parse_date_unit(tree, num_tabs):
+	pass
+
+def parse_string(tree, num_tabs):
 	pass
 
 def parse_string_rep(tree, num_tabs):
 	pass
 
-def parse_schedule(tree, num_tabs):
-	pass
-
-def parse_tag_name(tree, num_tabs):
+def parse_at(tree, num_tabs):
 	pass
 
 def parse_print(tree, num_tabs):
 	pass
 
 def parse_type(tree, num_tabs):
-	pass
-
-
-# NOT needed.
-def parse_at(tree, num_tabs):
 	pass
 
 def parse_colon(tree, num_tabs):
@@ -908,14 +903,21 @@ def parse_and(tree, num_tabs):
 def parse_year(tree, num_tabs):
 	pass
 
-def parse_to(tree, num_tabs):
+def parse_from(tree, num_tabs):
 	pass
 
-def parse_from(tree, num_tabs):
+def parse_to(tree, num_tabs):
 	pass
 
 def parse_with(tree, num_tabs):
 	pass
+
+def parse_build(tree, num_tabs):
+	pass
+
+def parse_schedule(tree, num_tabs):
+	pass
+
 
 
 dir_to_func = {
@@ -925,7 +927,6 @@ dir_to_func = {
 	'import_stmt' : parse_import_stmt,
 	'schedule_stmts' : parse_schedule_stmts,
 	'date' : parse_date,
-	#'year' : parse_year,
 	'event_list' : parse_event_list,
 	'event' : parse_event,
 	'when' : parse_when,
@@ -935,10 +936,7 @@ dir_to_func = {
 	'who' : parse_who,
 	'people_list' : parse_people_list,
 	'comma' : parse_comma,
-	'and' : parse_and,
-	'tag_line' : parse_tag_line,
 	'build_schedule' : parse_build_schedule,
-	'tag_priorities' : parse_tag_priorities,
 	'clean' : parse_clean,
 	'expr_block' : parse_expr_block,
 	'math_stmt' : parse_math_stmt,
@@ -957,7 +955,6 @@ dir_to_func = {
 	'day_math' : parse_day_math,
 	'time_math' : parse_time_math,
 	'print_stmt' : parse_print_stmt,
-	'date_duration' : parse_date_duration,
 	'time_duration' : parse_time_duration,
 	'export_stmt' : parse_export_stmt,
 	'name' : parse_name,
@@ -970,7 +967,6 @@ dir_to_func = {
 	'event_list_rep' : parse_event_list_rep,
 	'event_title' : parse_event_title,
 	'location' : parse_location,
-	'tag_op' : parse_tag_op,
 	'expr_block_rep' : parse_expr_block_rep,
 	'expr' : parse_expr,
 	'event_stmt' : parse_event_stmt,
@@ -980,29 +976,13 @@ dir_to_func = {
 	'comparison_operator' : parse_comparison_operator,
 	'bool_value' : parse_bool_value,
 	'op' : parse_op,
-	'date_unit' : parse_date_unit,
 	'time_unit' : parse_time_unit,
 	'filename' : parse_filename,
-	'export' : parse_export,
-	'tag_name' : parse_tag_name,
-	'tag' : parse_tag,
 	'and' : parse_and,
 	'comma' : parse_comma,
-	'with' : parse_with,
-	'at' : parse_at,
 	'num' : parse_num,
 	'meridian' : parse_meridian,
-	'from' : parse_from,
-	'to' : parse_to,
-	'colon' : parse_colon,
-	'build' : parse_build,
-	'schedule' : parse_schedule,
-	'string' : parse_string,
-	'string_rep' : parse_string_rep,
-	'import' : parse_import,
-	'print' : parse_print,
 	'newline' : parse_newline,
-	'type' : parse_type,
 	'assignment_stmt' : parse_assignment_stmt,
 	'update_stmt' : parse_update_stmt,
 	'remove_stmt' : parse_remove_stmt,
@@ -1010,5 +990,31 @@ dir_to_func = {
 	'elseif_blocks_rep' : parse_elseif_blocks_rep,
 	'access' : parse_access,
 	'user_string' : parse_user_string,
+
+	# TAG
+	'tag' : parse_tag,
+	'tag_name' : parse_tag_name,
+	'tag_op' : parse_tag_op,
+	'tag_line' : parse_tag_line,
+	'tag_priorities' : parse_tag_priorities,
+
+	# NOT used.
+	'date_duration' : parse_date_duration,
+	'date_unit' : parse_date_unit,
+	'string' : parse_string,
+	'string_rep' : parse_string_rep,
+	'at' : parse_at,
+	'print' : parse_print,
+	'type' : parse_type,
+	'colon' : parse_colon,
+	'import' : parse_import,
+	'export' : parse_export,
+	'and' : parse_and,
+	'year' : parse_year,
+	'from' : parse_from,
+	'to' : parse_to,
+	'with' : parse_with,
+	'build' : parse_build,
+	'schedule' : parse_schedule,
 }
 
