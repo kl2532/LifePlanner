@@ -1,0 +1,10 @@
+12/01/2016:
+	PLT from 2:40 PM to 3:55 PM at Mudd with Aho, George 
+build schedule
+	stime = 5:00 PM
+	etime = 7:00 PM
+	loc = "Bees"
+	update PLT from stime
+	update PLT to etime
+	update PLT at loc
+export test31.ics

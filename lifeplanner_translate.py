@@ -185,6 +185,8 @@ def parse_clean(tree, num_tabs):
 def parse_expr_block(tree, num_tabs):
 	# print "parse_expr_block tree: ", str(tree)
 	# parse_expr_block tree:  [['expr', ['print_stmt', ['print', 'print'], ['variable', 'hello']]], ['expr_block_rep', ['expr_block', None]]]
+	if not tree[0]:
+		return ''
 	if tree[0][0] != 'expr':
 		sys.stderr.write('Expression not found')
 		sys.exit(1)
@@ -266,8 +268,6 @@ def parse_day_math(tree, num_tabs):
 	pass
 
 def parse_time_math(tree, num_tabs):
-	print '\nparse_time_math: ', str(tree)	
-	print '\n[2][0]:' + str(tree[2][0])
 	code = ''
 	if tree[0][0] == 'time':
 		hour, minute = dir_to_func['time_elements'](tree[0][1:], num_tabs)
@@ -379,7 +379,6 @@ def parse_assignment_stmt(tree, num_tabs):
 		i += 1
 	if tree[0][0] == 'variable':
 		code += dir_to_func['variable'](tree[0][1], num_tabs) + ' = '
-		print 'assignment tree: ', tree[2]
 		code += dir_to_func[tree[2][0]](tree[2][1], num_tabs)
 	return code
 
@@ -417,7 +416,6 @@ def parse_math_stmt(tree, num_tabs):
 	return -1
 
 def parse_variable(tree, num_tabs):
-	print '\n parse_variable: ' + str(tree)
 	if type(tree) is list:
 		if tree[0] == 'variable':
 			return str(tree[1])
@@ -428,13 +426,11 @@ def parse_variable(tree, num_tabs):
 def parse_value(tree, num_tabs):
 	label = tree[0]
 	# print 'LABEL:', label[0:4]
-	print tree
 	if label in \
 	['bool_value', 'user_string', 'variable', 'num', 'time', 'date', \
 	'event', 'tag', 'time_math', 'access', 'func']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if label[0:4] == 'math':
-		print 'value: ', dir_to_func['math_stmt'](tree, num_tabs)
 		return dir_to_func['math_stmt'](tree, num_tabs)
 	else:
 		sys.stderr.write('Error in parse_value: ' + tree)
@@ -447,7 +443,6 @@ def parse_access(tree, num_tabs):
 	return code
 
 def parse_user_string(tree, num_tabs):
-	print 'user: ', tree
 	return tree[0]
 
 def parse_print_stmt(tree, num_tabs):
@@ -738,7 +733,6 @@ def parse_while_stmt(tree, num_tabs):
 	return code
 
 def parse_bool_expr(tree, num_tabs):
-	print '\nparse_bool_expr: ', str(tree)
 	code = ''
 	if tree[0]:
 		if tree[0][0] == 'bool_operation':
@@ -750,19 +744,25 @@ def parse_bool_expr(tree, num_tabs):
 		elif tree[0] == 'bool_value':
 			code += dir_to_func['bool_value'](tree[1], num_tabs)
 		elif tree[0] == 'not':
-			code += 'not ' + dir_to_func['bool_expr'](tree[1][1], num_tabs)
+			code += 'not ' + dir_to_func['bool_expr'](tree[1][1:], num_tabs)
 		elif tree[0][0] == 'bool_expr':
-			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + ' ' + \
-			dir_to_func['bool_operator'](tree[1][1], num_tabs) + ' ' + \
-			dir_to_func['bool_expr'](tree[2][1], num_tabs)
+			code += dir_to_func['bool_expr'](tree[0][1], num_tabs) + \
+			' ' + dir_to_func['bool_operator'](tree[1][1], num_tabs) +\
+			' ' + dir_to_func['bool_expr'](tree[2][1:], num_tabs)
+		elif tree[0] == 'bool_expr':
+			code += dir_to_func['bool_expr'](tree[1], num_tabs)+ ' ' 
 		elif tree[0] == 'value':
 			code += dir_to_func['value'](tree[1], num_tabs)
 		elif tree[0][0] == 'value':
 			code += dir_to_func['value'](tree[0][1], num_tabs)
 		else:
-			sys.stderr.write('Invalid bool expr: ', tree)
+			sys.stderr.write('Invalid bool expr: ' + str(tree))
 			sys.exit(1)
-	print 'bool expr code: ', code
+	return code
+
+def get_item_code(item, num_tabs):
+	code = ''
+
 	return code
 
 def parse_bool_operation(tree, num_tabs):
@@ -784,7 +784,11 @@ def parse_bool_operation(tree, num_tabs):
 	return code
 
 def parse_bool_value(tree, num_tabs):
-	return tree[0]
+	print 'bool tree: ', tree
+	if type(tree) == list:
+		return tree[0]
+	else:
+		return tree
 
 def parse_comparison_operator(tree, num_tabs):
 	# print 'parse_comparison_operator: ', str(tree)

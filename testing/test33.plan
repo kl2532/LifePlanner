@@ -1,0 +1,16 @@
+build schedule
+	bool = True
+	if bool
+		print "assignment"
+	end
+	bool = False
+	if not bool
+		print "not"
+	end
+	bool = True
+	if bool and True
+		print "and"
+	end
+	if bool or True
+		print "or"
+	end
