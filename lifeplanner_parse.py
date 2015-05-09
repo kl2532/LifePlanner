@@ -346,14 +346,14 @@ def p_boolean_opearation(p):
 def p_assignmentstmt(p):
    '''assignment_stmt : variable EQUAL value'''
    p[0] = ['assignment_stmt', p[1], p[2], p[3]]
-
+   print p[0]
 # gotta add array
 def p_value(p):
     '''value : variable
             | num
             | time
             | date
-            | name
+            | user_string
             | event
             | tag
             | math_stmt
@@ -362,6 +362,7 @@ def p_value(p):
             | func
             | access'''
     p[0] = ['value', p[1]]
+    print p[0]
 
 def p_access(p):
     '''access : strings LBRACKET TO RBRACKET
@@ -457,12 +458,11 @@ def p_timeop(p):
     p[0] = ['op', p[1]]
         
 def p_printstmt(p):
-    '''print_stmt : print quote strings quote
-                  | print variable'''
-    if len(p) == 5:
-        p[0] = ['print_stmt', p[1], p[2], p[3], p[4]]
-    elif len(p) == 3:
-        p[0] = ['print_stmt', p[1], p[2]]
+    '''print_stmt : print user_string
+                  | print variable
+                  | print num
+                  | print bool_value'''
+    p[0] = ['print_stmt', p[1], p[2]]
 
 def p_datedur(p):
     '''date_duration : num date_unit'''
@@ -568,24 +568,27 @@ def p_schedule(p):
     '''schedule : SCHEDULE'''
     p[0] = ['schedule', p[1]]
 
+def p_user_string(p):
+    '''user_string : quote strings quote'''
+    p[0] = ['user_string', p[2]]
+    print p[0]
+
 def p_string(p):
     '''string : STRING'''
     p[0] = ['string', p[1]]
 
 def p_strings(p):
-    '''strings : STRING strings
-                | empty'''
-    if len(p) == 3:
-        if p[2] == None:
-            p[0] = ['strings', p[1]]
-        else:
-            str_list = ""
-            for string in p[2][1:]:
-                str_list = str_list + " " + string
-            p[0] = ['strings', p[1] + str_list]
+    '''strings : STRING string_rep'''
+    str_list = ""
+    for string in p[2][1:]:
+        if string:
+            str_list = str_list + " " + string
+    p[0] = ['strings', p[1] + str_list]
+    print p[0]
 
 def p_string_rep(p):
-    '''string_rep : strings'''
+    '''string_rep : STRING
+                    | empty'''
     print 'print p[1] ', p[1]
     p[0] = ['string_rep', p[1]]
 
@@ -681,8 +684,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
-data = 'build schedule\nif False and True\nprint "And is incorrect"\nend\nelse\
-\nif False or False\nprint "Or is incorrect"\nend\nelseif i < 5\nprint "hello"\nend\nelse\nprint "correct"\nend\nend\n'
+data = 'build schedule\nvar = 1\nprint "happy"\nprint 1\nprint True\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree

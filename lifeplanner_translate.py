@@ -336,8 +336,8 @@ def parse_assignment_stmt(tree, num_tabs):
 		i += 1
 	if tree[0][0] == 'variable':
 		code += dir_to_func['variable'](tree[0][1], num_tabs) + ' = '
-	if tree[2][0] == 'value':
-		code += dir_to_func['value'](tree[2][1], num_tabs)
+		print 'assignment tree: ', tree[2]
+		code += dir_to_func[tree[2][0]](tree[2][1], num_tabs)
 	return code
 
 def parse_math_stmt(tree, num_tabs):
@@ -382,35 +382,47 @@ def parse_value(tree, num_tabs):
 	print 'parse_value tree: ' + str(tree)
 	label = tree[0]
 	if label in \
-	['variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access']:
+	['user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if 'math_' in label:
 		return dir_to_func['math_stmt'](tree[:], num_tabs)
 	else:
-		return 'in parse_value'
+		sys.stderr.write('Error in parse_value: ' + tree)
+		sys.exit(1)
 
 def parse_access(tree, num_tabs):
 	print '\nparse_access: ' + str(tree)
 	code = 'get_event(\'' + dir_to_func['strings'](tree[0][1], num_tabs) + '\', var_all_events)[\'' + tree[1] + '\']'
 	return code
 
+def parse_user_string(tree, num_tabs):
+	return '"' + dir_to_func['strings'](tree[0][1:], num_tabs) + '"'
+
 def parse_print_stmt(tree, num_tabs):
-	if tree[0][0] != 'print':
+	if len(tree) == 2 and len(tree[0]) > 0 and tree[0][0] == 'print' and len(tree[1]) > 0:
+		print dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
+		code = 'print ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
+		return code
+	else:
 		sys.stderr.write('Print statement incorrect')
 		sys.exit(1)
-	code = ''
-	i = 0
-	while i < num_tabs:
-		code += '\t'
-		i += 1
-	if tree[1][0] == 'variable':
-		code += 'print ' + dir_to_func['variable'](tree[1][1], num_tabs)
-	if tree[1][0] == 'quote':
-		code += 'print \"' + dir_to_func['strings'](tree[2][1], num_tabs) + '\"'
-	return code
+	# code = ''
+	# i = 0
+	# while i < num_tabs:
+	# 	code += '\t'
+	# 	i += 1
+	# if tree[1][0] == 'variable':
+	# 	code += 'print ' + dir_to_func['variable'](tree[1][1], num_tabs)
+	# if tree[1][0] == 'quote':
+	# 	code += 'print \"' + dir_to_func['strings'](tree[2][1], num_tabs) + '\"'
+	# return code
 
 def parse_strings(tree, num_tabs):
-	return tree
+	code = ""
+	for string in tree:
+		if string:
+			code += string
+	return code
 
 def parse_export_stmt(tree, num_tabs):
 	if len(tree) != 2:
@@ -696,7 +708,7 @@ def parse_bool_operation(tree, num_tabs):
 	return code
 
 def parse_bool_value(tree, num_tabs):
-	return tree
+	return tree[0]
 
 def parse_comparison_operator(tree, num_tabs):
 	# print 'parse_comparison_operator: ', str(tree)
@@ -955,6 +967,7 @@ dir_to_func = {
 	'remove_stmt' : parse_remove_stmt,
 	'function' : parse_func,
 	'elseif_blocks_rep' : parse_elseif_blocks_rep,
-	'access' : parse_access
+	'access' : parse_access,
+	'user_string' : parse_user_string,
 }
 
