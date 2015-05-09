@@ -719,7 +719,7 @@ def parse_if_block(tree, num_tabs):
 	if len(tree) == 3 and len(tree[1]) > 1 \
 		and tree[1][0] == 'bool_expr' and len(tree[2]) > 1\
 		and tree[2][0] == 'expr_block':
-		code = 'if ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) \
+		code = '\t' * num_tabs + 'if ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) \
 			+ ':\n' + dir_to_func[tree[2][0]](tree[2][1:], num_tabs + 1)
 		return code
 	else:
@@ -731,7 +731,7 @@ def parse_else_block(tree, num_tabs):
 		return ''
 	print 'else: ', tree
 	if len(tree) == 2 and tree[1][0] == 'expr_block':
-		return 'else:\n' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs + 1)
+		return '\t' * num_tabs + 'else:\n' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs + 1)
 	return -1
 	
 def parse_elseif_blocks(tree, num_tabs):
@@ -751,7 +751,7 @@ def parse_elseif_block(tree, num_tabs):
 		return ''
 	if len(tree) == 3 and len(tree[1]) > 1 and len(tree[2]) > 1\
 		and tree[1][0] == 'bool_expr' and tree[2][0] == 'expr_block':
-		return 'elif ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) + \
+		return '\t' * num_tabs + 'elif ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs) + \
 			':\n' + dir_to_func[tree[2][0]](tree[2][1:], num_tabs + 1)
 	print 'error in elseif block'
 	return -1
