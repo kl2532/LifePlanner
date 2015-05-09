@@ -335,7 +335,7 @@ def parse_update_stmt(tree, num_tabs):
 		code += tabs + 'new_when = date + \' \' + time\n\t\t'
 		code += tabs + 'event[\''+tree[1]+'\'] = dt.datetime.strptime(new_when, \'%m-%d-%Y %I:%M %p\')\n'
 	if tree[1] == 'at':
-		code += tabs + 'event[\'' + tree[1] + '\'] = \'' + dir_to_func['variable'](tree[2][1], num_tabs) + '\''
+		code += tabs + 'event[\'' + tree[1] + '\'] = ' + dir_to_func['variable'](tree[2][1], num_tabs)
 	return code
 
 def parse_cancel_stmt(tree, num_tabs):
@@ -984,7 +984,7 @@ dir_to_func = {
 	'assignment_stmt' : parse_assignment_stmt,
 	'update_stmt' : parse_update_stmt,
 	'remove_stmt' : parse_remove_stmt,
-	'function' : parse_func,
+	'func' : parse_func,
 	'elseif_blocks_rep' : parse_elseif_blocks_rep,
 	'access' : parse_access,
 	'user_string' : parse_user_string,
