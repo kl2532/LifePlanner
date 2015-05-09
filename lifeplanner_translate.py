@@ -262,11 +262,14 @@ def parse_day_math(tree, num_tabs):
 	pass
 
 def parse_time_math(tree, num_tabs):
-	# print 'parse_time_math: ', str(tree)
+	print '\nparse_time_math: ', str(tree)	
+	print '\n[0][0]:' + str(tree[0][0])
 	code = ''
 	if tree[0][0] == 'time':
 		hour, minute = dir_to_func['time_elements'](tree[0][1:], num_tabs)
 		code += 'dt.datetime.combine(dt.date.today(), dt.time(' + hour + ',' + minute + '))'
+	if tree[0][0] == 'variable':
+		code += dir_to_func['variable'](tree[0][1:], num_tabs)
 	if tree[1][0] == 'op':
 		code += dir_to_func['op'](tree[1][1:], num_tabs)
 	if tree[2][0] == 'time_duration':
@@ -332,8 +335,8 @@ def parse_update_stmt(tree, num_tabs):
 	if tree[1] == 'from' or tree[1] == 'to':
 		code += tabs + 'date = str(event[\''+ tree[1]+'\'].date())\n\t\t'
 		code += tabs + 'time = ' + dir_to_func['variable'](tree[2][1], num_tabs) + '\n\t\t'
-		code += tabs + 'new_when = date + \' \' + time\n\t\t'
-		code += tabs + 'event[\''+tree[1]+'\'] = dt.datetime.strptime(new_when, \'%m-%d-%Y %I:%M %p\')\n'
+		code += tabs + 'new_when = date + \' \' + time.strftime("%I:%M %p")\n\t\t'
+		code += tabs + 'event[\''+tree[1]+'\'] = dt.datetime.strptime(new_when, \'%Y-%m-%d %I:%M %p\')\n'
 	if tree[1] == 'at':
 		code += tabs + 'event[\'' + tree[1] + '\'] = ' + dir_to_func['variable'](tree[2][1], num_tabs)
 	return code
