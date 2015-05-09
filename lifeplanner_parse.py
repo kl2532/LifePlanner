@@ -12,13 +12,13 @@ tokens = lifeplanner_lex.tokens
 
 # Operator precedence
 precedence =    (
-                   ('left','PLUS','MINUS'),
-                   ('left','TIMES','SLASH'),
-                   ('left','LEFTPAREN'),
-                   ('left','BUILD'),
-                   ('left', 'PRINT'),
-                   ('right', 'EE'),
-                   ('right', 'EQUAL'),
+                    ('left','PLUS','MINUS'),
+                    ('left','TIMES','SLASH'),
+                    ('left','LEFTPAREN'),
+                    ('left','BUILD'),
+                    ('left', 'PRINT'),
+                    ('right', 'EE'),
+                    ('right', 'EQUAL'),
                 )
 
 # ----GRAMMAR PRODUCTIONS----
@@ -704,7 +704,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
-data = 'build schedule\nif (a)\nend\n'
+data = 'build schedule\nprint PLT\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree, '\n'

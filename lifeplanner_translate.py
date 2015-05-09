@@ -445,12 +445,20 @@ def parse_access(tree, num_tabs):
 def parse_user_string(tree, num_tabs):
 	return tree[0]
 
+#Rona 
 def parse_print_stmt(tree, num_tabs):
+	tabs = '\t' * num_tabs
 	if len(tree) == 2 and len(tree[0]) > 0 and tree[0][0] == 'print' and \
 	len(tree[1]) > 0:
-		print dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
-		code = '\t'*num_tabs + 'print ' + \
-		dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
+		print_item = dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
+		code = tabs + 'printed = False\n' +\
+			tabs + 'print_item = ' + print_item + '\n' +\
+			tabs + 'for e in var_all_events:\n' + \
+			tabs + '\tif e.title == print_item:\n' +\
+			tabs + '\t\tprint e\n' +\
+			tabs + '\t\tprinted = True\n' + \
+			tabs + 'if not printed:\n' +\
+			tabs + '\tprint print_item\n'
 		return code
 	else:
 		sys.stderr.write('Print statement incorrect')
