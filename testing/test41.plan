@@ -1,0 +1,15 @@
+build schedule
+	b1 = True
+	b2 = False
+	if b1 or b2 or True or False
+		print "or"
+	end
+	if b1 and True and True
+		print "and"
+	end
+	if not b2 and b1
+		print "not and"
+	end
+	if not b2 and b1 or True
+		print "not and or"
+	end
