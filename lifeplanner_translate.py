@@ -434,7 +434,7 @@ def parse_user_string(tree, num_tabs):
 def parse_print_stmt(tree, num_tabs):
 	if len(tree) == 2 and len(tree[0]) > 0 and tree[0][0] == 'print' and len(tree[1]) > 0:
 		print dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
-		code = 'print ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
+		code = '\t'*num_tabs + 'print ' + dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
 		return code
 	else:
 		sys.stderr.write('Print statement incorrect')
