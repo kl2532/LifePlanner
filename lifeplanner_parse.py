@@ -682,7 +682,7 @@ def p_error(p):
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
 data = 'build schedule\nif False and True\nprint "And is incorrect"\nend\nelse\
-\nif False or False\nprint "Or is incorrect"\nend\nelse\nprint "correct"\nend\nend\n'
+\nif False or False\nprint "Or is incorrect"\nend\nelseif i < 5\nprint "hello"\nend\nelse\nprint "correct"\nend\nend\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree
