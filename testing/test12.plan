@@ -1,5 +1,5 @@
 build schedule
-	time = 6:00 PM - 5 hours
+	time = 6:00 PM subtract 5 hours
 	print time
-	time = time - 2 hours
+	time = time subtract 2 hours
 	print time
