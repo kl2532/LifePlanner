@@ -21,11 +21,15 @@ class Event:
 		self.end = self.end.replace(tzinfo=from_zone)
 		self.end = self.end.astimezone(to_zone)
 
+		str_people = ""
+		for person in self.person:
+			str_people = person + " "
+
 		x = x + "DTSTAMP:20151231T000000Z\n"
 		x = x + "DTSTART:" + self.begin.strftime("%Y%m%dT%H%M%SZ")+ '\n'
 		x = x + "DTEND:" + self.end.strftime("%Y%m%dT%H%M%SZ") + '\n'
 		x = x + "SUMMARY:" + self.name + '\n'
-		x = x + "DESCRIPTION:" + "with " + self.person + '\n'
+		x = x + "DESCRIPTION:" + "with " + str_people + '\n'
 		x = x + "LOCATION:" + self.location + '\n'
 		x = x + "UID:" + str(uuid.uuid1()) + '\n'
 		x = x + "END:VEVENT"

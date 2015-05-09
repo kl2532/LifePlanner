@@ -51,12 +51,23 @@ def parse_program(tree, num_tabs):
 		entire_prog += dir_to_func['export_stmt'](tree[4][1:], num_tabs)
 	return entire_prog
 
+
 def parse_function_blocks(tree, num_tabs):
-	return 'function_blocks'
-	#need to finish translating
+	print tree
+	code = ''
+	for f_block in tree:
+		if f_block == None:
+			return code
+		code += parse_function_block(f_block[1:], num_tabs)
+	return code
+
 
 def parse_function_block(tree, num_tabs):
-	pass
+	# print tree[1][1:]
+	code = parse_function_declaration(tree[0][2:], num_tabs)
+	code += parse_expr_block(tree[1][1:], num_tabs+1)
+	code += parse_return_stmt(tree[2][1:], num_tabs+1)
+	return code
 
 def parse_function_declaration(tree, num_tabs):
 	code = ''
@@ -66,12 +77,24 @@ def parse_function_declaration(tree, num_tabs):
 		i += 1
 	code += 'def ' + dir_to_func['variable'](tree[0][1], num_tabs) + '('
 	params = dir_to_func['parameter_list'](tree[1], num_tabs)
-	x = params.split()
-	params = x[0]
-	for i in range(1, len(x)):
-		params += ', ' + x[i]
+	if params != '':
+		x = params.split()
+		params = x[0]
+		for i in range(1, len(x)):
+			params += ', ' + x[i]
 	code += params + '):\n'
 	return code
+
+
+def parse_return_stmt(tree, num_tabs):
+	if not tree[0]:
+		return '\n\n'
+	code = ''
+	for i in range(num_tabs):
+		code += '\t'
+	code += 'return ' + parse_value(tree[1][1], num_tabs) + '\n\n'
+	return code
+
 
 def parse_import_stmt(tree, num_tabs):
 	code = 'orig_event_dict = cal.read_calendar(\'' + str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')\n'
@@ -118,7 +141,7 @@ def parse_schedule_stmts_rep(tree, num_tabs):
 	return ''
 
 def parse_build_schedule(tree, num_tabs):
-	print "parse_build_schedule tree: ", tree
+	# print "parse_build_schedule tree: ", tree
 	# return "hello"
 	if len(tree) != 4:
 		sys.stderr.write('Invalid build schedule')
@@ -174,7 +197,7 @@ def parse_expr_block_rep(tree, num_tabs):
 	return ''
 
 def parse_expr(tree, num_tabs):
-	print 'parse_expr tree: ', str(tree)
+	# print 'parse_expr tree: ', str(tree)
 	code = ''
 	#done
 	if tree[0][0] == 'print_stmt':
@@ -228,7 +251,7 @@ def parse_func(tree, num_tabs):
 	return code
 
 def parse_parameter_list(tree, num_tabs):
-	print '\nparams: ' + str(tree)
+	# print '\nparams: ' + str(tree)
 	params = ''
 	if tree[1]:
 		params += tree[1]
@@ -239,7 +262,7 @@ def parse_day_math(tree, num_tabs):
 	pass
 
 def parse_time_math(tree, num_tabs):
-	print 'parse_time_math: ', str(tree)
+	# print 'parse_time_math: ', str(tree)
 	code = ''
 	if tree[0][0] == 'time':
 		hour, minute = dir_to_func['time_elements'](tree[0][1:], num_tabs)
@@ -264,7 +287,7 @@ def parse_op(tree, num_tabs):
 	return tree[0]
 
 def parse_event_stmt(tree, num_tabs):
-	print "parse_event_stmt: ", str(tree)
+	# print "parse_event_stmt: ", str(tree)
 	if tree[0][0] == 'cancel_stmt':
 		return dir_to_func['cancel_stmt'](tree[0][1:], num_tabs)
 	if tree[0][0] == 'update_stmt':
@@ -341,7 +364,7 @@ def parse_assignment_stmt(tree, num_tabs):
 	return code
 
 def parse_math_stmt(tree, num_tabs):
-	print 'math tree: ', tree
+	# print 'math tree: ', tree
 	label = tree[0]
 	if len(tree) == 4:
 		first = tree[1]
@@ -379,19 +402,19 @@ def parse_variable(tree, num_tabs):
 	return str(tree)
 
 def parse_value(tree, num_tabs):
-	print 'parse_value tree: ' + str(tree)
 	label = tree[0]
+	# print 'LABEL:', label[0:4]
 	if label in \
 	['user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access']:
 		return dir_to_func[label](tree[1:], num_tabs)
-	if 'math_' in label:
-		return dir_to_func['math_stmt'](tree[:], num_tabs)
+	if label[0:4] == 'math':
+		return dir_to_func['math_stmt'](tree, num_tabs)
 	else:
 		sys.stderr.write('Error in parse_value: ' + tree)
 		sys.exit(1)
 
 def parse_access(tree, num_tabs):
-	print '\nparse_access: ' + str(tree)
+	# print '\nparse_access: ' + str(tree)
 	code = 'get_event(\'' + dir_to_func['strings'](tree[0][1], num_tabs) + '\', var_all_events)[\'' + tree[1] + '\']'
 	return code
 
@@ -434,8 +457,8 @@ def parse_export_stmt(tree, num_tabs):
 	if tree[1][0] != 'filename':
 		sys.stderr.write('Filename not found')
 		sys.exit(1)
-	code = 'try:\n\tevent_dict\nexcept NameError:\n\tpass\nelse:\n'
-	code += '\tfor ev in event_dict:\n'
+	code = 'try:\n\tvar_all_events\nexcept NameError:\n\tpass\nelse:\n'
+	code += '\tfor ev in var_all_events:\n'
 	code += '\t\te_name = ev[\'event_title\']\n'
 	code += '\t\te_to = ev[\'to\']\n'
 	code += '\t\te_from = ev[\'from\']\n'
@@ -466,10 +489,10 @@ def parse_date(tree, num_tabs):
 
 def parse_event_list(tree, num_tabs, month, day, year):
 	# if len(tree) != 2:
-	# 	return -1
-	print
-	print 'event' + str(tree)
-	print
+	# # 	return -1
+	# print
+	# print 'event' + str(tree)
+	# print
 	if not tree[0]:
 		return ''
 	if tree[0][0] != 'event':
@@ -483,11 +506,11 @@ def parse_event_list(tree, num_tabs, month, day, year):
 	code + '\n' 
 
 def parse_event_list_rep(tree, num_tabs, month, day, year=None):
-	print tree
-	print
+	# print tree
+	# print
 	if tree and tree[0][0] == 'event_list':
-		print tree[0][1:]
-		print
+		# print tree[0][1:]
+		# print
 		return dir_to_func['event_list'](tree[0][1:], num_tabs, month, day, year)
 	return ''
 
@@ -798,9 +821,6 @@ def parse_for_stmt(tree, num_tabs):
 	
 def parse_date_duration(tree, num_tabs):
 	pass
-			
-def parse_return_stmt(tree, num_tabs):
-	pass
 	
 def parse_and(tree, num_tabs):
 	pass
@@ -813,9 +833,7 @@ def parse_tag_priorities(tree, num_tabs):
 	
 def parse_comment_stmt(tree, num_tabs):
 	return ''
-	
-def parse_function_declaration(tree, num_tabs):
-	pass
+
 
 def parse_string(tree, num_tabs):
 	pass
