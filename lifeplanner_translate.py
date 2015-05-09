@@ -405,7 +405,7 @@ def parse_value(tree, num_tabs):
 	label = tree[0]
 	# print 'LABEL:', label[0:4]
 	if label in \
-	['user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access']:
+	['user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access', 'func']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if label[0:4] == 'math':
 		return dir_to_func['math_stmt'](tree, num_tabs)
