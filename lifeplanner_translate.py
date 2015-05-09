@@ -248,10 +248,11 @@ def parse_func(tree, num_tabs):
 		i += 1
 	code += dir_to_func['variable'](tree[0][1], num_tabs) + '('
 	params = dir_to_func['parameter_list'](tree[1], num_tabs)
-	x = params.split()
-	params = x[0]
-	for i in range(1, len(x)):
-		params += ', ' + x[i]
+	if params != '':
+		x = params.split()
+		params = x[0]
+		for i in range(1, len(x)):
+			params += ', ' + x[i]
 	code += params + ')\n'
 	return code
 
