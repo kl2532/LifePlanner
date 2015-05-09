@@ -14,7 +14,7 @@ def translate(tree):
 		sys.exit(1)
 	return 'import datetime as dt\nimport time\nimport event as e\n' + \
 		'import ourCalendar as c\n' + get_event + '\n' + \
-		'cal = c.ourCalendar()\n\n' + dir_to_func['program'](tree[1:], 0)
+		'cal = c.ourCalendar()\n\n' + 'var_all_events = []' + '\n' + dir_to_func['program'](tree[1:], 0)
 
 def parse_program(tree, num_tabs):
 	#print "parse_program tree: ", str(tree)
@@ -45,8 +45,7 @@ def parse_program(tree, num_tabs):
 		entire_prog += dir_to_func['import_stmt'](tree[1][1:], num_tabs) \
 		+ '\n'
 	if tree[2][1]:
-		entire_prog += 'var_all_events = []' + '\n' \
-		+ dir_to_func['schedule_stmts'](tree[2][1:], num_tabs) + '\n'
+		entire_prog += dir_to_func['schedule_stmts'](tree[2][1:], num_tabs) + '\n'
 	if tree[3][1]:
 		entire_prog += dir_to_func['build_schedule'](tree[3][1:], num_tabs) \
 		+ '\n'
