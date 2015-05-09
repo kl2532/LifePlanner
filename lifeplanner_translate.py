@@ -274,7 +274,7 @@ def parse_time_math(tree, num_tabs):
 		code += 'dt.datetime.combine(dt.date.today(), dt.time(' + hour + ',' \
 			+ minute + '))'
 	if tree[0][0] == 'variable':
-		code += dir_to_func['variable'](tree[0][1:], num_tabs)
+		code += 'dt.datetime.combine(dt.date.today(), ' + dir_to_func['variable'](tree[0][1:], num_tabs) + ')'
 	if tree[1][0] == 'op':
 		code += dir_to_func['op'](tree[1][1:], num_tabs)
 	if tree[2][0] == 'time_duration':
