@@ -348,6 +348,7 @@ def p_assignmentstmt(p):
    p[0] = ['assignment_stmt', p[1], p[2], p[3]]
    print p[0]
 # gotta add array
+
 def p_value(p):
     '''value : variable
             | num
@@ -360,7 +361,8 @@ def p_value(p):
             | time_math
             | day_math
             | func
-            | access'''
+            | access
+            | bool_value'''
     p[0] = ['value', p[1]]
     print p[0]
 
@@ -374,6 +376,7 @@ def p_access(p):
 def p_variable(p):
     '''variable : STRING'''
     p[0] = ['variable', p[1]]
+    print p[0]
                             
 def p_bool_op(p):
     '''bool_operator : AND
@@ -569,8 +572,8 @@ def p_schedule(p):
     p[0] = ['schedule', p[1]]
 
 def p_user_string(p):
-    '''user_string : quote strings quote'''
-    p[0] = ['user_string', p[2]]
+    '''user_string : USERSTRING'''
+    p[0] = ['user_string', p[1]]
     print p[0]
 
 def p_string(p):
@@ -684,7 +687,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
-data = 'build schedule\nvar = 1\nprint "happy"\nprint 1\nprint True\n'
+data = 'build schedule\nvar = "True or not"\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree

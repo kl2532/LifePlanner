@@ -405,7 +405,7 @@ def parse_value(tree, num_tabs):
 	label = tree[0]
 	# print 'LABEL:', label[0:4]
 	if label in \
-	['user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access']:
+	['bool_value', 'user_string', 'variable', 'num', 'time', 'date', 'event', 'tag', 'time_math', 'access']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if label[0:4] == 'math':
 		return dir_to_func['math_stmt'](tree, num_tabs)
@@ -419,7 +419,8 @@ def parse_access(tree, num_tabs):
 	return code
 
 def parse_user_string(tree, num_tabs):
-	return '"' + dir_to_func['strings'](tree[0][1:], num_tabs) + '"'
+	print 'user: ', tree
+	return tree[0]
 
 def parse_print_stmt(tree, num_tabs):
 	if len(tree) == 2 and len(tree[0]) > 0 and tree[0][0] == 'print' and len(tree[1]) > 0:

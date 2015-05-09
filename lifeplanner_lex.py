@@ -9,7 +9,7 @@ tokens = [
     'NEWLINE', 'LEFTPAREN', 'COLON', 'COMMA', 'RIGHTPAREN', 'COMMENT', 
     'PPLAND', 'SLASH', 'USERSTRING',
     'EE', 'GE', 'LE', 'EQUAL', 'GT', 'LT', 'QUOTATION',
-    'NUMTYPE', 'DECTYPE', 'STRTYPE', 'LBRACKET', 'RBRACKET'
+    'NUMTYPE', 'DECTYPE', 'STRTYPE', 'LBRACKET', 'RBRACKET', 'USERSTRING'
     ]
 
 reserved = {
@@ -202,6 +202,10 @@ t_DECIMAL   = r'[\-]?[0-9]+\.[0-9]*'
 #         t.type = reserved[t.value]
 #     return t
 
+def t_USERSTRING(t):
+    r'\"[a-zA-Z0-9_][ a-zA-Z0-9_]*[.]?[ a-zA-Z0-9_]+\"'
+    return t
+
 def t_STRING(t):
     r'[a-zA-Z0-9_]*[.]?[a-zA-Z0-9_]+'
     int_re = re.compile('[\-]?[0-9]+')
@@ -212,7 +216,6 @@ def t_STRING(t):
         t.type = 'DECIMAL'
     elif t.value in reserved:
         t.type = reserved[t.value]
-
     return t
 
 # Regular expression patterns for arithmetic operators.
