@@ -1,0 +1,7 @@
+function printStrings(s)
+	print s
+function returnHello()
+	return a
+build schedule
+	a = returnHello()
+	

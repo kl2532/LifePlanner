@@ -1,0 +1,5 @@
+function printStrings(s)
+	print s
+build schedule
+	a = "hello"
+	printStrings(a)
