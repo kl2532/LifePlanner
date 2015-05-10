@@ -1,0 +1,13 @@
+function addTogether(i, j)
+	:) super adder
+	x = i + j
+	return x
+import a.ics
+build schedule
+	cancel Dinner
+	add Rachel to Studytime
+	for i = 0, i < 3, i = i + 1
+		j = i + 1
+		addTogether(i, j)
+	end
+export b.ics
