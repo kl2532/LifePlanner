@@ -1,0 +1,12 @@
+1/2/2014:
+	lunch from 12:00 PM to 1:00 PM at Ship with Nemo
+	hunting from 1:30 PM to 2:30 PM at Forest with Bear
+build schedule
+	t1 = lunch[to]
+	t2 = hunting[from]
+	if t1 < t2
+		print "less than"
+	end
+	if t2 > t1
+		print "greater than"
+	end

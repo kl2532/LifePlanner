@@ -1,0 +1,5 @@
+build schedule
+	t1 = 6:00 PM add 30 minutes
+	print t1
+	t2 = t1 subtract 40 minutes
+	print t2

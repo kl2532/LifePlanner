@@ -456,9 +456,9 @@ def parse_print_stmt(tree, num_tabs):
 		str_print_item = str_print_item.replace('\n', '\\n')
 		code += tabs + 'printed = False\n' +\
 			tabs + 'str_print_item = ' + str_print_item + '\n' +\
-			tabs + 'for e in var_all_events:\n' + \
-			tabs + '\tif e["event_title"] == str_print_item:\n' +\
-			tabs + '\t\tprint e\n' +\
+			tabs + 'for elem in var_all_events:\n' + \
+			tabs + '\tif elem["event_title"] == str_print_item:\n' +\
+			tabs + '\t\tprint elem\n' +\
 			tabs + '\t\tprinted = True\n' + \
 			tabs + 'if not printed:\n' +\
 			tabs + '\tprint ' + print_item + '\n'
@@ -497,6 +497,18 @@ def parse_export_stmt(tree, num_tabs):
 	code = 'try:\n\tvar_all_events\nexcept NameError:\n\tpass\nelse:\n'
 	code += '\tfor ev in var_all_events:\n'
 	code += '\t\te_name = ev[\'event_title\']\n'
+	code += '\t\torig = False\n'
+	code += '\t\ttry:\n'
+	code += '\t\t\torig_event_dict\n'
+	code += '\t\texcept NameError:\n'
+	code += '\t\t\tpass\n'
+	code += '\t\telse:\n'
+	code += '\t\t\tfor orig_e in orig_event_dict:\n'
+	code += '\t\t\t\tif e_name == orig_e[\'event_title\']:\n'
+	code += '\t\t\t\t\torig = True\n'
+	code += '\t\t\t\t\tcontinue\n'
+	code += '\t\tif orig:\n'
+	code += '\t\t\tcontinue\n'
 	code += '\t\te_to = ev[\'to\']\n'
 	code += '\t\te_from = ev[\'from\']\n'
 	code += '\t\tif \'at\' in ev:\n'
