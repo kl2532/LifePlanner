@@ -1,7 +1,8 @@
 function printStrings(s)
 	print s
 function returnHello()
-	return a
+	return "Hello"
 build schedule
 	a = returnHello()
+	printStrings(a)
 	

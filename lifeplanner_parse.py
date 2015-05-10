@@ -724,12 +724,17 @@ def p_error(p):
 
 # ----INITIALIZE PARSER----
 yacc.yacc()
+import sys
+data = ''
+with open(sys.argv[1], 'r') as f:
+    data = f.read()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
-data = 'build schedule\n print a + b\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree, '\n'
 print trans.translate(tree)
+with open('translation.py', 'w') as f:
+    f.write(trans.translate(tree))
 
 #import sys
 #python_translation = ""
