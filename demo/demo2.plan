@@ -3,6 +3,9 @@ function addTogether(i, j)
 	x = i + j
 	return x
 	
+function yay()
+	print "Yay"
+
 import agenda.ics
 build schedule
 	cancel Dinner
@@ -14,4 +17,5 @@ build schedule
 		sum = addTogether(i, j)
 		print sum
 	end
+	yay()
 export new_agenda.ics
