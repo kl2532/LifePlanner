@@ -4,7 +4,7 @@ import re
 # ----DELINEATION OF KEYWORDS AND TOKENS----
 
 tokens = [
-    'INTEGER','DECIMAL','STRING', #'CHARACTER', 
+    'INTEGER','DECIMAL','STRING',
     'PLUS','MINUS','DIVIDE', 'TIMES', 
     'NEWLINE', 'LEFTPAREN', 'COLON', 'COMMA', 'RIGHTPAREN', 'COMMENT', 
     'PPLAND', 'SLASH', 'USERSTRING',
@@ -19,13 +19,6 @@ reserved = {
     'with' : 'WITH',
     'AM' : 'AM',
     'PM' : 'PM', 
-    'Monday' : 'MONDAY',
-    'Tuesday' : 'TUESDAY',
-    'Wednesday' : 'WEDNESDAY',
-    'Thursday' : 'THURSDAY',
-    'Friday': 'FRIDAY', 
-    'Saturday': 'SATURDAY', 
-    'Sunday': 'SUNDAY', 
     'build' : 'BUILD',
     'schedule' : 'SCHEDULE',
     'export' : 'EXPORT',
@@ -39,7 +32,6 @@ reserved = {
     'schedule' : 'SCHEDULE',
     'export' : 'EXPORT',
     'import' : 'IMPORT',
-    'tag' : 'TAG',
     'minute' : 'MINUTE',
     'minutes' : 'MINUTE',
     'hour' : 'HOUR',
@@ -52,18 +44,6 @@ reserved = {
     'months': 'MONTH',
     'year' : 'YEAR',
     'years': 'YEAR',
-    'January' : 'JAN',
-    'February' : 'FEB',
-    'March' : 'MAR',
-    'April' : 'APR',
-    'May' : 'MAY',
-    'June' : 'JUN',
-    'July' : 'JUL',
-    'August' : 'AUG',
-    'September' : 'SEP',
-    'October' : 'OCT',
-    'November' : 'NOV',
-    'December' : 'DEC',
     'append' : 'APPEND',
     'remove' : 'REMOVE',
     'length': 'LENGTH',
@@ -98,25 +78,6 @@ t_ignore = ' \t'
 # Keywords
 
 # Time
-t_MONDAY = r'(Monday)'
-t_TUESDAY = r'(Tuesday)'
-t_WEDNESDAY = r'(Wednesday)'
-t_THURSDAY = r'(Thursday)'
-t_FRIDAY = r'(Friday)'
-t_SATURDAY = r'(Saturday)'
-t_SUNDAY = r'(Sunday)'
-t_JAN = 'January'
-t_FEB = 'February'
-t_MAR = 'March'
-t_APR = 'April'
-t_MAY = 'May'
-t_JUN = 'June'
-t_JUL = 'July'
-t_AUG = 'August'
-t_SEP = 'September'
-t_OCT = 'October'
-t_NOV = 'November'
-t_DEC = 'December'
 t_MINUTE = r'(minute) | (minutes)'
 t_HOUR = r'(hour) | (hours)'
 t_DAY = r'(day) | (days)'
@@ -126,14 +87,13 @@ t_YEAR = r'(year) | (years)'
 t_AM = r'(AM)'
 t_PM = r'(PM)'
 
-
+# Special keywords
 t_BUILD = r'(build)'
 t_SCHEDULE = r'(schedule)'
 t_PRINT = r'(print)'
 t_IMPORT = r'(import)'
 t_FROM = r'(from)'
 t_EXPORT = r'(export)'
-t_TAG = r'(tag)'
 t_PLAN = r'(plan)'
 
 #Parts of events
@@ -176,7 +136,6 @@ t_CANCEL = r'(cancel)'
 t_SUBTRACT = r'(subtract)'
 
 # Punctuation
-t_NEWLINE = r'\n'
 t_LEFTPAREN  = r'\('
 t_RIGHTPAREN = r'\)'
 t_LBRACKET = r'\['
@@ -198,14 +157,10 @@ t_STRTYPE = r'string'
 # (integer, decimal, character, ...)
 t_INTEGER   = r'[\-]?[0-9]+'
 t_DECIMAL   = r'[\-]?[0-9]+\.[0-9]*'
-# t_USERSTRING(t) = r'\"[a-zA-Z0-9_]*\"'
 
-# def t_VARIABLE(t):
-#     r'[a-zA-Z_][a-zA-Z0-9_]*'
-#     if t.value in reserved:
-#         t.type = reserved[t.value]
-#     return t
-
+# Strings - user string has quotes around it and is chosen
+# over the reserved words, string has no quotes and is
+# not prefered over the reserved words
 def t_USERSTRING(t):
     r'\"[a-zA-Z0-9_][ a-zA-Z0-9_]*[.]?[ a-zA-Z0-9_]+\"'
     return t
@@ -236,10 +191,10 @@ t_EE        = r'=='
 
 # When a \n is found, increment the line number of the lexer.
 # This way, line count and errors can be reported.
-# def t_NEWLINE(t):
-#      r'\n'
-#      t.lexer.lineno +=1
-#      return t             
+def t_NEWLINE(t):
+     r'\n'
+     t.lexer.lineno +=1
+     return t             
 
 
 # ----ERROR HANDLING----
@@ -248,9 +203,8 @@ t_EE        = r'=='
 
 def t_error(t):
     t.lexer.skip(1)
-
-# def t_error(t):
-#     print t.type, " ",t.value
+    print 'Error in line %d. Invalid character' % t.lexer.lineno
+    print 'type: ' + t.type + ',    value: ' + t.value
 
 # Lex the input.
 lexer = lex.lex()

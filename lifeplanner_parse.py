@@ -164,30 +164,10 @@ def p_plist1(p):
     elif len(p) == 2:
         p[0] = ['people_list1', None]
 
-def p_tagline(p):
-    '''tag_line : tag tag_name newline
-                | empty'''
-    if len(p) == 4:
-        p[0] = ['tag_line', p[1], p[2]]
-    else:
-        p[0] = ['tag_line', None]
 
 def p_buildstmts(p):
-    '''build_schedule : build schedule newline tag_priorities clean'''
-    p[0] = ['build_schedule', p[1], p[2], p[4], p[5]]
-
-def p_tagp(p):
-    '''tag_priorities : tag colon tag_name tag_op tag_name newline tag_priorities
-                      | empty'''
-    if len(p) == 8:
-        p[0] = ['tag_priorities', p[1], p[2], p[3], p[4], p[5], p[7]]
-    else:
-        p[0] = ['tag_priorities', None]
-    
-def p_tagop(p):
-    '''tag_op : LT
-              | GT'''
-    p[0] = ['tag_op', p[1]]
+    '''build_schedule : build schedule newline clean'''
+    p[0] = ['build_schedule', p[1], p[2], p[4]]
 
 #change later
 def p_clean(p):
@@ -313,7 +293,6 @@ def p_value(p):
             | date
             | user_string
             | event
-            | tag
             | math_stmt
             | time_math
             | day_math
@@ -494,14 +473,6 @@ def p_filename(p):
 def p_export(p):
     '''export : EXPORT'''
     p[0] = ['export', p[1]]
-
-def p_tagname(p):
-    '''tag_name : strings'''
-    p[0] = ['tag_name', p[1]]
-
-def p_tag(p):
-    '''tag : TAG'''
-    p[0] = ['tag', p[1]]
 
 def p_name(p):
     '''name : strings'''

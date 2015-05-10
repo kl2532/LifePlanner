@@ -142,7 +142,7 @@ def parse_schedule_stmts_rep(tree, num_tabs):
 def parse_build_schedule(tree, num_tabs):
 	# print "parse_build_schedule tree: ", tree
 	# return "hello"
-	if len(tree) != 4:
+	if len(tree) != 3:
 		sys.stderr.write('Invalid build schedule')
 		sys.exit(1)
 	if tree[0][0] != 'build':
@@ -151,17 +151,12 @@ def parse_build_schedule(tree, num_tabs):
 	if tree[1][0] != 'schedule':
 		sys.stderr.write('Schedule not found')
 		sys.exit(1)
-	if tree[2] and tree[2][0] != 'tag_priorities':
-		sys.stderr.write('Tag priorities not found')
-		sys.exit(1)
-	if tree[3] and tree[3][0] != 'clean':
+	if tree[2] and tree[2][0] != 'clean':
 		sys.stderr.write('Build schedule body not found')
 		sys.exit(1)
 	code = ''
 	if tree[2][1]:
-		code += dir_to_func['tag_priorities'](tree[2][1:], num_tabs) + '\n' 
-	if tree[3][1]:
-		code += dir_to_func['clean'](tree[3][1:], num_tabs)
+		code += dir_to_func['clean'](tree[2][1:], num_tabs)
 	return code
 
 def parse_clean(tree, num_tabs):
