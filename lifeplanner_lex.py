@@ -203,8 +203,8 @@ def t_NEWLINE(t):
 
 def t_error(t):
     t.lexer.skip(1)
-    print 'Error in line %d. Invalid character' % t.lexer.lineno
-    print 'type: ' + t.type + ',    value: ' + t.value
+    print 'Error in line %d. Invalid character: ' % t.lexer.lineno
+    print '\ntype: ' + t.type + ',    value: ' + t.value
 
 # Lex the input.
 lexer = lex.lex()
