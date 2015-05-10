@@ -2,12 +2,15 @@ function addTogether(i, j)
 	:) super adder
 	x = i + j
 	return x
-import a.ics
+import agenda.ics
 build schedule
 	cancel Dinner
-	add Rachel to Studytime
+	if not Aquila in Studytime[with]
+		add Aquila to Studytime
+	end
 	for i = 0, i < 3, i = i + 1
 		j = i + 1
-		addTogether(i, j)
+		sum = addTogether(i, j)
+		print sum
 	end
-export b.ics
+export new_agenda.ics

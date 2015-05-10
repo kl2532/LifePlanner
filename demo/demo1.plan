@@ -1,4 +1,5 @@
 function sayHi()
+	:) our hello world program
 	print "hello world"
 	return 0
 5/13/2015:
@@ -15,4 +16,4 @@ function sayHi()
 	Fly from 2:00 PM to 9:00 PM at plane
 build schedule
 	sayHi()
-export a.ics
+export agenda.ics
