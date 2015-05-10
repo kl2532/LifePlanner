@@ -1,0 +1,8 @@
+build schedule
+	sa = "test"
+	sb = "cha"
+	print sa+sb
+	aa = "not cancel "
+	ab = "and or you"
+	ax = aa+ab
+	print ax

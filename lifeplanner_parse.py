@@ -63,9 +63,11 @@ def p_parameter_list(p):
     '''parameter_list : STRING parameter_list 
                     | INTEGER parameter_list 
                     | DECIMAL parameter_list
+                    | USERSTRING parameter_list
                     | COMMA STRING parameter_list
                     | COMMA INTEGER parameter_list
                     | COMMA DECIMAL parameter_list
+                    | COMMA USERSTRING parameter_list
                     | empty'''
     if len(p) == 3:
         p[0] = ['parameter_list', p[1], p[2]]
@@ -485,7 +487,7 @@ def p_stringstmt(p):
     print p[0]
 
 def p_str_var(p):
-    '''var_str : variable
+    '''var_str : string
                 | user_string'''
     p[0] = p[1]
     print p[0]
@@ -721,10 +723,10 @@ def p_error(p):
 yacc.yacc()
 import sys
 data = ''
-#with open(sys.argv[1], 'r') as f:
-#    data = f.read()
-# data = 'function addTogether(i, j)\n\tx = i / 2 - 3\n\tx = (x + 1)*2\n\treturn x\nbuild schedule\n\tprint addTogether(1, 2)'
-data = 'import my.ics\nbuild schedule\n\tprint wake\n\tprint wake2\n'
+
+with open(sys.argv[1], 'r') as f:
+    data = f.read()
+#data = '12/01/2016:\n\tPLT from 2:40 PM to 3:55 PM at Mudd with Aho, George\nbuild schedule\n\tcancel PLT\nexport test28.ics\n'
 
 tree = yacc.parse(data)
 print

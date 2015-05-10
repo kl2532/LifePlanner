@@ -450,6 +450,7 @@ def parse_print_stmt(tree, num_tabs):
 		str_print_item = print_item
 		if len(print_item) < 2 or print_item[0] != '"' or print_item[len(print_item) - 1] != '"':
 			str_print_item = '"' + print_item + '"'
+		str_print_item = str_print_item.replace('\n', '\\n')
 		code += tabs + 'printed = False\n' +\
 			tabs + 'str_print_item = ' + str_print_item + '\n' +\
 			tabs + 'for e in var_all_events:\n' + \
@@ -668,8 +669,10 @@ def parse_time_elements(tree, num_tabs):
 		sys.exit(1)
 	hour = tree[0][1]
 	minute = tree[2][1]
-	if getmeridian(tree, num_tabs) == 'PM':
+	if getmeridian(tree, num_tabs) == 'PM' and hour != '12':
 		hour = str(int(hour) + 12)
+	elif hour == '12' and getmeridian(tree, num_tabs) == 'AM':
+		hour = '0'
 	return hour, minute
 	
 def parse_where(tree, num_tabs):
