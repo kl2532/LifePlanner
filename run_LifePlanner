@@ -3,13 +3,14 @@
 #To run "run_LifePlanner [file_name.plan]
 
 python lifeplanner_parse.py $1 2>error.txt
-filesize=$(stat -c%s "error.txt")
-echo $filesize
+#filesize=$(stat -c%s "error.txt")
+#echo $filesize
 #errormessage ='python lifeplanner_parse.py $1 2'
 #echo $errormessage 
-if [ "$filesize" == "0" ]; then
-    python calendar.py
-    rm calendar.py
-else 
-    echo "Errors thrown from translator."
-fi
+# if [ "$filesize" == "0" ]; then
+#     python calendar.py
+#     rm calendar.py
+# else 
+#     echo "Errors thrown from translator."
+# fi
+python translation.py 1> output.txt
