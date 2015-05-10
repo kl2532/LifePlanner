@@ -1,5 +1,6 @@
 function beast(s)
 	:) I am the beast!
 	return "I am the beast "+s
+	
 build schedule
 	print beast("hi")

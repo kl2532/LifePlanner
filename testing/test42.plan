@@ -1,9 +1,11 @@
 function a(x,y)
 	b = y * x
 	return b
+
 function b(x,y)
 	b = x - y
 	return b
+	
 build schedule
 	x = a(1, 2)
 	y = b(19, 2)
