@@ -1,0 +1,4 @@
+function addStrings(a, b)
+	return a+b
+build schedule
+	print addStrings("hello", "world")
