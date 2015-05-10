@@ -695,11 +695,13 @@ def parse_who(tree, num_tabs):
 	if len(tree) != 2 or tree[0][1] != 'with' or tree[1][0] != 'people_list':
 		sys.stderr.write('Invalid who for event')
 		sys.exit(1)
-	pp_list = dir_to_func['people_list'](tree[1][1:], num_tabs)
+	print tree[1]
+	pp_list = 'pp_list' + str(event_count)  + '= []\n' \
+	+ dir_to_func['people_list'](tree[1][1:], num_tabs)
 	return pp_list
 
 def parse_people_list(tree, num_tabs):
-	code = 'pp_list' + str(event_count)  + '= []\n'
+	code = ''
 	for branch in tree:
 		if branch[0] == 'name':
 			code += 'pp_list' + str(event_count) + '.append(\'' + \
