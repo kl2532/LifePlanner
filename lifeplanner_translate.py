@@ -21,7 +21,8 @@ def translate(tree):
 			'import ourCalendar as c\n' + get_event + '\n' + \
 			'cal = c.ourCalendar()\n\n' + 'var_all_events = []' + '\n' + dir_to_func['program'](tree[1:], 0)
 	except:
-		print 'Invalid program; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid program; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_program(tree, num_tabs):
 	try:
@@ -60,7 +61,8 @@ def parse_program(tree, num_tabs):
 			entire_prog += dir_to_func['export_stmt'](tree[4][1:], num_tabs)
 		return entire_prog
 	except:
-		print 'Invalid program format; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid program format; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 
 def parse_function_blocks(tree, num_tabs):
@@ -72,7 +74,8 @@ def parse_function_blocks(tree, num_tabs):
 			code += parse_function_block(f_block[1:], num_tabs)
 		return code
 	except:
-		print 'Invalid function blocks; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid function blocks; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 
 def parse_function_block(tree, num_tabs):
@@ -81,7 +84,8 @@ def parse_function_block(tree, num_tabs):
 		code += parse_expr_block(tree[1][1:], num_tabs+1)
 		return code
 	except:
-		print 'Invalid function block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid function block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_function_declaration(tree, num_tabs):
 	try:	
@@ -100,7 +104,8 @@ def parse_function_declaration(tree, num_tabs):
 		code += params + '):\n'
 		return code
 	except:
-		print 'Invalid function declaration; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid function declaration; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_return_stmt(tree, num_tabs):
 	try:
@@ -108,7 +113,8 @@ def parse_return_stmt(tree, num_tabs):
 		code += 'return ' + parse_value(tree[1][1], num_tabs) + '\n\n'
 		return code
 	except:
-		print 'Invalid return statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid return statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_import_stmt(tree, num_tabs):
 	try:
@@ -124,13 +130,15 @@ def parse_import_stmt(tree, num_tabs):
 		code += '\tvar_all_events.append(orig_e)\n'
 		return code
 	except:
-		print 'Invalid import statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid import statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_filename(tree, num_tabs):
 	try:
 		return tree[0][1]
 	except:
-		print 'Invalid file name; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid file name; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_schedule_stmts(tree, num_tabs):
 	try:
@@ -155,7 +163,8 @@ def parse_schedule_stmts(tree, num_tabs):
 			code += dir_to_func['schedule_stmts_rep'](tree[3][1:], num_tabs)
 		return code
 	except:
-		print 'Invalid schedule statements; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid schedule statements; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_schedule_stmts_rep(tree, num_tabs):
 	try:
@@ -163,7 +172,8 @@ def parse_schedule_stmts_rep(tree, num_tabs):
 			return dir_to_func['schedule_stmts'](tree[0][1:], num_tabs)
 		return ''
 	except:
-		print 'Invalid repetition of schedule statements; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid repetition of schedule statements; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_build_schedule(tree, num_tabs):
 	try:
@@ -184,7 +194,8 @@ def parse_build_schedule(tree, num_tabs):
 			code += dir_to_func['clean'](tree[2][1:], num_tabs)
 		return code
 	except:
-		print 'Invalid build schedule; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid build schedule; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_clean(tree, num_tabs):
 	try:
@@ -196,7 +207,8 @@ def parse_clean(tree, num_tabs):
 			code += dir_to_func['expr_block'](tree[0][1:], num_tabs) + '\n'
 		return code
 	except:
-		print 'Invalid segment after build schedule; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid segment after build schedule; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_expr_block(tree, num_tabs):
 	try:
@@ -211,7 +223,8 @@ def parse_expr_block(tree, num_tabs):
 			code += dir_to_func['expr_block_rep'](tree[1][1:], num_tabs) + '\n'
 		return code
 	except:
-		print 'Invalid expression block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid expression block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_expr_block_rep(tree, num_tabs):
 	try:
@@ -219,7 +232,8 @@ def parse_expr_block_rep(tree, num_tabs):
 			return dir_to_func['expr_block'](tree[0][1:], num_tabs)
 		return ''
 	except:
-		print 'Invalid repetition of expression block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid repetition of expression block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_expr(tree, num_tabs):
 	try:
@@ -230,7 +244,8 @@ def parse_expr(tree, num_tabs):
 			code += '\n'
 		return code
 	except:
-		print 'Invalid expression; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid expression; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_func(tree, num_tabs):
 	try:
@@ -249,7 +264,8 @@ def parse_func(tree, num_tabs):
 		code += params + ')\n'
 		return code
 	except:
-		print 'Invalid function; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid function; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_parameter_list(tree, num_tabs):
 	try:
@@ -259,7 +275,8 @@ def parse_parameter_list(tree, num_tabs):
 			return params + ' ' + parse_parameter_list(tree[2], num_tabs)
 		return ''
 	except:
-		print 'Invalid parameter list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid parameter list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_day_math(tree, num_tabs):
 	pass
@@ -279,7 +296,8 @@ def parse_time_math(tree, num_tabs):
 			code += dir_to_func['time_duration'](tree[2][1:], num_tabs)
 		return '(' + code + ').time()'
 	except:
-		print 'Invalid time math statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid time math statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_time_duration(tree, num_tabs):
 	try:
@@ -289,13 +307,15 @@ def parse_time_duration(tree, num_tabs):
 			unit = dir_to_func['time_unit'](tree[1][1:], num_tabs)
 		return 'dt.timedelta(' + unit + '=' + num + ')'
 	except:
-		print 'Invalid time duration; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid time duration; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_time_unit(tree, num_tabs):
 	try:
 		return tree[0]
 	except:
-		print 'Invalid time unit; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid time unit; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_op(tree, num_tabs):
 	try:
@@ -303,7 +323,8 @@ def parse_op(tree, num_tabs):
 			return '+'
 		return '-'
 	except:
-		print 'Invalid operation; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid operation; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_event_stmt(tree, num_tabs):
 	try:
@@ -317,7 +338,8 @@ def parse_event_stmt(tree, num_tabs):
 			return dir_to_func['remove_stmt'](tree[0][1:], num_tabs)
 		return 'event_stmt'
 	except:
-		print 'Invalid event statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid event statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_remove_stmt(tree, num_tabs):
 	try:
@@ -333,7 +355,8 @@ def parse_remove_stmt(tree, num_tabs):
 			+ dir_to_func['strings'](tree[0][1], num_tabs) + '\')'
 		return code
 	except:
-		print 'Invalid remove statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid remove statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_add_stmt(tree, num_tabs):
 	try:
@@ -349,7 +372,8 @@ def parse_add_stmt(tree, num_tabs):
 			+ dir_to_func['strings'](tree[0][1], num_tabs) + '\')'
 		return code
 	except:
-		print 'Invalid add statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid add statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_update_stmt(tree, num_tabs):
 	try:
@@ -374,7 +398,8 @@ def parse_update_stmt(tree, num_tabs):
 				+ dir_to_func['variable'](tree[2][1], num_tabs)
 		return code
 	except:
-		print 'Invalid update statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid update statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_cancel_stmt(tree, num_tabs):
 	try:
@@ -388,7 +413,8 @@ def parse_cancel_stmt(tree, num_tabs):
 		'var_all_events.pop(i)\n\t\t' + '\t' * num_tabs + 'break\n'
 		return code
 	except:
-		print 'Invalid cancel statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid cancel statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_assignment_stmt(tree, num_tabs):
 	try:
@@ -399,7 +425,8 @@ def parse_assignment_stmt(tree, num_tabs):
 			code += dir_to_func[tree[2][0]](tree[2][1], num_tabs)
 		return code
 	except:
-		print 'Invalid assignment statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid assignment statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_math_stmt(tree, num_tabs):
 	try:
@@ -434,7 +461,8 @@ def parse_math_stmt(tree, num_tabs):
 		sys.stderr.write('Invalid math statement')
 		sys.exit(1)
 	except:
-		print 'Invalid math statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid math statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_variable(tree, num_tabs):
 	try:
@@ -445,7 +473,8 @@ def parse_variable(tree, num_tabs):
 				return str(tree[0])
 		return str(tree)
 	except:
-		print 'Invalid variable; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid variable; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_value(tree, num_tabs):
 	try:
@@ -460,7 +489,8 @@ def parse_value(tree, num_tabs):
 			sys.stderr.write('Error in parse_value: ' + str(tree))
 			sys.exit(1)
 	except:
-		print 'Invalid value; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid value; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_access(tree, num_tabs):
 	try:
@@ -468,13 +498,15 @@ def parse_access(tree, num_tabs):
 			'\', var_all_events)[\'' + tree[1] + '\']'
 		return code
 	except:
-		print 'Invalid access statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid access statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_user_string(tree, num_tabs):
 	try:
 		return tree[0]
 	except:
-		print 'Invalid user string; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid user string; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_print_stmt(tree, num_tabs):
 	try:
@@ -501,7 +533,8 @@ def parse_print_stmt(tree, num_tabs):
 			sys.stderr.write('Print statement incorrect')
 			sys.exit(1)
 	except:
-		print 'Invalid print statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid print statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_strings(tree, num_tabs):
 	try:
@@ -511,7 +544,8 @@ def parse_strings(tree, num_tabs):
 				code += string
 		return code
 	except:
-		print 'Invalid strings; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid strings; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_export_stmt(tree, num_tabs):
 	try:
@@ -550,7 +584,8 @@ def parse_export_stmt(tree, num_tabs):
 		return code + 'cal.write_file(\'' + \
 			str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')'
 	except:
-		print 'Invalid export statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid export statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_date(tree, num_tabs):
 	try:
@@ -571,7 +606,8 @@ def parse_date(tree, num_tabs):
 				sys.exit(1)
 		return month, day, year
 	except:
-		print 'Invalid date; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid date; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_event_list(tree, num_tabs, month, day, year):
 	try:
@@ -587,7 +623,8 @@ def parse_event_list(tree, num_tabs, month, day, year):
 				day, year)
 		return code + '\n' 
 	except:
-		print 'Invalid event list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid event list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_event_list_rep(tree, num_tabs, month, day, year=None):
 	try:
@@ -596,7 +633,8 @@ def parse_event_list_rep(tree, num_tabs, month, day, year=None):
 				year)
 		return ''
 	except:
-		print 'Invalid repetition of event list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid repetition of event list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_event(tree, num_tabs, month, day, year):
 	try:
@@ -625,7 +663,8 @@ def parse_event(tree, num_tabs, month, day, year):
 		event_count += 1
 		return event_initial + modify_event + add_event 
 	except:
-		print 'Invalid event; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid event; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_event_title(tree, num_tabs):
 	try:
@@ -634,7 +673,8 @@ def parse_event_title(tree, num_tabs):
 		return 'event_dict' + str(event_count) + '[\"event_title\"] = ' + '"' + \
 		event_title + '"' 
 	except:
-		print 'Invalid event title; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid event title; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_when(tree, num_tabs, month, day, year):
 	try:
@@ -690,7 +730,8 @@ def parse_when(tree, num_tabs, month, day, year):
 				create_dt + '\n' + add_dt
 		return code
 	except:
-		print 'Invalid event time; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid event time; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_meridian(tree, num_tabs):
 	try:
@@ -699,7 +740,8 @@ def parse_meridian(tree, num_tabs):
 			sys.exit(1)
 		return tree[0]
 	except:
-		print 'Invalid time meridian; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid time meridian; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def getmeridian(tree, num_tabs):
 	try:
@@ -708,7 +750,8 @@ def getmeridian(tree, num_tabs):
 			sys.exit(1)
 		return dir_to_func['meridian'](tree[3][1:], num_tabs)
 	except:
-		print 'Invalid time merdian; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid time merdian; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_time(tree, num_tabs):
 	try:
@@ -716,7 +759,8 @@ def parse_time(tree, num_tabs):
 		code = 'dt.time(' + hour + ',' + minute + ')'
 		return code
 	except:
-		print 'Invalid time; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid time; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_time_elements(tree, num_tabs):
 	try:
@@ -731,7 +775,8 @@ def parse_time_elements(tree, num_tabs):
 			hour = '0'
 		return hour, minute
 	except:
-		print 'Invalid time minute or hour; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid time minute or hour; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 	
 def parse_where(tree, num_tabs):
 	try:
@@ -744,7 +789,8 @@ def parse_where(tree, num_tabs):
 		return 'event_dict' + str(event_count) + '[\"at\"] = \'' + \
 		event_location + '\''
 	except:
-		print 'Invalid location for event; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid location for event; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 
 def parse_location(tree, num_tabs):
@@ -754,7 +800,8 @@ def parse_location(tree, num_tabs):
 			sys.exit(1)
 		return tree[0][1]
 	except:
-		print 'Invalid location; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid location; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_who(tree, num_tabs):
 	try:
@@ -765,7 +812,8 @@ def parse_who(tree, num_tabs):
 		+ dir_to_func['people_list'](tree[1][1:], num_tabs)
 		return pp_list
 	except:
-		print 'Invalid list of people for event; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid list of people for event; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_people_list(tree, num_tabs):
 	try:
@@ -783,13 +831,15 @@ def parse_people_list(tree, num_tabs):
 		str(event_count)
 		return code
 	except:
-		print 'Invalid people list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid people list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_name(tree, num_tabs):
 	try:
 		return tree[1]
 	except:
-		print 'Invalid name; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid name; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_comma(tree, num_tabs):
 	try:
@@ -805,7 +855,8 @@ def parse_comma(tree, num_tabs):
 					dir_to_func['name'](branch[2][1], num_tabs) + '\')\n'
 		return code
 	except:
-		print 'Invalid comma in repetition of people list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid comma in repetition of people list; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_while_stmt(tree, num_tabs):
 	try:
@@ -819,7 +870,8 @@ def parse_while_stmt(tree, num_tabs):
 			code += dir_to_func['expr_block'](tree[2][1:], num_tabs+1)
 		return code
 	except:
-		print 'Invalid while statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid while statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_bool_expr(tree, num_tabs):
 	try:
@@ -852,7 +904,8 @@ def parse_bool_expr(tree, num_tabs):
 				sys.exit(1)
 		return code
 	except:
-		print 'Invalid boolean expression; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid boolean expression; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def get_item_code(item, num_tabs):
 	return ''
@@ -875,7 +928,8 @@ def parse_bool_operation(tree, num_tabs):
 				code += dir_to_func['value'](tree[2][1], num_tabs)
 		return code
 	except:
-		print 'Invalid boolean operation; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid boolean operation; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_bool_value(tree, num_tabs):
 	try:
@@ -884,7 +938,8 @@ def parse_bool_value(tree, num_tabs):
 		else:
 			return tree
 	except:
-		print 'Invalid boolean value; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid boolean value; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_comparison_operator(tree, num_tabs):
 	return tree
@@ -900,7 +955,8 @@ def parse_if_stmt(tree, num_tabs):
 					print "Invalid if statement. Error in", item
 		return code 
 	except:
-		print 'Invalid if statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid if statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_if_block(tree, num_tabs):
 	try:
@@ -915,7 +971,8 @@ def parse_if_block(tree, num_tabs):
 			print 'Invalid if block: ', str(tree[1])
 		sys.exit(1)
 	except:
-		print 'Invalid if block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid if block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_else_block(tree, num_tabs):
 	try:
@@ -927,7 +984,8 @@ def parse_else_block(tree, num_tabs):
 		print 'Invalid else block: ', str(tree)
 		sys.exit(1)
 	except:
-		print 'Invalid else block, Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid else block, Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 	
 def parse_elseif_blocks(tree, num_tabs):
 	try:
@@ -940,7 +998,8 @@ def parse_elseif_blocks(tree, num_tabs):
 		print 'Invalid elseif blocks: ', str(tree)
 		sys.exit(1)
 	except:
-		print 'Invalid elseif block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid elseif block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 			
 def parse_elseif_block(tree, num_tabs):
 	try:
@@ -954,7 +1013,8 @@ def parse_elseif_block(tree, num_tabs):
 		print 'Invalid elseif block: ', str(tree)
 		sys.exit(1)
 	except:
-		print 'Invalid elseif block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid elseif block; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_elseif_blocks_rep(tree, num_tabs):
 	try:
@@ -965,7 +1025,8 @@ def parse_elseif_blocks_rep(tree, num_tabs):
 		print 'Invalid repetition of else if: ', str(tree)
 		sys.exit(1)
 	except:
-		print 'Invalid repetition of else if; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid repetition of else if; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_for_stmt(tree, num_tabs):
 	try:
@@ -984,7 +1045,8 @@ def parse_for_stmt(tree, num_tabs):
 		code += increment
 		return code
 	except:
-		print 'Invalid for statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid for statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_bool_operator(tree, num_tabs):
 	return tree
@@ -996,7 +1058,8 @@ def parse_num(tree, num_tabs):
 	try:
 		return tree[0]
 	except:
-		print 'Invalid number; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid number; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_newline(tree, num_tabs):
 	return '\n'
@@ -1011,14 +1074,13 @@ def parse_str_stmt(tree, num_tabs):
 				code += dir_to_func[item[0]](item[1:], num_tabs) + " + "
 		return code[:len(code) - 3]
 	except:
-		print 'Invalid concatenation of strings; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid concatenation of strings; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_plan_stmt(tree, num_tabs):
 	try:
 		code = ''
 		if len(tree) == 2 and tree[0][0] == 'date':
-			print 'Rona: ', tree[0]
-			print tree[1]
 			month, day, year = dir_to_func['date'](tree[0][1:], num_tabs)
 			tabs = '\t' * num_tabs
 			code = tabs + dir_to_func['event'](tree[1][1:], num_tabs, month, day, year)
@@ -1027,13 +1089,15 @@ def parse_plan_stmt(tree, num_tabs):
 		sys.stderr.write('Invalid plan statement')
 		sys.exit(1)
 	except:
-		print 'Invalid plan statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid plan statement; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 def parse_string(tree, num_tabs):
 	try:
 		return tree[0]
 	except:
-		print 'Invalid string; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree
+		print 'Invalid string; Error: ', sys.exc_info()[0], ' From parsed tree: ', tree 
+		sys.exit(1)
 
 
 def parse_colon(tree, num_tabs):
