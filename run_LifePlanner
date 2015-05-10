@@ -3,4 +3,4 @@
 #To run "run_LifePlanner [file_name.plan]
 
 python lifeplanner_parse.py $1 2>error.txt
-python translation.py 1> output.txt
+python translation.py
