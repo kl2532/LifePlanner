@@ -485,7 +485,7 @@ def p_stringstmt(p):
     print p[0]
 
 def p_str_var(p):
-    '''var_str : variable
+    '''var_str : string
                 | user_string'''
     p[0] = p[1]
     print p[0]

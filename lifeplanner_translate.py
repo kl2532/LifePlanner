@@ -449,6 +449,7 @@ def parse_print_stmt(tree, num_tabs):
 		str_print_item = print_item
 		if len(print_item) < 2 or print_item[0] != '"' or print_item[len(print_item) - 1] != '"':
 			str_print_item = '"' + print_item + '"'
+		str_print_item = str_print_item.replace('\n', '\\n')
 		code += tabs + 'printed = False\n' +\
 			tabs + 'str_print_item = ' + str_print_item + '\n' +\
 			tabs + 'for e in var_all_events:\n' + \
