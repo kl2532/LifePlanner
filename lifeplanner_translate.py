@@ -226,7 +226,7 @@ def parse_expr(tree, num_tabs):
 		code = ''
 		label = tree[0][0]
 		code += dir_to_func[label](tree[0][1:], num_tabs) 
-		if label != 'return_stmt' and label != plan_stmt:
+		if label != 'return_stmt' and label != 'plan_stmt':
 			code += '\n'
 		return code
 	except:
@@ -761,7 +761,6 @@ def parse_who(tree, num_tabs):
 		if len(tree) != 2 or tree[0][1] != 'with' or tree[1][0] != 'people_list':
 			sys.stderr.write('Invalid who for event')
 			sys.exit(1)
-		print tree[1]
 		pp_list = 'pp_list' + str(event_count)  + '= []\n' \
 		+ dir_to_func['people_list'](tree[1][1:], num_tabs)
 		return pp_list
