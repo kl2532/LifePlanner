@@ -499,11 +499,11 @@ def parse_export_stmt(tree, num_tabs):
 	code += '\t\tif \'at\' in ev:\n'
 	code += '\t\t\te_at = ev[\'at\']\n'
 	code += '\t\telse:\n'
-	code += '\t\t\te_at = \'\''
+	code += '\t\t\te_at = \'\'\n'
 	code += '\t\tif \'with\' in ev:\n'
 	code += '\t\t\te_with = ev[\'with\']\n'
 	code += '\t\telse:\n'
-	code += '\t\t\te_with = \'\''
+	code += '\t\t\te_with = \'\'\n'
 	code += '\t\tev_event = e.Event(e_name, e_from, e_to, e_at, e_with)\n'
 	code += '\t\tcal.add_event(ev_event.create_string_event())\n'
 	return code + 'cal.write_file(\'' + \
