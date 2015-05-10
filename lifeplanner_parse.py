@@ -48,7 +48,7 @@ def p_functionblocks(p):
         p[0] = ['function_blocks', None]
 
 def p_functionblock(p):
-    '''function_block : function_declaration expr_block'''
+    '''function_block : function_declaration expr_block newline'''
     p[0] = ['function_block', p[1], p[2]]
 
 def p_function_declaration(p):
