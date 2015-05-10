@@ -667,8 +667,10 @@ def parse_time_elements(tree, num_tabs):
 		sys.exit(1)
 	hour = tree[0][1]
 	minute = tree[2][1]
-	if getmeridian(tree, num_tabs) == 'PM':
+	if getmeridian(tree, num_tabs) == 'PM' and hour != '12':
 		hour = str(int(hour) + 12)
+	elif hour == '12' and getmeridian(tree, num_tabs) == 'AM':
+		hour = '0'
 	return hour, minute
 	
 def parse_where(tree, num_tabs):
