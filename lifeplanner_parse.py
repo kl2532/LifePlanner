@@ -726,9 +726,10 @@ def p_error(p):
 yacc.yacc()
 import sys
 data = ''
-with open(sys.argv[1], 'r') as f:
-    data = f.read()
-#data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
+#with open(sys.argv[1], 'r') as f:
+#    data = f.read()
+data = '12/01/2016:\nPLT from 2:40 PM to 3:55 PM at Mudd with Aho, George\nbuild schedule\nprint PLT\n'
+
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree, '\n'
