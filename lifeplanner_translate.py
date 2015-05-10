@@ -183,7 +183,7 @@ def parse_expr(tree, num_tabs):
 	code = ''
 	label = tree[0][0]
 	code += dir_to_func[label](tree[0][1:], num_tabs) 
-	if label != 'return_stmt' and label != plan_stmt:
+	if label != 'return_stmt' and label != 'plan_stmt':
 		code += '\n'
 	return code
 
