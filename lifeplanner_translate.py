@@ -368,7 +368,7 @@ def parse_cancel_stmt(tree, num_tabs):
 	'event = var_all_events[i]\n\t' + '\t' * num_tabs + \
 	'if event[\'event_title\'] == \'' + \
 	dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + '\t' * num_tabs + \
-	'var_all_events.pop(i)'
+	'var_all_events.pop(i)\nbreak\n'
 
 	return code
 
