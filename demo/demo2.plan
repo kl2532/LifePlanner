@@ -4,7 +4,7 @@ function addTogether(i, j)
 	return x
 	
 function yay()
-	print "Yay"
+	print "Yay!"
 	
 import agenda.ics
 build schedule
