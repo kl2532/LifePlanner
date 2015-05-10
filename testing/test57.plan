@@ -1,6 +1,7 @@
 function beast()
 	:) I am the beast!
 	return 1+2
+	
 build schedule
 	print beast()
 	

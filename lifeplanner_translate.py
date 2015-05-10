@@ -458,6 +458,7 @@ def parse_print_stmt(tree, num_tabs):
 			tabs + 'str_print_item = ' + str_print_item + '\n' +\
 			tabs + 'for elem in var_all_events:\n' + \
 			tabs + '\tif elem["event_title"] == str_print_item:\n' +\
+			tabs + '\t\telem.pop(\'uid\', None)\n' +\
 			tabs + '\t\tprint elem\n' +\
 			tabs + '\t\tprinted = True\n' + \
 			tabs + 'if not printed:\n' +\
