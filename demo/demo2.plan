@@ -2,6 +2,18 @@ function addTogether(i, j)
 	:) super adder
 	x = i + j
 	return x
+	
+function fib(n)
+	if n==0
+		return 0
+	end
+	elseif n==1
+		return 1
+	end
+	else
+		return fib(n-1) + fib(n-2)
+	end
+	
 import agenda.ics
 build schedule
 	cancel Dinner

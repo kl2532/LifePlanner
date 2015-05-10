@@ -8,7 +8,7 @@ def runtest():
     for i in range(1, 61):
         test_file = "testing/test" + str(i) + ".plan"
         # f = open(temp, "wb")
-        call(["./run_LifePlanner", test_file])
+        call(["./test_LifePlanner", test_file])
         temp = "output.txt"
         correct_output_file = "testing/ctest" + str(i) + ".plan"
         worked = False
