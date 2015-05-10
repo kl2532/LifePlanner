@@ -84,7 +84,8 @@ reserved = {
     'before' : 'BEFORE',
     'after' : 'AFTER',
     'update' : 'UPDAT',
-    'subtract' : 'SUBTRACT'
+    'subtract' : 'SUBTRACT',
+    'plan' : 'PLAN'
     }
 
 tokens = tokens + reserved.values()
@@ -133,6 +134,7 @@ t_IMPORT = r'(import)'
 t_FROM = r'(from)'
 t_EXPORT = r'(export)'
 t_TAG = r'(tag)'
+t_PLAN = r'(plan)'
 
 #Parts of events
 t_AT = r'(at)'
