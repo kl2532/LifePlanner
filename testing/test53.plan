@@ -1,4 +1,4 @@
-import testing/ctest45.ics
+import ctest45.ics
 build schedule
 	plan 12/02/2016 : PLT2 from 2:40 PM to 3:55 PM at Mudd
 	print PLT2
