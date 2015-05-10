@@ -632,7 +632,11 @@ def p_strings(p):
     str_list = ""
     for string in p[2][1:]:
         if string:
-            str_list = str_list + " " + str(string)
+            print 'string : ' + str(string)
+            if string[0] == 'strings':
+                str_list = str_list + ' ' + str(string[1])
+            else:
+                str_list = str_list + " " + str(string)
     p[0] = ['strings', p[1] + str_list]
     print p[0]
 
@@ -736,7 +740,7 @@ data = ''
 
 with open(sys.argv[1], 'r') as f:
     data = f.read()
-#data = 'build schedule\n if True \nplan 12/01/2016 : PLT from 2:40 PM to 3:55 PM at Mudd with Aho, George\nend\n'
+#data = 'build schedule\n if True \nplan 12/01/2016 : PLT from 2:40 PM to 3:55 PM at Mudd with Aho, George Doe\nend\n'
 
 tree = yacc.parse(data)
 print
