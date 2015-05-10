@@ -454,7 +454,7 @@ def parse_print_stmt(tree, num_tabs):
 		if len(print_item) < 2 or print_item[0] != '"' or print_item[len(print_item) - 1] != '"':
 			str_print_item = '"' + print_item.replace('"', '\\"') + '"'
 		str_print_item = str_print_item.replace('\n', '\\n')
-		code += tabs + 'printed = False\n' +\
+		code += tabs + '\nprinted = False\n' +\
 			tabs + 'str_print_item = ' + str_print_item + '\n' +\
 			tabs + 'for elem in var_all_events:\n' + \
 			tabs + '\tif elem["event_title"] == str_print_item:\n' +\
