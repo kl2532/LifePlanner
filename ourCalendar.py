@@ -50,7 +50,10 @@ class ourCalendar:
 						event_list[i]["with"] = ""
 				if(line.startswith('LOCATION')):
 					info = line.split(":")
-					event_list[i]["at"] = info[1].rstrip()
+					if(info[1].rstrip()):
+						event_list[i]["at"] = info[1].rstrip()
+					else:
+						event_list[i]["at"] = ""
 				if(line.startswith('SUMMARY')):
 					info = line.split(":")
 					event_list[i]["event_title"] = info[1].rstrip()
