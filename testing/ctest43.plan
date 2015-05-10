@@ -1,2 +1,2 @@
-{'from': datetime.datetime(2015, 1, 1, 2, 30, 40, tzinfo=tzlocal()), 'uid': 'f1a07a47-f6c6-11e4-9970-80e65010b248', 'event_title': 'Wake', 'to': datetime.datetime(2015, 1, 1, 3, 0, 40, tzinfo=tzlocal()), 'at': 'Hungarian', 'with': ['sun']}
-{'from': datetime.datetime(2015, 1, 1, 5, 30, 40, tzinfo=tzlocal()), 'uid': 'f1a17c42-f6c6-11e4-9c31-80e65010b248', 'event_title': 'Wake2', 'to': datetime.datetime(2015, 1, 1, 6, 0, 40, tzinfo=tzlocal()), 'at': 'Hungarian', 'with': ['sun']}
+{'from': datetime.datetime(2015, 1, 1, 2, 30, 40, tzinfo=tzlocal()), 'event_title': 'Wake', 'to': datetime.datetime(2015, 1, 1, 3, 0, 40, tzinfo=tzlocal()), 'at': 'Hungarian', 'with': ['sun']}
+{'from': datetime.datetime(2015, 1, 1, 5, 30, 40, tzinfo=tzlocal()), 'event_title': 'Wake2', 'to': datetime.datetime(2015, 1, 1, 6, 0, 40, tzinfo=tzlocal()), 'at': 'Hungarian', 'with': ['sun']}
