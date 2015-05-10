@@ -1,0 +1,9 @@
+function beast(a)
+	if a > 0
+	return True
+end
+else
+	return False
+end
+build schedule
+	print beast(1)

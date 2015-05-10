@@ -1,0 +1,6 @@
+function beast()
+	:) I am the beast!
+	return 1*(2/1)
+build schedule
+	a = beast()
+print a

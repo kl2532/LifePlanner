@@ -4,16 +4,15 @@ import filecmp
 import os.path
 
 def runtest():
-    # for printing to stdout
     s = ""
-    for i in range(1, 51):
+    for i in range(1, 61):
         test_file = "testing/test" + str(i) + ".plan"
         # f = open(temp, "wb")
         call(["./run_LifePlanner", test_file])
         temp = "output.txt"
         correct_output_file = "testing/ctest" + str(i) + ".plan"
         worked = False
-        if i>=26 and i<=31 or i==45:
+        if i>=26 and i<=31 or i==45 or i==52 or i==53:
             temp = "test"+str(i)+".ics"
             correct_output_file = "testing/ctest" + str(i) + ".ics"
             if os.path.isfile(temp):
@@ -37,8 +36,9 @@ def icscomp(file_a, file_b):
     if num_a!=num_b:
         return False
     for line in f_a:
-        if (not line.startswith('UID:')) and (line!=f_b.readline()):
-            return False
+        if (not line.startswith('UID:')):
+            if line!=f_b.readline():
+                return False
     return True
-#print icscomp('testing/ctest27.ics', 'my.ics')
+
 runtest()
