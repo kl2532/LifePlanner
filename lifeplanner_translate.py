@@ -600,7 +600,7 @@ def parse_event(tree, num_tabs, month, day, year):
 		modify_event += dir_to_func['who'](tree[3][1:], num_tabs) + '\n'
 	#if tree[4]:
 		#modify_event += dir_to_func['tag_line'](tree[4][1:], num_tabs)
-	add_event = 'var_all_events.append(event_dict' + str(event_count) + ')'
+	add_event = 'var_all_events.append(event_dict' + str(event_count) + ')\n'
 	event_count += 1
 	return event_initial + modify_event + add_event 
 
