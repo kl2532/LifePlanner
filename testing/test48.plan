@@ -1,0 +1,10 @@
+build schedule
+	t1 = 6:00 PM
+	t2 = 8:00 PM
+	if t1 < t2
+		print "less than"
+	end
+	if t2 > t1
+		print "greater than"
+	end
+	

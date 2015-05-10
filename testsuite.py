@@ -6,14 +6,14 @@ import os.path
 def runtest():
     # for printing to stdout
     s = ""
-    for i in range(1, 42):
+    for i in range(1, 51):
         test_file = "testing/test" + str(i) + ".plan"
         # f = open(temp, "wb")
         call(["./run_LifePlanner", test_file])
         temp = "output.txt"
         correct_output_file = "testing/ctest" + str(i) + ".plan"
         worked = False
-        if i>=26 and i<=31:
+        if i>=26 and i<=31 or i==45:
             temp = "test"+str(i)+".ics"
             correct_output_file = "testing/ctest" + str(i) + ".ics"
             if os.path.isfile(temp):
@@ -40,5 +40,5 @@ def icscomp(file_a, file_b):
         if (not line.startswith('UID:')) and (line!=f_b.readline()):
             return False
     return True
-
+#print icscomp('testing/ctest27.ics', 'my.ics')
 runtest()
