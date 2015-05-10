@@ -1,6 +1,5 @@
 function beast()
-	return "I am the beast"
 	:) I am the beast!
+	return "I am the beast"
 build schedule
 	print beast()
-	
