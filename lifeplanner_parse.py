@@ -259,6 +259,7 @@ def p_expr(p):
             | time_range newline
             | str_stmt newline'''
     p[0] = ['expr', p[1]]
+    print '\n expr' + str(p[0])
 
 def p_func(p):
     '''func : variable LEFTPAREN parameter_list RIGHTPAREN'''
@@ -284,7 +285,6 @@ def p_updatestmt(p):
     '''update_stmt : UPDAT strings FROM variable
                     | UPDAT strings TO variable
                     | UPDAT strings AT variable'''
-    print 'updating'
     p[0] = ['update_stmt', p[2], p[3], p[4]]
 
 def p_addstmt(p):
@@ -319,7 +319,6 @@ def p_boolean(p):
             | value
             | NOT bool_expr
             | LEFTPAREN bool_expr RIGHTPAREN'''
-    print 'p_boolean'
     if len(p) == 4:
         p[0] = ['bool_expr', p[1], p[2], p[3]]
     elif len(p) == 3:
@@ -336,8 +335,6 @@ def p_boolean_opearation(p):
 def p_assignmentstmt(p):
    '''assignment_stmt : variable EQUAL value'''
    p[0] = ['assignment_stmt', p[1], p[2], p[3]]
-   print p[0]
-# gotta add array
 
 def p_value(p):
     '''value : variable
@@ -355,7 +352,6 @@ def p_value(p):
             | bool_value
             | str_stmt'''
     p[0] = ['value', p[1]]
-    print p[0]
 
 def p_access(p):
     '''access : strings LBRACKET TO RBRACKET
@@ -367,7 +363,6 @@ def p_access(p):
 def p_variable(p):
     '''variable : STRING'''
     p[0] = ['variable', p[1]]
-    print p[0]
                             
 def p_bool_op(p):
     '''bool_operator : AND
@@ -624,12 +619,12 @@ def p_strings(p):
     str_list = ""
     for string in p[2][1:]:
         if string:
-            str_list = str_list + " " + string
+            str_list = str_list + " " + str(string)
     p[0] = ['strings', p[1] + str_list]
     print p[0]
 
 def p_string_rep(p):
-    '''string_rep : STRING
+    '''string_rep : strings
                     | empty'''
     print 'print p[1] ', p[1]
     p[0] = ['string_rep', p[1]]
