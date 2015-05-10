@@ -22,8 +22,13 @@ class Event:
 		self.end = self.end.astimezone(to_zone)
 
 		str_people = ""
+		i = 1
 		for person in self.person:
-			str_people = person + " "
+			if i == len(self.person):
+				str_people += person
+			else:
+				str_people += person + ", "
+			i = i + 1
 
 		x = x + "DTSTAMP:20151231T000000Z\n"
 		x = x + "DTSTART:" + self.begin.strftime("%Y%m%dT%H%M%SZ")+ '\n'
