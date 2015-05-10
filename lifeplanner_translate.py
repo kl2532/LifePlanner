@@ -107,9 +107,8 @@ def parse_import_stmt(tree, num_tabs):
 	code += '\te_from = orig_e[\'from\']\n'
 	code += '\te_at = orig_e[\'at\']\n'
 	code += '\te_with = orig_e[\'with\']\n'
+	code += '\te_uid = orig_e[\'uid\']\n'
 	code += '\tvar_all_events.append(orig_e)\n'
-	code += '\torig_event = e.Event(e_name, e_from, e_to, e_at, e_with)\n'
-	code += '\tcal.add_event(orig_event.create_string_event())\n'
 	return code
 
 def parse_filename(tree, num_tabs):
@@ -368,6 +367,9 @@ def parse_cancel_stmt(tree, num_tabs):
 	'event = var_all_events[i]\n\t' + '\t' * num_tabs + \
 	'if event[\'event_title\'] == \'' + \
 	dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + '\t' * num_tabs + \
+	'if \'uid\' in event:\n\t\t\t' + '\t' * num_tabs + \
+	'var_all_events[i][\'cancel\'] = True\n\t\t' + '\t' * num_tabs + \
+	'else:\n\t\t\t' + '\t' * num_tabs + \
 	'var_all_events.pop(i)\n\t\t' + '\t' * num_tabs + 'break\n'
 
 	return code
@@ -497,18 +499,6 @@ def parse_export_stmt(tree, num_tabs):
 	code = 'try:\n\tvar_all_events\nexcept NameError:\n\tpass\nelse:\n'
 	code += '\tfor ev in var_all_events:\n'
 	code += '\t\te_name = ev[\'event_title\']\n'
-	code += '\t\torig = False\n'
-	code += '\t\ttry:\n'
-	code += '\t\t\torig_event_dict\n'
-	code += '\t\texcept NameError:\n'
-	code += '\t\t\tpass\n'
-	code += '\t\telse:\n'
-	code += '\t\t\tfor orig_e in orig_event_dict:\n'
-	code += '\t\t\t\tif e_name == orig_e[\'event_title\']:\n'
-	code += '\t\t\t\t\torig = True\n'
-	code += '\t\t\t\t\tcontinue\n'
-	code += '\t\tif orig:\n'
-	code += '\t\t\tcontinue\n'
 	code += '\t\te_to = ev[\'to\']\n'
 	code += '\t\te_from = ev[\'from\']\n'
 	code += '\t\tif \'at\' in ev:\n'
@@ -519,7 +509,15 @@ def parse_export_stmt(tree, num_tabs):
 	code += '\t\t\te_with = ev[\'with\']\n'
 	code += '\t\telse:\n'
 	code += '\t\t\te_with = \'\'\n'
-	code += '\t\tev_event = e.Event(e_name, e_from, e_to, e_at, e_with)\n'
+	code += '\t\tif \'cancel\' in ev:\n'
+	code += '\t\t\te_cancel = True\n'
+	code += '\t\telse:\n'
+	code += '\t\t\te_cancel = False\n'
+	code += '\t\tif \'uid\' in ev:\n'
+	code += '\t\t\te_uid = ev[\'uid\']\n'
+	code += '\t\telse:\n'
+	code += '\t\t\te_uid = None\n'
+	code += '\t\tev_event = e.Event(e_name, e_from, e_to, e_at, e_with, e_uid, e_cancel)\n'
 	code += '\t\tcal.add_event(ev_event.create_string_event())\n'
 	return code + 'cal.write_file(\'' + \
 		str(dir_to_func['filename'](tree[1][1:], num_tabs)) + '\')'

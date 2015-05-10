@@ -19,7 +19,8 @@ class ourCalendar:
 
 	def read_calendar(self, orig_file):
 		# returns a list of events where each event is a dictionary
-		# example: [{'name': ..., 'to': ..., 'from': ...,  'at':..., 'with':...}, {'name': ..., 'to': ..., 'from': ...,  'at':..., 'with':...}, ...]
+		# example: [{'event_title': ..., 'to': ..., 'from': ...,  'at':..., 'with':..., 'uid':...}, 
+		#           {'event_title': ..., 'to': ..., 'from': ...,  'at':..., 'with':..., 'uid':...}, ...]
 		event_list = [] 
 		with open(orig_file, 'r') as f:
 			i = 0
@@ -55,6 +56,9 @@ class ourCalendar:
 						event_list[i]["at"] = info[1].rstrip()
 					else:
 						event_list[i]["at"] = ""
+				if(line.startswith('UID')):
+					info = line.split(":")
+					event_list[i]["uid"] = info[1].rstrip()
 				if(line.startswith('SUMMARY')):
 					info = line.split(":")
 					event_list[i]["event_title"] = info[1].rstrip()
