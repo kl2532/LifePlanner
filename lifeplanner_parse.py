@@ -256,7 +256,8 @@ def p_expr(p):
             | time_math newline
             | day_math newline
             | func newline
-            | time_range newline'''
+            | time_range newline
+            | str_stmt newline'''
     p[0] = ['expr', p[1]]
 
 def p_func(p):
@@ -351,7 +352,8 @@ def p_value(p):
             | day_math
             | func
             | access
-            | bool_value'''
+            | bool_value
+            | str_stmt'''
     p[0] = ['value', p[1]]
     print p[0]
 
@@ -457,7 +459,8 @@ def p_printstmt(p):
                   | print bool_value
                   | print math_stmt
                   | print bool_expr
-                  | print func'''
+                  | print func
+                  | print str_stmt'''
     p[0] = ['print_stmt', p[1], p[2]]
 
 def p_datedur(p):
@@ -480,6 +483,24 @@ def p_timeunit(p):
     '''time_unit : HOUR
                  | MINUTE'''
     p[0] = ['time_unit', p[1]]
+
+def p_stringstmt(p):
+    '''str_stmt : var_str PLUS var_str str_stmt_rep'''
+    p[0] = ['str_stmt', p[1], p[3], p[4]]
+    print p[0]
+
+def p_str_var(p):
+    '''var_str : variable
+                | user_string'''
+    p[0] = p[1]
+    print p[0]
+
+def p_strstmt_rep(p):
+    '''str_stmt_rep : PLUS var_str str_stmt_rep
+                    | empty'''
+    if len(p) == 4:
+        p[0] = ['str_stmt_rep', p[2], p[3]] 
+        print p[0]
 
 def p_mathstmt1(p):
     '''math_stmt : math_stmt PLUS math_stmt
@@ -704,7 +725,7 @@ def p_error(p):
 # ----INITIALIZE PARSER----
 yacc.yacc()
 #data = 'build schedule\nif Aho in PLT[with]\nprint "And is incorrect"\nend\n'
-data = 'build schedule\nprint PLT\n'
+data = 'build schedule\n print a + b\n'
 tree = yacc.parse(data)
 print
 print 'parse tree: ', tree, '\n'

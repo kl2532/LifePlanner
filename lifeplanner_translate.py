@@ -238,6 +238,8 @@ def parse_expr(tree, num_tabs):
 		code += dir_to_func['func'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'time_range':
 		code += dir_to_func['time_range'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'str_stmt':
+		code += dir_to_func['str_stmt'](tree[0][1:], num_tabs) + '\n'
 	return code
 
 def parse_func(tree, num_tabs):
@@ -358,12 +360,7 @@ def parse_update_stmt(tree, num_tabs):
 	return code
 
 def parse_cancel_stmt(tree, num_tabs):
-	tabs = ''
-	j = 0
-	while(j < num_tabs):
-		tabs = '\t'
-		j += 1
-	code = tabs + 'for i in range(len(var_all_events)):\n\t' + tabs + \
+	code = '\t' * num_tabs + 'for i in range(len(var_all_events)):\n\t' + tabs + \
 	'event = var_all_events[i]\n\t' + tabs + \
 	'if event[\'event_title\'] == \'' + \
 	dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + tabs + \
@@ -373,10 +370,7 @@ def parse_cancel_stmt(tree, num_tabs):
 
 def parse_assignment_stmt(tree, num_tabs):
 	code = ''
-	i = 0
-	while i < num_tabs:
-		code += '\t'
-		i += 1
+	code += '\t' * num_tabs
 	if tree[0][0] == 'variable':
 		code += dir_to_func['variable'](tree[0][1], num_tabs) + ' = '
 		code += dir_to_func[tree[2][0]](tree[2][1], num_tabs)
@@ -425,15 +419,15 @@ def parse_variable(tree, num_tabs):
 
 def parse_value(tree, num_tabs):
 	label = tree[0]
-	# print 'LABEL:', label[0:4]
+	print tree
 	if label in \
 	['bool_value', 'user_string', 'variable', 'num', 'time', 'date', \
-	'event', 'tag', 'time_math', 'access', 'func']:
+	'event', 'tag', 'time_math', 'access', 'func', 'str_stmt']:
 		return dir_to_func[label](tree[1:], num_tabs)
 	if label[0:4] == 'math':
 		return dir_to_func['math_stmt'](tree, num_tabs)
 	else:
-		sys.stderr.write('Error in parse_value: ' + tree)
+		sys.stderr.write('Error in parse_value: ' + str(tree))
 		sys.exit(1)
 
 def parse_access(tree, num_tabs):
@@ -899,7 +893,12 @@ def parse_num(tree, num_tabs):
 def parse_newline(tree, num_tabs):
 	return '\n'
 
-
+def parse_str_stmt(tree, num_tabs):
+	code = ''
+	for item in tree:
+		if item:
+			code += dir_to_func[item[0]](item[1:], num_tabs) + " + "
+	return code[:len(code) - 3]
 
 # tag functions
 def parse_tag(tree, num_tabs):
@@ -1043,6 +1042,7 @@ dir_to_func = {
 	'elseif_blocks_rep' : parse_elseif_blocks_rep,
 	'access' : parse_access,
 	'user_string' : parse_user_string,
+	'str_stmt' : parse_str_stmt,
 
 	# TAG
 	'tag' : parse_tag,
