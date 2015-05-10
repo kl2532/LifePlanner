@@ -45,7 +45,8 @@ class ourCalendar:
 				if(line.startswith('DESCRIPTION')):
 					info = line.split(":")
 					if(info[1].rstrip()):
-						event_list[i]["with"] = info[1].rstrip()
+						people = info[1].rstrip().split()
+						event_list[i]["with"] = people[1:]
 					else:
 						event_list[i]["with"] = ""
 				if(line.startswith('LOCATION')):
