@@ -48,8 +48,8 @@ def p_functionblocks(p):
         p[0] = ['function_blocks', None]
 
 def p_functionblock(p):
-    '''function_block : function_declaration expr_block return_stmt'''
-    p[0] = ['function_block', p[1], p[2], p[3]]
+    '''function_block : function_declaration expr_block'''
+    p[0] = ['function_block', p[1], p[2]]
 
 def p_function_declaration(p):
     '''function_declaration : FUNCTION function_name LEFTPAREN parameter_list RIGHTPAREN newline'''
@@ -77,8 +77,7 @@ def p_parameter_list(p):
         p[0] = ['parameter_list', None]
 
 def p_return(p):
-    '''return_stmt : RETURN value newline
-                    | empty'''
+    '''return_stmt : RETURN value newline'''
     if len(p) == 4:
         p[0] = ['return_stmt', p[1], p[2]]
     else:
@@ -265,7 +264,8 @@ def p_expr(p):
             | func newline
             | time_range newline
             | str_stmt newline
-            | plan_stmt'''
+            | plan_stmt
+            | return_stmt'''
     p[0] = ['expr', p[1]]
     print '\n expr' + str(p[0])
 

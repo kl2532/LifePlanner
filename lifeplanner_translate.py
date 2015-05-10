@@ -68,7 +68,6 @@ def parse_function_block(tree, num_tabs):
 	# print tree[1][1:]
 	code = parse_function_declaration(tree[0][2:], num_tabs)
 	code += parse_expr_block(tree[1][1:], num_tabs+1)
-	code += parse_return_stmt(tree[2][1:], num_tabs+1)
 	return code
 
 def parse_function_declaration(tree, num_tabs):
@@ -89,11 +88,8 @@ def parse_function_declaration(tree, num_tabs):
 
 
 def parse_return_stmt(tree, num_tabs):
-	if not tree[0]:
-		return '\n\n'
-	code = ''
-	for i in range(num_tabs):
-		code += '\t'
+	print tree
+	code = '\t'*num_tabs
 	code += 'return ' + parse_value(tree[1][1], num_tabs) + '\n\n'
 	return code
 
@@ -241,8 +237,10 @@ def parse_expr(tree, num_tabs):
 	if tree[0][0] == 'str_stmt':
 		code += dir_to_func['str_stmt'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'plan_stmt':
-		print 'Rona: ', tree
 		code += dir_to_func['plan_stmt'](tree[0][1:], num_tabs)
+	if tree[0][0] == 'return_stmt':
+		#Rona
+		code += dir_to_func['return_stmt'](tree[0][1:], num_tabs)
 	return code
 
 def parse_func(tree, num_tabs):
