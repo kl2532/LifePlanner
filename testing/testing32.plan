@@ -1,5 +1,0 @@
-function addTogether (i, j)
-	return i + j
-build schedule
-	x = addTogether(1, 2)
-	print x
