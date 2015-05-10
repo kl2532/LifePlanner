@@ -446,6 +446,7 @@ def parse_print_stmt(tree, num_tabs):
 	if len(tree) == 2 and len(tree[0]) > 0 and tree[0][0] == 'print' and \
 	len(tree[1]) > 0:
 		print_item = dir_to_func[tree[1][0]](tree[1][1:], num_tabs)
+		str_print_item = print_item
 		if len(print_item) < 2 or print_item[0] != '"' or print_item[len(print_item) - 1] != '"':
 			str_print_item = '"' + print_item + '"'
 		code += tabs + 'printed = False\n' +\
