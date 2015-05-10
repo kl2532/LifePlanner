@@ -1069,8 +1069,6 @@ def parse_str_stmt(tree, num_tabs):
 		code = ''
 		for item in tree:
 			if item:
-				print code
-				print item
 				code += dir_to_func[item[0]](item[1:], num_tabs) + " + "
 		return code[:len(code) - 3]
 	except:
