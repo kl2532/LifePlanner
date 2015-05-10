@@ -723,7 +723,7 @@ import sys
 data = ''
 #with open(sys.argv[1], 'r') as f:
 #    data = f.read()
-data = '12/01/2016:\nPLT from 2:40 PM to 3:55 PM at Mudd with Aho, George\nbuild schedule\nprint PLT\n'
+data = '12/01/2016:\n\tPLT from 2:40 PM to 3:55 PM at Mudd with Aho, George\nbuild schedule\n\tcancel PLT\nexport test28.ics\n'
 
 tree = yacc.parse(data)
 print

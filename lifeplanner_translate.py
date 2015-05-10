@@ -360,10 +360,10 @@ def parse_update_stmt(tree, num_tabs):
 	return code
 
 def parse_cancel_stmt(tree, num_tabs):
-	code = '\t' * num_tabs + 'for i in range(len(var_all_events)):\n\t' + tabs + \
-	'event = var_all_events[i]\n\t' + tabs + \
+	code = '\t' * num_tabs + 'for i in range(len(var_all_events)):\n\t' + '\t' * num_tabs + \
+	'event = var_all_events[i]\n\t' + '\t' * num_tabs + \
 	'if event[\'event_title\'] == \'' + \
-	dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + tabs + \
+	dir_to_func['strings'](tree[1][1], num_tabs) + '\':\n\t\t' + '\t' * num_tabs + \
 	'var_all_events.pop(i)'
 
 	return code
