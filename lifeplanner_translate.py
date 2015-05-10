@@ -1081,8 +1081,6 @@ def parse_plan_stmt(tree, num_tabs):
 	try:
 		code = ''
 		if len(tree) == 2 and tree[0][0] == 'date':
-			print 'Rona: ', tree[0]
-			print tree[1]
 			month, day, year = dir_to_func['date'](tree[0][1:], num_tabs)
 			tabs = '\t' * num_tabs
 			code = tabs + dir_to_func['event'](tree[1][1:], num_tabs, month, day, year)
