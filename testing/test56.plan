@@ -1,0 +1,5 @@
+function beast()
+	:) I am the beast!
+	return "I am the beast "+"hi"
+build schedule
+	print beast()

@@ -1,0 +1,7 @@
+function a(x)
+	return x*5
+function b(x)
+	y = a(x)
+	return y/5
+build schedule
+	print b(1)
