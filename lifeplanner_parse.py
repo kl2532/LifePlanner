@@ -578,9 +578,9 @@ yacc.yacc()
 import sys
 data = ''
 
-# with open(sys.argv[1], 'r') as f:
-#     data = f.read()
-data = 'build schedule\n if True \nplan 12/01/2016 : PLT from 2:40 PM to 3:55 PM at Mudd with Aho, George Doe\nend\n'
+with open(sys.argv[1], 'r') as f:
+    data = f.read()
+#data = 'build schedule\n if True \nplan 12/01/2016 : PLT from 2:40 PM to 3:55 PM at Mudd with Aho, George Doe\nend\n'
 
 tree = yacc.parse(data)
 print

@@ -3,15 +3,10 @@ function addTogether(i, j)
 	x = i + j
 	return x
 	
-function fib(n)
-	if n==0
-		return 0
-	end
-	elseif n==1
-		return 1
-	end
-	else
-		return fib(n-1) + fib(n-2)
+function yays(n)
+	i = 0
+	while i<n
+		print "Yay!"
 	end
 	
 import agenda.ics
@@ -25,4 +20,5 @@ build schedule
 		sum = addTogether(i, j)
 		print sum
 	end
+	yays(3)
 export new_agenda.ics
