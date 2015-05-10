@@ -162,7 +162,7 @@ t_DECIMAL   = r'[\-]?[0-9]+\.[0-9]*'
 # over the reserved words, string has no quotes and is
 # not prefered over the reserved words
 def t_USERSTRING(t):
-    r'\"[a-zA-Z0-9_][ a-zA-Z0-9_]*[.]?[ a-zA-Z0-9_]+\"'
+    r'\"[^\""]+\"'
     return t
 
 def t_STRING(t):
