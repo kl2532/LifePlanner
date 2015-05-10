@@ -241,6 +241,9 @@ def parse_expr(tree, num_tabs):
 		code += dir_to_func['time_range'](tree[0][1:], num_tabs) + '\n'
 	if tree[0][0] == 'str_stmt':
 		code += dir_to_func['str_stmt'](tree[0][1:], num_tabs) + '\n'
+	if tree[0][0] == 'plan_stmt':
+		print 'Rona: ', tree
+		code += dir_to_func['plan_stmt'](tree[0][1:], num_tabs)
 	return code
 
 def parse_func(tree, num_tabs):
@@ -583,8 +586,8 @@ def parse_event(tree, num_tabs, month, day, year):
 		modify_event += dir_to_func['where'](tree[2][1:], num_tabs) +'\n'
 	if tree[3][1]:
 		modify_event += dir_to_func['who'](tree[3][1:], num_tabs) + '\n'
-	if tree[4]:
-		modify_event += dir_to_func['tag_line'](tree[4][1:], num_tabs)
+	#if tree[4]:
+		#modify_event += dir_to_func['tag_line'](tree[4][1:], num_tabs)
 	add_event = 'var_all_events.append(event_dict' + str(event_count) + ')'
 	event_count += 1
 	return event_initial + modify_event + add_event 
@@ -916,6 +919,20 @@ def parse_str_stmt(tree, num_tabs):
 			code += dir_to_func[item[0]](item[1:], num_tabs) + " + "
 	return code[:len(code) - 3]
 
+def parse_plan_stmt(tree, num_tabs):
+	code = ''
+	if len(tree) == 2 and tree[0][0] == 'date':
+		print 'Rona: ', tree[0]
+		print tree[1]
+		month, day, year = dir_to_func['date'](tree[0][1:], num_tabs)
+		tabs = '\t' * num_tabs
+		code = tabs + dir_to_func['event'](tree[1][1:], num_tabs, month, day, year)
+		code = code.replace('\n', '\n' + tabs)
+		return code
+	sys.stderr.write('Invalid plan statement')
+	sys.exit(1)
+	#Rona
+
 # tag functions
 def parse_tag(tree, num_tabs):
 	pass
@@ -1059,6 +1076,7 @@ dir_to_func = {
 	'access' : parse_access,
 	'user_string' : parse_user_string,
 	'str_stmt' : parse_str_stmt,
+	'plan_stmt' : parse_plan_stmt,
 
 	# TAG
 	'tag' : parse_tag,

@@ -118,6 +118,7 @@ def p_schedule_stmt_rep(p):
 def p_date(p):
     '''date : num SLASH num SLASH num'''
     p[0] = ['date', p[1], p[3], p[5]]
+    print p[0]
 
 # def p_year(p):
 #     '''year : SLASH num
@@ -138,20 +139,24 @@ def p_events_rep(p):
     p[0] = ['event_list_rep', p[1]]
     
 def p_event(p):
-    '''event : event_title when where who newline tag_line'''
-    p[0] = ['event', p[1], p[2], p[3], p[4], p[6]]
+    '''event : event_title when where who newline'''
+    p[0] = ['event', p[1], p[2], p[3], p[4]]
+    print p[0]
 
 def p_event_title(p):
     '''event_title : strings'''
     p[0] = ['event_title', p[1]]
+    print p[0]
 
 def p_when(p):
     '''when : from time to time'''
     p[0] = ['when', p[1], p[2], p[3], p[4]]
+    print p[0]
 
 def p_time(p):
     '''time : num colon num meridian'''
     p[0] = ['time', p[1], p[2], p[3], p[4]]
+    print p[0]
 
 def p_where(p):
     '''where : at location
@@ -259,7 +264,8 @@ def p_expr(p):
             | day_math newline
             | func newline
             | time_range newline
-            | str_stmt newline'''
+            | str_stmt newline
+            | plan_stmt'''
     p[0] = ['expr', p[1]]
     print '\n expr' + str(p[0])
 
@@ -288,6 +294,11 @@ def p_updatestmt(p):
                     | UPDAT strings TO variable
                     | UPDAT strings AT variable'''
     p[0] = ['update_stmt', p[2], p[3], p[4]]
+
+
+def p_planstmt(p):
+    '''plan_stmt : PLAN date colon event'''
+    p[0] = ['plan_stmt', p[2], p[4]]
 
 def p_addstmt(p):
     '''add_stmt : ADD strings TO strings'''
@@ -628,7 +639,6 @@ def p_strings(p):
 def p_string_rep(p):
     '''string_rep : strings
                     | empty'''
-    print 'print p[1] ', p[1]
     p[0] = ['string_rep', p[1]]
 
 def p_empty(p):
@@ -726,7 +736,7 @@ data = ''
 
 with open(sys.argv[1], 'r') as f:
     data = f.read()
-#data = '12/01/2016:\n\tPLT from 2:40 PM to 3:55 PM at Mudd with Aho, George\nbuild schedule\n\tcancel PLT\nexport test28.ics\n'
+#data = 'build schedule\n if True \nplan 12/01/2016 : PLT from 2:40 PM to 3:55 PM at Mudd with Aho, George\nend\n'
 
 tree = yacc.parse(data)
 print
