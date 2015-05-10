@@ -928,6 +928,8 @@ def parse_str_stmt(tree, num_tabs):
 	code = ''
 	for item in tree:
 		if item:
+			print code
+			print item
 			code += dir_to_func[item[0]](item[1:], num_tabs) + " + "
 	return code[:len(code) - 3]
 
@@ -971,7 +973,7 @@ def parse_date_unit(tree, num_tabs):
 	pass
 
 def parse_string(tree, num_tabs):
-	pass
+	return tree[0]
 
 def parse_string_rep(tree, num_tabs):
 	pass
