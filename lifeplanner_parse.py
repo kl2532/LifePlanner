@@ -21,13 +21,6 @@ precedence =    (
                     ('right', 'EQUAL'),
                 )
 
-# ----GRAMMAR PRODUCTIONS----
-
-# simple one-line program
-# def p_program(p):
-#     '''program : day colon newline event build_schedule export_stmt'''
-#     p[0] = (p[1], p[2], p[3], p[4], p[5], p[6])
-
 start = 'program'
 
 def p_program(p):
@@ -103,27 +96,9 @@ def p_schedule_stmt_rep(p):
     '''schedule_stmts_rep : schedule_stmts'''
     p[0] = ['schedule_stmts_rep', p[1]]
 
-# def p_day1(p):
-#     '''day : MONDAY
-#            | TUESDAY
-#            | WEDNESDAY
-#            | THURSDAY
-#            | FRIDAY
-#            | SATURDAY
-#            | SUNDAY
-#            | date'''
-#     p[0] = ('day', p[1])
-
 def p_date(p):
     '''date : num SLASH num SLASH num'''
     p[0] = ['date', p[1], p[3], p[5]]
-    print p[0]
-
-# def p_year(p):
-#     '''year : SLASH num
-#             | empty'''
-#     if len(p) == 3:
-#         p[0] = ('year', p[1], p[2])
 
 def p_events(p):
     '''event_list : event event_list_rep
@@ -140,22 +115,18 @@ def p_events_rep(p):
 def p_event(p):
     '''event : event_title when where who newline'''
     p[0] = ['event', p[1], p[2], p[3], p[4]]
-    print p[0]
 
 def p_event_title(p):
     '''event_title : strings'''
     p[0] = ['event_title', p[1]]
-    print p[0]
 
 def p_when(p):
     '''when : from time to time'''
     p[0] = ['when', p[1], p[2], p[3], p[4]]
-    print p[0]
 
 def p_time(p):
     '''time : num colon num meridian'''
     p[0] = ['time', p[1], p[2], p[3], p[4]]
-    print p[0]
 
 def p_where(p):
     '''where : at location
@@ -193,15 +164,6 @@ def p_plist1(p):
     elif len(p) == 2:
         p[0] = ['people_list1', None]
 
-# def p_plist_rep(p):
-#     '''people_list_rep :
-#                         | people_list people_list_rep'''
-#     if(len(p) == 3):
-#         print 'print p[1] ', p[1]
-#         print 'print p[2] ', p[2]
-#         p[0] = (p[1], p[2])
-#     else:
-#         print 'empty'
 def p_tagline(p):
     '''tag_line : tag tag_name newline
                 | empty'''
@@ -212,7 +174,6 @@ def p_tagline(p):
 
 def p_buildstmts(p):
     '''build_schedule : build schedule newline tag_priorities clean'''
-    print 'buildingggg'
     p[0] = ['build_schedule', p[1], p[2], p[4], p[5]]
 
 def p_tagp(p):
@@ -232,7 +193,6 @@ def p_tagop(p):
 def p_clean(p):
     '''clean : expr_block
              | empty'''
-    print 'clean!!!'
     if len(p) == 2:
         p[0] = ['clean', p[1]]
     else:
@@ -267,7 +227,6 @@ def p_expr(p):
             | plan_stmt
             | return_stmt'''
     p[0] = ['expr', p[1]]
-    print '\n expr' + str(p[0])
 
 def p_func(p):
     '''func : variable LEFTPAREN parameter_list RIGHTPAREN'''
@@ -316,7 +275,6 @@ def p_whilestmt(p):
     '''while_stmt : WHILE bool_expr newline expr_block END'''
     p[0] = ['while_stmt', p[1], p[2], p[4]]
 
-# REMOVE
 def p_timerange(p):
     '''time_range : FROM date TO date newline expr_block END'''
     p[0] = ['time_range', p[1], p[2], p[3], p[4], p[6]]
@@ -338,7 +296,6 @@ def p_boolean(p):
         p[0] = ['bool_expr', p[1], p[2]]
     elif len(p) == 2:
         p[0] = ['bool_expr', p[1]]
-    #print p[0]
         
 def p_boolean_opearation(p):
     '''bool_operation : value IN value
@@ -380,7 +337,6 @@ def p_variable(p):
 def p_bool_op(p):
     '''bool_operator : AND
                     | OR'''
-    print 'p_bool_op'
     p[0] = ['bool_operator', p[1]]
 
 def p_comp_op(p):
@@ -396,44 +352,34 @@ def p_comp_op(p):
 def p_bool_value(p):
     '''bool_value : TRUE 
                 | FALSE'''
-    print 'p_bool_value'
     p[0] = ['bool_value', p[1]]
-    print p[0]
 
 def p_ifstmt(p):
     '''if_stmt : if_block elseif_blocks else_block'''
     p[0] = ['if_stmt', p[1], p[2], p[3]]
-    print p[0]
     
 def p_ifblock(p):
     '''if_block : IF bool_expr newline expr_block END newline'''
     p[0] = ['if_block', p[1], p[2], p[4]]
-    print p[0]
     
 def p_elseifblocks(p):
     '''elseif_blocks : empty
                     | elseif_block elseif_blocks_rep'''
-#                    | elseif_block'''
-    print 'p_elseifblocks', len(p)
     if len(p) == 3:
         p[0] = ['elseif_blocks', p[1], p[2]]
     elif len(p) == 2:
         if p[1]:
             p[0] = ['elseif_blocks', p[1]]
         else:
-            print 'none'
             p[0] = ['elseif_blocks', None]
-    print p[0]
 
 def p_elseifblocksrep(p):
     '''elseif_blocks_rep : elseif_blocks'''
     p[0] = ['elseif_blocks_rep', p[1]]
-    print p[0]
 
 def p_elseifblock(p):
     '''elseif_block : ELSEIF bool_expr newline expr_block END newline'''
     p[0] = ['elseif_block', p[1], p[2], p[4]]
-    print p[0]
 
 def p_elseblock(p):
     '''else_block : empty
@@ -442,7 +388,6 @@ def p_elseblock(p):
         p[0] = ['else_block', p[1], p[3]]
     else:
         p[0] = ['else_block', None]
-    print p[0]
 
 def p_daymath(p):
     '''day_math : date op date_duration
@@ -453,7 +398,6 @@ def p_timemath(p):
     '''time_math : time op time_duration
                  | variable op time_duration'''
     p[0] = ['time_math', p[1], p[2], p[3]]
-    print '\ntimemath: ' + str(p[0])
 
 def p_timeop(p):
     '''op : ADD
@@ -485,7 +429,6 @@ def p_dateunit(p):
 def p_timedur(p):
     '''time_duration : num time_unit'''
     p[0] = ['time_duration', p[1], p[2]]
-    print '\ntime_duration: ' + str(p[0])
 
 def p_timeunit(p):
     '''time_unit : HOUR
@@ -495,20 +438,17 @@ def p_timeunit(p):
 def p_stringstmt(p):
     '''str_stmt : var_str PLUS var_str str_stmt_rep'''
     p[0] = ['str_stmt', p[1], p[3], p[4]]
-    print p[0]
 
 def p_str_var(p):
     '''var_str : string
                 | user_string'''
     p[0] = p[1]
-    print p[0]
 
 def p_strstmt_rep(p):
     '''str_stmt_rep : PLUS var_str str_stmt_rep
                     | empty'''
     if len(p) == 4:
-        p[0] = ['str_stmt_rep', p[2], p[3]] 
-        print p[0]
+        p[0] = ['str_stmt_rep', p[2], p[3]]
 
 def p_mathstmt1(p):
     '''math_stmt : math_stmt PLUS math_stmt
@@ -577,12 +517,10 @@ def p_comma(p):
 
 def p_with(p):
     '''with : WITH'''
-    print 'p_with', p[1]
     p[0] = ['with', p[1]]
 
 def p_at(p):
     '''at : AT'''
-    print 'p_at', p[1]
     p[0] = ['at', p[1]]
 
 def p_num(p):
@@ -592,22 +530,18 @@ def p_num(p):
 def p_meridian(p):
     '''meridian : AM
                 | PM'''
-    print 'p_meridian', p[1]
     p[0] = ['meridian', p[1]]
 
 def p_from(p):
     '''from : FROM'''
-    print 'p_from', p[1]
     p[0] = ['from', p[1]]
 
 def p_to(p):
     '''to : TO'''
-    print 'p_to', p[1]
     p[0] = ['to', p[1]]
 
 def p_colon(p):
     '''colon : COLON'''
-    print "p_colon", p[1]
     p[0] = ['colon', p[1]]
 
 def p_build(p):
@@ -621,7 +555,6 @@ def p_schedule(p):
 def p_user_string(p):
     '''user_string : USERSTRING'''
     p[0] = ['user_string', p[1]]
-    print p[0]
 
 def p_string(p):
     '''string : STRING'''
@@ -632,13 +565,11 @@ def p_strings(p):
     str_list = ""
     for string in p[2][1:]:
         if string:
-            print 'string : ' + str(string)
             if string[0] == 'strings':
                 str_list = str_list + ' ' + str(string[1])
             else:
                 str_list = str_list + " " + str(string)
     p[0] = ['strings', p[1] + str_list]
-    print p[0]
 
 def p_string_rep(p):
     '''string_rep : strings
@@ -661,10 +592,6 @@ def p_print(p):
 def p_newline(p):
     '''newline : NEWLINE'''
     p[0] = ['newline', p[1]]
-    
-# def p_var_assignmet(p):
-#     '''var_assign : variable EQUAL STRING'''
-#     p[0] = ('var_assign', p[1], p[2], p[3])
 
 def p_types(p):
     '''type : NUMTYPE
@@ -675,72 +602,14 @@ def p_types(p):
 def p_error(p):
     print p
 
-
-
-# def p_term(p):
-#     '''term : constant'''
-#     p[0] = ( rt.TERM, p[1] )
-
-# def p_constant(p):
-#     '''constant : integer
-#                 | decimal
-#                 | character
-#                 | string'''
-#     p[0] = ( rt.CONSTANT, p[1] )
-
-# def p_integer(p):
-#     '''integer : INTEGER'''
-#     p[0] = ( rt.INTEGER, int(p[1]) )
- 
-# def p_decimal(p):
-#     '''decimal : DECIMAL'''
-#     p[0] = ( rt.DECIMAL, float(p[1]) )
-
-# def p_char(p):
-#     '''character : CHARACTER'''
-#     p[0] = ( rt.CHARACTER, p[1][1])
-
-# def p_string(p):
-#     '''string : STRING'''
-#     print 'hello', p[1]
-#     p[0] = p[1]
-
-# def p_indent(p):
-#     '''indent : INDENT'''
-#     p[0] = p[1]
-
-# def p_rparen(p):
-#     '''rparen : RIGHTPAREN'''
-#     p[0] = ( rt.RPAREN )
-
-# def p_lparen(p):
-#     '''lparen : LEFTPAREN'''
-#     p[0] = ( rt.LPAREN )
-
-# def p_user_strings(p):
-#    '''user_strings : USERSTRING user_string_rep'''
-#    print 'p_strings p[1]', p[1]
-#    print 'p_strings p[2]', p[2]
-#    p[0] = (p[1], p[2])
-   
-# def p_user_string_rep(p):
-#    '''user_string_rep : 
-#                   | user_strings user_string_rep'''
-#    if(len(p) == 3):
-#       print 'print p[1] ', p[1]
-#       print 'print p[2] ', p[2]
-#       p[0] = (p[1], p[2])
-#    else:
-#       print 'empty'
-
 # ----INITIALIZE PARSER----
 yacc.yacc()
 import sys
 data = ''
 
-with open(sys.argv[1], 'r') as f:
-    data = f.read()
-#data = 'build schedule\n if True \nplan 12/01/2016 : PLT from 2:40 PM to 3:55 PM at Mudd with Aho, George Doe\nend\n'
+# with open(sys.argv[1], 'r') as f:
+#     data = f.read()
+data = 'build schedule\n if True \nplan 12/01/2016 : PLT from 2:40 PM to 3:55 PM at Mudd with Aho, George Doe\nend\n'
 
 tree = yacc.parse(data)
 print
