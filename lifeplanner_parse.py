@@ -20,18 +20,16 @@ precedence =    (
                     ('right', 'EE'),
                     ('right', 'EQUAL'),
                 )
-
+# All programs must start with the program production
 start = 'program'
+
+# ----- Grammar productions-----
 
 def p_program(p):
     '''program : function_blocks import_stmt schedule_stmts build_schedule export_stmt whatever'''
     p[0] = ['program', p[1], p[2], p[3], p[4], p[5]]
 
-def p_end(p):
-    '''whatever : newline whatever
-                | empty'''
-    pass
-
+# ----- Production for functions -----
 def p_functionblocks(p):
     '''function_blocks : function_block function_blocks
                     | empty'''
@@ -76,6 +74,7 @@ def p_return(p):
     else:
         p[0] = ['return_stmt', None]
 
+# --- Production for Import Statements -----
 def p_imports(p):
     '''import_stmt : import filename newline
                    | empty'''
@@ -84,6 +83,7 @@ def p_imports(p):
     else:
         p[0] = ['import_stmt', None]
 
+# ----- Productions for Creating a Schedule -----
 def p_schedulestmt(p):
     '''schedule_stmts : date colon newline event_list schedule_stmts_rep
                       | empty'''
@@ -164,12 +164,11 @@ def p_plist1(p):
     elif len(p) == 2:
         p[0] = ['people_list1', None]
 
-
+# ----- Production for Modifying the Schedule -----
 def p_buildstmts(p):
     '''build_schedule : build schedule newline clean'''
     p[0] = ['build_schedule', p[1], p[2], p[4]]
 
-#change later
 def p_clean(p):
     '''clean : expr_block
              | empty'''
@@ -211,8 +210,6 @@ def p_expr(p):
 def p_func(p):
     '''func : variable LEFTPAREN parameter_list RIGHTPAREN'''
     p[0] = ['func', p[1], p[3]]
-
-
 
 def p_comment_stmt(p): 
     '''comment_stmt : COMMENT strings'''
@@ -486,6 +483,11 @@ def p_comma(p):
     '''comma : COMMA'''
     p[0] = ['comma', p[1]]
 
+def p_end(p):
+    '''whatever : newline whatever
+                | empty'''
+    pass
+
 def p_with(p):
     '''with : WITH'''
     p[0] = ['with', p[1]]
@@ -549,7 +551,6 @@ def p_string_rep(p):
 
 def p_empty(p):
     '''empty :'''
-    #print 'empty!!'
     pass
 
 def p_import(p):
@@ -571,32 +572,19 @@ def p_types(p):
     p[0] = ['type', p[1]]
 
 def p_error(p):
-    print p
+    print 'Unexpected Error in Parser with token: ', p
 
 # ----INITIALIZE PARSER----
 yacc.yacc()
 import sys
-data = ''
 
+#Read source program
+data = ''
 with open(sys.argv[1], 'r') as f:
     data = f.read()
-#data = 'build schedule\n if True \nplan 12/01/2016 : PLT from 2:40 PM to 3:55 PM at Mudd with Aho, George Doe\nend\n'
-
+#Parse source program
 tree = yacc.parse(data)
-print
-print 'parse tree: ', tree, '\n'
-print trans.translate(tree)
+
+#Write translation to file
 with open('translation.py', 'w') as f:
     f.write(trans.translate(tree))
-
-#import sys
-#python_translation = ""
-#for line in tree:
-#    if line[0]=='print':
-#        for i in range(len(line) - 1, -1, -1):
-#            if line[i] == 'print':
-#                python_translation +=  ''.join(line[i+1:]).strip('\"')
-#                break
-
-#with open("calendar.py", "w") as f:
-#    f.write(python_translation)
