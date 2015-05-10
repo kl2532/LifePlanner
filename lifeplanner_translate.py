@@ -107,6 +107,7 @@ def parse_import_stmt(tree, num_tabs):
 	code += '\te_from = orig_e[\'from\']\n'
 	code += '\te_at = orig_e[\'at\']\n'
 	code += '\te_with = orig_e[\'with\']\n'
+	code += '\tvar_all_events.append(orig_e)\n'
 	code += '\torig_event = e.Event(e_name, e_from, e_to, e_at, e_with)\n'
 	code += '\tcal.add_event(orig_event.create_string_event())\n'
 	return code

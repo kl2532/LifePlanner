@@ -723,7 +723,8 @@ import sys
 data = ''
 #with open(sys.argv[1], 'r') as f:
 #    data = f.read()
-data = '12/01/2016:\n\tPLT from 2:40 PM to 3:55 PM at Mudd with Aho, George\nbuild schedule\n\tcancel PLT\nexport test28.ics\n'
+# data = 'function addTogether(i, j)\n\tx = i / 2 - 3\n\tx = (x + 1)*2\n\treturn x\nbuild schedule\n\tprint addTogether(1, 2)'
+data = 'import my.ics\nbuild schedule\n\tprint wake\n\tprint wake2\n'
 
 tree = yacc.parse(data)
 print
