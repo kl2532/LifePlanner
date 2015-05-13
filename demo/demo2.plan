@@ -13,6 +13,7 @@ function yay(n)
 import agenda.ics
 build schedule
 	cancel Dinner
+	plan 5/17/2016 : Carnival from 1:00 PM to 8:00 PM at Circus
 	if not Aquila in Studytime[with]
 		add Aquila to Studytime
 	end
