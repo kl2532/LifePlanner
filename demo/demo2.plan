@@ -3,8 +3,12 @@ function addTogether(i, j)
 	x = i + j
 	return x
 	
-function yay()
-	print "Yay"
+function yay(n)
+	i = 0
+	while i<n
+		print "Yay!"
+		i = i + 1
+	end
 
 import agenda.ics
 build schedule
@@ -17,5 +21,5 @@ build schedule
 		sum = addTogether(i, j)
 		print sum
 	end
-	yay()
+	yay(3)
 export new_agenda.ics
