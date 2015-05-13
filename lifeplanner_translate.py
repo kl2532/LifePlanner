@@ -863,7 +863,7 @@ def parse_while_stmt(tree, num_tabs):
 		if tree[0] != 'while':
 			sys.stderr.write('Invalid while')
 			sys.exit(1)
-		code = 'while '
+		code = '\t' * num_tabs + 'while '
 		if tree[1][0] == 'bool_expr':
 			code += dir_to_func['bool_expr'](tree[1][1:], num_tabs) + ":\n"
 		if tree[2][0] == 'expr_block':
