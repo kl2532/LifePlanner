@@ -117,8 +117,28 @@ def p_event(p):
     p[0] = ['event', p[1], p[2], p[3], p[4]]
 
 def p_event_title(p):
-    '''event_title : strings'''
+    '''event_title : strings event_title_rep'''
+    title = p[1][1]
+    if p[2]:
+        p[1][1] += ' ' + p[2]
     p[0] = ['event_title', p[1]]
+
+def p_event_title_rep(p):
+    '''event_title_rep : strings event_title_rep
+                        | num event_title_rep
+                        | empty'''
+    if len(p) == 3:
+        first = p[1]
+        if p[1]:
+            first = p[1][1]
+        p[0] = first
+        second  = p[2]
+        if p[2]:
+            second = p[2]
+            if type(second) == list:
+                second = p[2][1]
+            p[0] = first + ' ' +second
+
 
 def p_when(p):
     '''when : from time to time'''
