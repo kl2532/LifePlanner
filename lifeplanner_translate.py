@@ -1036,7 +1036,7 @@ def parse_for_stmt(tree, num_tabs):
 		if tree[1][0] == 'assignment_stmt':
 			code += dir_to_func['assignment_stmt'](tree[1][1:], num_tabs) + '\n'
 		if tree[2][0] == 'bool_expr':
-			code += 'while ' + dir_to_func['bool_expr'](tree[2][1:], num_tabs) \
+			code += '\t'*num_tabs + 'while ' + dir_to_func['bool_expr'](tree[2][1:], num_tabs) \
 			+ ':\n'
 		if tree[3][0] == 'assignment_stmt':
 			increment = dir_to_func['assignment_stmt'](tree[3][1:], num_tabs+1)
